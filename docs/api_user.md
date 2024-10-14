@@ -10,7 +10,7 @@
 - query
   - sort : recent || oldest || cheapest || highest (최신순 OR 오래된 순 OR 가격 낮은 순 OR 가격 높은 순 정렬)
   - genre : 미정(필터)
-  - soldout : true || false매진 여부(필터)
+  - sellout : true || false매진 여부(필터)
   - grade : COMMON || RARE || SUPER_RARE || LEGENDARY
   - ownerId : 판매자 ID(필터)
   - pageNum : 페이지 넘버(페이지네이션)
@@ -22,7 +22,7 @@
 - header :
   - Authorization : Bearer {accessToken}
 - query :
-  - sort=recent&genre=travel&soldout=false&grade=SUPER_RARE&ownerId=1&pageNum=1&pageSize=9&keyword=스페인
+  - sort=recent&genre=travel&sellout=false&grade=SUPER_RARE&ownerId=1&pageNum=1&pageSize=9&keyword=스페인
 
 ### res template
 
