@@ -30,10 +30,10 @@
   - totalCount : 총 카드 수,
   - cards : 카드 배열
     - {카드 정보}
-      - image : 이미지 url
-      - grade : 이미지 등급
-      - genre : 이미지 장르
-      - count : 이미지 보유량
+      - image : 이미지 url (max-length : 2048)
+      - grade : 이미지 등급 (int로 전달)
+      - genre : 이미지 장르 (int로 전달)
+      - ownCount : 이미지 보유량
       - price : 이미지 가격(포인트)
       - sellerNickname : 판매자 닉네임
 
@@ -44,9 +44,9 @@
   card : [
   {
   image : http://code-it.com/test-image1.png,
-  grade : rare,
-  genre : travel,
-  count : 2,
+  grade : 1,
+  genre : 2,
+  ownCount : 2,
   price : 4,
   sellerNickname : 프로여행러
   },
@@ -61,24 +61,41 @@
 
 ### req template
 
-- description :
-- path :
-- method :
+- description : 내 포토 카드 등록
+- path : /users/my-card
+- method : POST
 - header
-  - property1 :
-  - property2 :
+  - Authorization : Bearer {accessToken}
 - body
-  - property1 :
-  - property2 :
+  - image : 이미지 url (max-length : 2048)
+  - grade : 이미지 등급 (int로 전달)
+  - genre : 이미지 장르 (int로 전달)
+  - count : 이미지 생성 갯수
+  - price : 이미지 가격(초기 포인트 : 판매 포인트와 별도. 교환 신청에서 사용됨)
 
 ### req example
 
-- header :
-- body :
+- header
+  - Authorization : Bearer {accessToken}
+- body : {
+  image : http://code-it.com/test-image1.png,
+  grade : 1,
+  genre : 2,
+  count : 2,
+  price : 4,
+}
 
 ### res template
 
-- data :
+- data : {
+  id : c9c35842-2fda-44cc-8873-d933220e7b37
+  image : http://code-it.com/test-image1.png,
+  grade : 1,
+  genre : 2,
+  count : 2,
+  price : 4,
+}
+
 
 ### res example
 

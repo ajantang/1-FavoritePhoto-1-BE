@@ -33,20 +33,21 @@ model User {
 }
 
 model Card {
-  id            String     @id @default(uuid()) @db.VarChar(36)
-  name          String     @db.VarChar(50)
-  description   String     @db.VarChar(1024)
+  id            String   @id @default(uuid()) @db.VarChar(36)
+  name          String   @db.VarChar(50)
+  description   String   @db.VarChar(1024)
   price         Int
   grade         Int
   genre         Int
-  image         String     @db.VarChar(2048)
-  totalQuantity Int        @map("total_quantity")
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
-  Owns          Own[]
-  Shops         Shop[]
-  Purchase      Purchase[]
-  Exchange      Exchange[]
+  image         String   @db.VarChar(2048)
+  totalQuantity Int      @map("total_quantity")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  Owns      Own[]
+  Shops     Shop[]
+  Purchases Purchase[]
+  Exchanges Exchange[]
 
   @@map("card")
 }
@@ -63,17 +64,21 @@ model Own {
 }
 
 model Shop {
-  id                String         @id @default(uuid()) @db.VarChar(36)
-  User              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId            String         @db.VarChar(36)
-  Card              Card           @relation(fields: [cardId], references: [id], onDelete: Cascade)
-  cardId            String         @map("card_id")
-  remainingQuantity Int            @map("remaining_quantity")
-  totalQuantity     Int            @map("total_quantity")
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  Exchange          Exchange[]
-  Notification      Notification[]
+  id                  String   @id @default(uuid()) @db.VarChar(36)
+  User                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String   @db.VarChar(36)
+  Card                Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId              String   @map("card_id")
+  remainingQuantity   Int      @map("remaining_quantity")
+  totalQuantity       Int      @map("total_quantity")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  exchangeGrade       Int      @map("exchange_grade")
+  exchangeGenre       Int      @map("exchange_genre")
+  exchangeDescription String   @map("exchange_description") @db.VarChar(2014)
+
+  Exchanges     Exchange[]
+  Notifications Notification[]
 }
 
 model Purchase {
@@ -106,7 +111,7 @@ model Notification {
   id        String   @id @default(uuid()) @db.VarChar(36)
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @db.VarChar(36)
-  Shop      Shop?     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  Shop      Shop?    @relation(fields: [shopId], references: [id], onDelete: Cascade)
   shopId    String?  @map("shop_id") @db.VarChar(36)
   message   String   @db.VarChar(1024)
   check     Boolean  @default(false)
