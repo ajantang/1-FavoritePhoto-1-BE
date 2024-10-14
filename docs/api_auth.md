@@ -1,10 +1,10 @@
-## POST /api/auth/sign-up
+## POST /auth/sign-up
 
 ### req template
 
 - description : 회원 가입
-- path : /api/auth/sign-up
-- type : POST
+- path : /auth/sign-up
+- method : POST
 - body
   - email : 사용자 이메일
   - password : 사용자 비밀번호
@@ -40,13 +40,13 @@
   image : ...,
   }
 
-## POST /api/auth/sign-in
+## POST /auth/sign-in
 
 ### req template
 
 - description : 로그인
-- path : /api/auth/sign-in
-- type : POST
+- path : /auth/sign-in
+- method : POST
 - body
   - email : 사용자 이메일
   - password : 사용자 비밀번호
@@ -85,13 +85,13 @@
   }
   }
 
-## POST /api/auth/sign-out
+## POST /auth/sign-out
 
 ### req template
 
 - description : 로그아웃 (로그인 과정이 확정되면 변경 예정. 세션? 쿠키? jwt?)
-- path : /api/auth/sign-out
-- type : POST
+- path : /auth/sign-out
+- method : POST
 - header
   - Authorization : Bearer {accessToken}
 
@@ -104,13 +104,13 @@
 
 - status : 200
 
-## POST /api/auth/refresh
+## POST /auth/refresh
 
 ### req template
 
 - description : 토큰 갱신
-- path : /api/auth/refresh
-- type : POST
+- path : /auth/refresh
+- method : POST
 - body
   - refreshToken : refresh token
 
