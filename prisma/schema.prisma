@@ -69,6 +69,7 @@ model Shop {
   userId              String   @db.VarChar(36)
   Card                Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
   cardId              String   @map("card_id")
+  price               Int
   remainingQuantity   Int      @map("remaining_quantity")
   totalQuantity       Int      @map("total_quantity")
   createdAt           DateTime @default(now())
