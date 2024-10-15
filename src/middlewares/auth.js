@@ -1,5 +1,5 @@
 import { getCookie } from "cookies-next";
-import { verifyAccessToken } from "../lib/token";
+import { verifyAccessToken } from "../lib/token.js";
 
 export function authMiddleware(req, res, next) {
   const token = getCookie("accessToken", { req });

@@ -1,5 +1,5 @@
 import e from "express";
-import { authMiddleware } from "../middlewares/auth";
+import { authMiddleware } from "../middlewares/auth.js";
 
 const authRouter = e.Router();
 authRouter.use(authMiddleware);

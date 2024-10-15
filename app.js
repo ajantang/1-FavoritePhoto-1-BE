@@ -1,18 +1,18 @@
 import cors from "cors";
 import express from "express";
 
-import adminRouter from "./src/routes/admin";
-import authRouter from "./src/routes/auth";
-import cardRouter from "./src/routes/cards";
-import notificationRouter from "./src/routes/notification";
-import pointRouter from "./src/routes/points";
-import shopRouter from "./src/routes/shop";
-import userRouter from "./src/routes/users";
+import adminRouter from "./src/controllers/admin-controller.js";
+import authRouter from "./src/controllers/auth-controller.js";
+import cardRouter from "./src/controllers/cards-controller.js";
+import notificationRouter from "./src/controllers/notification-controller.js";
+import pointRouter from "./src/controllers/points-controller.js";
+import shopRouter from "./src/controllers/shop-controller.js";
+import userRouter from "./src/controllers/users-controller.js";
 import {
   logErrors,
   clientErrorHandler,
   serverErrorHandler,
-} from "./src/middlewares/error";
+} from "./src/middlewares/error.js";
 
 export const app = express();
 
