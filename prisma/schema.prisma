@@ -29,6 +29,7 @@ model User {
   Exchanges     Exchange[]
   Notifications Notification[]
   LastBoxTime   LastBoxTime[]
+  Card          Card[]
 
   @@map("user")
 }
@@ -41,6 +42,8 @@ model Card {
   grade         Int
   genre         Int
   image         String   @db.VarChar(2048)
+  User          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String   @map("user_id") @db.VarChar(36)
   totalQuantity Int      @map("total_quantity")
   createdAt     DateTime @default(now()) @map("created_at")
   updatedAt     DateTime @updatedAt @map("updated_at")
