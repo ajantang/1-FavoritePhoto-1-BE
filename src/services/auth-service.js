@@ -5,11 +5,11 @@ import {
   comparePassword,
 } from "../utils/passwordUtil.js";
 
-import { expireTime } from "../constants/session.js";
+import { EXPIRE_TIME } from "../constants/session.js";
 
 async function createSession({ sessionId, userId, sessionData }) {
   const now = new Date();
-  const expires = new Date(now.getTime() + expireTime);
+  const expires = new Date(now.getTime() + EXPIRE_TIME);
 
   await sessionRepository.createSession({
     sessionId,
