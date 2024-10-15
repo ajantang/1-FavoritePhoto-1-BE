@@ -35,7 +35,7 @@
       - genre : 카드 장르 (int로 전달)
       - ownCount : 카드 보유량
       - price : 카드 가격(포인트)
-      - sellerNickname : 판매자 닉네임
+      - authorNickname : 카드 생성자 닉네임
 
 ### res example
 
@@ -48,7 +48,7 @@
   genre : 2,
   ownCount : 2,
   price : 4,
-  sellerNickname : 프로여행러
+  authorNickname : 프로여행러
   },
   {
   ...
@@ -87,7 +87,7 @@
   genre : 2,
   count : 2,
   price : 4,
-}
+  }
 
 ### res template
 
@@ -100,7 +100,7 @@
   - genre : 카드 장르 (int로 전달)
   - totalQuantity : 카드 생성 갯수
   - price : 카드 가격(초기 포인트 : 판매 포인트와 별도. 교환 신청에서 사용됨)
-
+  - authorNickname : 카드 생성자 닉네임
 
 ### res example
 
@@ -111,7 +111,8 @@
   genre : 2,
   count : 2,
   price : 4,
-}
+  authorNickname : 코드잇
+  }
 
 ## GET /users/my-cards/shop
 
@@ -150,7 +151,7 @@
       - genre : 카드 장르 (int로 전달)
       - ownCount : 카드 보유량
       - price : 카드 가격(포인트)
-      - sellerNickname : 판매자 닉네임
+      - authorNickname : 카드 생성자 닉네임
 
 ### res example
 
@@ -163,7 +164,7 @@
   genre : 2,
   ownCount : 2,
   price : 4,
-  sellerNickname : 프로여행러
+  authorNickname : 프로여행러
   },
   {
   ...
@@ -209,7 +210,7 @@
       - genre : 카드 장르 (int로 전달)
       - ownCount : 카드 보유량
       - price : 카드 가격(포인트)
-      - sellerNickname : 판매자 닉네임
+      - authorNickname : 카드 생성자 닉네임
 
 ### res example
 
@@ -222,7 +223,7 @@
   genre : 2,
   ownCount : 2,
   price : 4,
-  sellerNickname : 프로여행러
+  authorNickname : 프로여행러
   },
   {
   ...
@@ -246,18 +247,17 @@
 - header :
   - Authorization : Bearer {accessToken}
 
-
 ### res template
 
 - data : {
   nickname : 닉네임
-}
+  }
 
 ### res example
 
 - data : {
   nickname : 코드잇16
-}
+  }
 
 ## GET /users/check-email
 
@@ -274,18 +274,17 @@
 - header :
   - Authorization : Bearer {accessToken}
 
-
 ### res template
 
 - data : {
   isPossible : 사용 가능 여부(bool)
-}
+  }
 
 ### res example
 
 - data : {
   isPossible : true
-}
+  }
 
 ## GET /users/check-nickname
 
@@ -306,12 +305,10 @@
 
 - data : {
   isPossible : 사용 가능 여부(bool)
-}
-
+  }
 
 ### res example
 
 - data : {
   isPossible : true
-}
-
+  }
