@@ -1,10 +1,83 @@
+## POST /shop
+
+### req template
+
+- description : 내 포토 카드 판매 등록
+- path : /shop
+- method : POST
+- header
+  - Authorization : Bearer {accessToken}
+- body
+  - cardId: 카드ID
+  - salesQuantity: 판매수량
+  - price: 장당 가격
+  - exchangeGrade: 교환 희망 등급 (INT)
+  - exchangeGenre: 교환 희망 장르 (INT)
+  - exchangeDescription: 교환 희망 설명
+
+### req example
+
+- header
+  - Authorization : Bearer {accessToken}
+- body : {
+  cardId: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
+  salesQuantity: 3,
+  price: 4,
+  exchangeGrade: 0,
+  exchangeGenre: 2,
+  exchangeDescription: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다"
+  }
+
+### res template
+
+- data 
+  - salesInfo : 판매정보
+    - id: 상점ID
+    - image: 사진
+    - name: 카드 이름
+    - grade: 등급
+    - genre: 장르
+    - creatorNickname: 원작자 이름
+    - sellerNickname: 판매자 이름
+    - description: 설명
+    - price: 장당 가격
+    - remainingQuantity: 잔여 수량
+    - totalQuantity: 총 판매 수량
+  - exchangePreference: 교환 희망 정보
+    - description: 교환 희망 설명
+    - grade: 교환 희망 등급
+    - genre: 교환 희망 장르
+
+### res example
+
+- data : {
+	salesInfo : {
+		id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
+		image: "url 주소",
+		name: "우리집 앞마당",
+		grade: 1,
+		genre: 4,
+		creatorNickname: "미스쏜",
+		sellerNickname: "유디",
+		description: "우리집 앞마당 포토카드입니다. 우리집 앞마당 포토카드입니다.",
+		price: 4,
+		remainingQuantity: 3,
+		totalQuantity: 3
+	},
+	exchangePreference: {
+		description: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다",
+		grade: 0,
+		genre: 4,
+	}		
+}
+
 ## api template
 
 ### req template
 
 - description :
 - path :
-- type :
+- method :
 - header
   - property1 :
   - property2 :
