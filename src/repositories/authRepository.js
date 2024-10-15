@@ -1,5 +1,5 @@
 import prisma from "./prisma";
-import { userSelect } from "./selector/userSelect";
+import { userSelect } from "./selects/userSelect";
 
 async function createUser({ email, encryptedPassword, nickname }) {
   return await prisma.user.create({

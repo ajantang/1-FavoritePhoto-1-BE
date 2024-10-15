@@ -1,5 +1,5 @@
 import prisma from "./prisma";
-import { sessionSelect } from "./selector/sessionSelect";
+import { sessionSelect } from "./selects/sessionSelect";
 
 async function createSession({ expires, data }) {
   return prisma.session.create({
