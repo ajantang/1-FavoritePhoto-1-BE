@@ -1,22 +1,24 @@
 import prisma from "./prisma";
-import { sessionSelect } from "./selects/sessionSelect";
+import { sessionSelect } from "./selects/session-select";
 
-async function createSession({ expires, data }) {
+async function createSession({ sessionId, userId, expires, data }) {
+  const jsonData = JSON.stringify(data);
+
   return prisma.session.create({
-    data: { expires, data },
+    data: { id: sessionId, userId, expires, data: jsonData },
     select: sessionSelect,
   });
 }
 
-async function findSession(id) {
+async function findSession(sessionId) {
   return prisma.session.findUniqueOrThrow({
-    where: { id },
+    where: { id: sessionId },
     select: sessionSelect,
   });
 }
 
-async function deleteSession(id) {
-  return prisma.session.delete({ where: { id } });
+async function deleteSession(sessionId) {
+  return prisma.session.delete({ where: { sessionId } });
 }
 
 export default { createSession, findSession, deleteSession };
