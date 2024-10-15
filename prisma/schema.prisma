@@ -12,3 +12,144 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id                String   @id @default(uuid()) @db.VarChar(36)
+  email             String   @unique @db.VarChar(254)
+  encryptedPassword String   @map("encrypted_password") @db.VarChar(60)
+  nickname          String   @unique @db.VarChar(50)
+  point             Int      @default(0)
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  Owns          Own[]
+  Shops         Shop[]
+  purchases     Purchase[]     @relation("ConsumerPurchases")
+  sales         Purchase[]     @relation("PurchaserSales")
+  Exchanges     Exchange[]
+  Notifications Notification[]
+  LastBoxTime   LastBoxTime[]
+  Card          Card[]
+
+  @@map("user")
+}
+
+model Card {
+  id            String   @id @default(uuid()) @db.VarChar(36)
+  name          String   @db.VarChar(50)
+  description   String   @db.VarChar(1024)
+  price         Int
+  grade         Int
+  genre         Int
+  image         String   @db.VarChar(2048)
+  User          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String   @map("user_id") @db.VarChar(36)
+  totalQuantity Int      @map("total_quantity")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  Owns      Own[]
+  Shops     Shop[]
+  Purchases Purchase[]
+  Exchanges Exchange[]
+
+  @@map("card")
+}
+
+model Own {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id") @db.VarChar(36)
+  Card      Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId    String   @map("card_id") @db.VarChar(36)
+  quantity  Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("own")
+}
+
+model Shop {
+  id                  String   @id @default(uuid()) @db.VarChar(36)
+  User                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId              String   @map("user_id") @db.VarChar(36)
+  Card                Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId              String   @map("card_id") @db.VarChar(36)
+  price               Int
+  remainingQuantity   Int      @map("remaining_quantity")
+  totalQuantity       Int      @map("total_quantity")
+  exchangeGrade       Int      @map("exchange_grade")
+  exchangeGenre       Int      @map("exchange_genre")
+  exchangeDescription String   @map("exchange_description") @db.VarChar(1024)
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  Exchanges     Exchange[]
+  Notifications Notification[]
+
+  @@map("shop")
+}
+
+model Purchase {
+  id             String   @id @default(uuid()) @db.VarChar(36)
+  Consumer       User     @relation("ConsumerPurchases", fields: [consumerId], references: [id])
+  consumerId     String   @map("consumer_id") @db.VarChar(36)
+  Purchaser      User     @relation("PurchaserSales", fields: [purchaserId], references: [id])
+  purchaserId    String   @map("purchaser_id") @db.VarChar(36)
+  Card           Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId         String   @map("card_id") @db.VarChar(36)
+  purchaseVolumn Int
+  cardPrice      Int
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@map("purchase")
+}
+
+model Exchange {
+  id          String   @id @default(uuid()) @db.VarChar(36)
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String   @map("user_id") @db.VarChar(36)
+  Shop        Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  shopId      String   @map("shop_id") @db.VarChar(36)
+  Card        Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  cardId      String   @map("card_id") @db.VarChar(36)
+  description String?  @db.VarChar(1024)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("exchange")
+}
+
+model Notification {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id") @db.VarChar(36)
+  Shop      Shop?    @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  shopId    String?  @map("shop_id") @db.VarChar(36)
+  message   String   @db.VarChar(1024)
+  check     Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("notification")
+}
+
+model LastBoxTime {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id") @db.VarChar(36)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("last_box_time")
+}
+
+model Sesseion {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  expires   DateTime
+  data      String   @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("session")
+}
