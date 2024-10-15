@@ -16,7 +16,7 @@ DB 정보를 저장/관리
 
 #### cookies-next
 
-쿠키로 accessToken / refreshToken 저장/관리
+쿠키로
 
 #### cors
 
