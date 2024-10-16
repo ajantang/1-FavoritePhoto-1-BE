@@ -9,7 +9,7 @@ async function createShop(createData) {
   });
 }
 
-async function geetByFilter(filter) {
+async function getByFilter(filter) {
   const { orderBy, skip, take, where } = filter;
   return prisma.shop.findMany({
     orderBy,
@@ -20,4 +20,4 @@ async function geetByFilter(filter) {
   });
 }
 
-export default { createShop, geetByFilter };
+export default { createShop, getByFilter };
