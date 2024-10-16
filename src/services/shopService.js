@@ -64,8 +64,8 @@ async function getShopListByFilter(query) {
 
   const where = {
     Card: {
-      ...(genre ? { genre: parseInt(genre, 10) } : {}),
-      ...(grade ? { grade: parseInt(grade, 10) } : {}),
+      ...(genre ? { genre: parseInt(genre) } : {}),
+      ...(grade ? { grade: parseInt(grade) } : {}),
       ...whereOr,
     },
     ...selloutWhere,
