@@ -10,7 +10,7 @@ async function update(updateData) {
     id: own.id,
   };
 
-  const quantity = own.quantity - totalQuantity;
+  const quantity = Number(own.quantity - totalQuantity);
   const data = {
     quantity,
   };

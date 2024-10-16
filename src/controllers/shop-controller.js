@@ -4,8 +4,9 @@ import { createShopMapper } from "./mappers/shopMapper.js";
 
 async function createShop(req, res, next) {
   const shop = await shopService.createShop(req.body);
-  await ownService.update(req.body);
-  const responseData = createShopMapper(shop);
+  const own = await ownService.update(req.body);
+  const [shopResult, ownResult] = await Promise.all([shop, own]);
+  const responseData = createShopMapper(shopResult);
   res.status(201).send(responseData);
 }
 

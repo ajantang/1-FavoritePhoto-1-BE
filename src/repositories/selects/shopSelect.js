@@ -3,7 +3,7 @@ import { cardDetailSelect } from "./card-select.js";
 export const shopSelect = {
   id: true,
   price: true,
-  reremainingQuantity: true,
+  remainingQuantity: true,
   totalQuantity: true,
   exchangeGrade: true,
   exchangeGenre: true,
@@ -17,5 +17,7 @@ export const shopCreateSelect = {
       nickname: true,
     },
   },
-  Card: cardDetailSelect,
+  Card: {
+    select : cardDetailSelect,
+  }
 };
