@@ -25,3 +25,35 @@ export function createShopMapper(data) {
   };
 }
 
+export function getShopListMapper(list, total) {
+  const shops = list.map((shop) => {
+    const card = shop.Card;
+    const creator = card.User;
+    let sellout;
+
+    if (shop.remainingQuantity === 0) {
+      sellout == true;
+    } else {
+      sellout = false;
+    }
+
+    return {
+      id: shop.id,
+      cardId: card.id,
+      sellout,
+      image: card.image,
+      name: card.name,
+      grade: card.grade,
+      genre: card.genre,
+      creatorNickname: creator.nickname,
+      price: shop.price,
+      remainingQuantity: shop.remainingQuantity,
+      totalQuantity: shop.totalQuantity,
+    };
+  });
+
+  return {
+    total,
+    shops,
+  };
+}
