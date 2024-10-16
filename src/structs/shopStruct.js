@@ -19,7 +19,7 @@ const shopStructBody = {
   exchangeDescription: s.size(s.string, 0, 1024),
 };
 
-export const createShop = s.object({
+export const createShopStruct = s.object({
   userId: Uuid,
   cardId: Uuid,
   ...shopStructBody,

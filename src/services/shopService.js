@@ -1,7 +1,7 @@
 import shopRepository from "../repositories/shopRepository.js";
 
-async function createShop(creatData) {
-  const { salesQuantity, ...rest } = creatData;
+async function createShop(createData) {
+  const { salesQuantity, ...rest } = createData;
   const createShopData = {
     ...rest,
     remainingQuantity: salesQuantity,

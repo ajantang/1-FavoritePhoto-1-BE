@@ -7,7 +7,7 @@ import authRouter from "./src/controllers/auth-controller.js";
 import cardRouter from "./src/controllers/cards-controller.js";
 import notificationRouter from "./src/controllers/notification-controller.js";
 import pointRouter from "./src/controllers/points-controller.js";
-import shopRouter from "./src/controllers/shop-controller.js";
+import shopRouter from "./src/routes/shop-router.js"
 import userRouter from "./src/controllers/users-controller.js";
 import {
   logErrors,
