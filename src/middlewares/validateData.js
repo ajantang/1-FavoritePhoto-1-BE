@@ -4,7 +4,7 @@ import { createShopStruct } from "../structs/shopStruct.js";
 
 function createShop() {
   return async (req, res, next) => {
-    const userId = "";
+    const userId = "3b11769f-2c33-4c76-b263-3b5bda200c43";
     const { cardId, salesQuantity, ...rest } = req.body;
     // const { userId, cardId, salesQuantity, ...rest } = req.body;
     const filter = {
