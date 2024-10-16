@@ -1,4 +1,3 @@
-
 // import { getCookie } from "cookies-next";
 // import { verifyAccessToken } from "../lib/token";
 
@@ -21,7 +20,7 @@
 
 // 공용 미들웨어(에러 처리 등) 외의 미들웨어는 routes 폴더 안 js에서 사용
 
-import { createCustomError } from "../lib/custom-error";
+import { createCustomError } from "../lib/custom-error.js";
 
 export function authMiddleware(req, res, next) {
   if (req.session && req.session.userId) {

@@ -15,7 +15,7 @@ export const cardSelect = {
 
 export const cardDetailSelect = {
   ...cardSelect,
-  description,
+  description: true,
 };
 
 export const cardDetailRequsterSelect = (requesterId) => ({

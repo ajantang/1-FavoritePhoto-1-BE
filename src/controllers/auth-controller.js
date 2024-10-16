@@ -3,7 +3,7 @@ import { createCustomError } from "../lib/custom-error.js";
 
 async function signUp(req, res, next) {
   try {
-    const { email, password } = req.body;
+    const { email, password, nickname } = req.body;
     const result = await authService.signUp({ email, password, nickname });
 
     return res.status(200).send(result);
