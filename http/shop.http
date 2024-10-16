@@ -1,0 +1,12 @@
+###
+POST http://localhost:3000/shop
+Content-Type: application/json
+
+{
+    "cardId": "02d136e5-0e31-403b-abbd-6525b1e546ca",
+    "salesQuantity": 5,
+    "price": 4,
+    "exchangeGrade": 0,
+    "exchangeGenre": 3,
+    "exchangeDescription": "테스트 진행중"
+}
