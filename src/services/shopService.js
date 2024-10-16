@@ -124,9 +124,19 @@ async function getShopDetailById(id) {
   return await shopRepository.getShopDetailById(id);
 }
 
+async function checkUserShopOwner(userId, shopId) {
+  const filter = {
+    userId,
+    shopId,
+  };
+
+  return await shopRepository.checkUserShopOwner(filter);
+}
+
 export default {
   createShop,
   getShopListByQuery,
   countShopListByQuery,
   getShopDetailById,
+  checkUserShopOwner,
 };
