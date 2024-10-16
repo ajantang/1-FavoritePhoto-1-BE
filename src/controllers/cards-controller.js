@@ -1,20 +1,15 @@
 import e from "express";
 
+function temp(req, res, next) {
+  res.send();
+}
+
 const cardRouter = e.Router();
 
 cardRouter
-  .route("/")
-  .post(":shopId/exchange", (req, res, next) => {
-    // 포토 카드 교환 제안
-  })
-  .post(":exchangeId/exchange-accept", (req, res, next) => {
-    // 포토 카드 교환 제안 승인
-  })
-  .post(":exchangeId/exchange-refuse", (req, res, next) => {
-    // 포토 카드 교환 제안 거절
-  })
-  .delete(":exchangeId/exchange-cancel", (req, res, next) => {
-    // 포토 카드 교환 제안 취소
-  });
+  .post("/:shopId/exchange", temp)
+  .post("/:exchangeId/exchange-accept", temp)
+  .post("/:exchangeId/exchange-refuse", temp)
+  .delete("/:exchangeId/exchange-cancel", temp);
 
 export default cardRouter;

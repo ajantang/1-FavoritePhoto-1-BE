@@ -1,4 +1,4 @@
-import { cardSelect } from "./card-select";
+import { cardSelect } from "./card-select.js";
 
 export const userSelect = {
   id: true,

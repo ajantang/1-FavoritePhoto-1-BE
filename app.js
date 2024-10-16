@@ -1,9 +1,10 @@
 import cors from "cors";
 import express from "express";
 import dotenv from "dotenv";
+import session from "express-session";
 
 import adminRouter from "./src/controllers/admin-controller.js";
-import authRouter from "./src/controllers/auth-controller.js";
+// import authRouter from "./src/controllers/auth-controller.js";
 import cardRouter from "./src/controllers/cards-controller.js";
 import notificationRouter from "./src/controllers/notification-controller.js";
 import pointRouter from "./src/controllers/points-controller.js";
@@ -15,7 +16,7 @@ import {
   serverErrorHandler,
 } from "./src/middlewares/error.js";
 
-import { EXPIRE_TIME } from "./src/constants/session";
+import { EXPIRE_TIME } from "./src/constants/session.js";
 
 dotenv.config();
 export const app = express();
@@ -42,7 +43,7 @@ app.use(
 app.use(express.json());
 
 app.use("/admin", adminRouter);
-app.use("/auth", authRouter);
+// app.use("/auth", authRouter);
 app.use("/cards", cardRouter);
 app.use("/notifications", notificationRouter);
 app.use("/points", pointRouter);

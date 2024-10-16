@@ -1,8 +1,8 @@
 import e from "express";
-import { adminAuthMiddleware } from "../middlewares/admin.js";
+// import { adminAuthMiddleware } from "../middlewares/admin.js";
 
 const adminRouter = e.Router();
-adminRouter.use(adminAuthMiddleware);
+// adminRouter.use(adminAuthMiddleware);
 
 // 임시로 테스트 과정에서 데이터 수정을 용이하게 하기 위해 생성
 adminRouter.get("/users", (req, res, next) => {

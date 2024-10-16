@@ -1,5 +1,5 @@
-import prisma from "./prisma";
-import { sessionSelect } from "./selects/session-select";
+import prisma from "./prisma.js";
+import { sessionSelect } from "./selects/session-select.js";
 
 async function createSession({ sessionId, userId, expires, data }) {
   const jsonData = JSON.stringify(data);
