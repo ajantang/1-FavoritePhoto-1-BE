@@ -5,15 +5,15 @@ const Uuid = s.define("Uuid", (value) => isUuid.v4(value));
 
 const shopStructBody = {
   price: s.min(s.number(), 0),
-  exchangeGrade: s.min(s.max(s.number(), 3), 0), // 추후 수정 가능
-  exchangeGenre: s.min(s.max(s.number(), 3), 0), // 추후 수정 가능
+  exchangeGrade: s.refine(s.number(), "exchangeGrade", (value) => value >= 0 && value <= 3), // 추후 수정 가능
+  exchangeGenre: s.refine(s.number(), "exchangeGenre", (value) => value >= 0 && value <= 3), // 추후 수정 가능
   exchangeDescription: s.size(s.string(), 0, 1024),
 };
 
 export const createShopStruct = s.object({
   userId: Uuid,
   cardId: Uuid,
-  remainingQuantity: s.min(s.number(), 0),
-  totalQuantity: s.min(s.number(), 0),
+  remainingQuantity: s.refine(s.number(), "remainingQuantity", (value) => value >= 1),
+  totalQuantity: s.refine(s.number(), "remainingQuantity", (value) => value >= 1),
   ...shopStructBody,
 });

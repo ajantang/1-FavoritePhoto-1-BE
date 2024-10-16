@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
     "cardId": "02d136e5-0e31-403b-abbd-6525b1e546ca",
-    "salesQuantity": 0,
+    "salesQuantity": 1,
     "price": 4,
     "exchangeGrade": 0,
     "exchangeGenre": 3,
