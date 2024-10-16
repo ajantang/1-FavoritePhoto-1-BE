@@ -15,6 +15,7 @@ async function getByFilter(query) {
     pageSize,
     keyword = "",
   } = query;
+  console.log(sellout)
 
   const page = pageNum || 1;
   const pageSizeNum = pageSize || 15;
@@ -54,9 +55,9 @@ async function getByFilter(query) {
   };
 
   let selloutWhere;
-  if (sellout) {
+  if (sellout === 'true') {
     selloutWhere = { remainingQuantity: 0 };
-  } else if (sellout === false) {
+  } else if (sellout === 'false') {
     selloutWhere = { remainingQuantity: { gt: 0 } };
   } else {
     selloutWhere = { remainingQuantity: { gte: 0 } };
