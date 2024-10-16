@@ -5,13 +5,12 @@ async function getByFilter(filter) {
 }
 
 async function update(updateData) {
-  const { userId, cardId, totalQuantity, currentStock } = updateData;
+  const { totalQuantity, own } = updateData;
   const where = {
-    userId,
-    cardId,
+    id: own.id,
   };
 
-  const quantity = currentStock - totalQuantity;
+  const quantity = own.quantity - totalQuantity;
   const data = {
     quantity,
   };

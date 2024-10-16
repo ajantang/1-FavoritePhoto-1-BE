@@ -11,8 +11,8 @@ function createShop() {
       userId,
       cardId,
     };
-    const inventory = await ownService.getByFilter(filter);
-    if (inventory.quantity < salesQuantity) {
+    const own = await ownService.getByFilter(filter);
+    if (own.quantity < salesQuantity) {
       const error = new Error(
         "The quantity requested for sale exceeds the available stock."
       );
@@ -26,6 +26,7 @@ function createShop() {
       ...rest,
       remainingQuantity: salesQuantity,
       totalQuantity: salesQuantity,
+      own,
     };
     req.boy = newReqBody;
     assert(req.body, createShopStruct);
