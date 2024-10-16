@@ -24,6 +24,7 @@ export const shopCreateSelect = {
 
 export const shopListSelect = {
   ...shopSelect,
+  createdAt: true,
   Card: {
     select: cardSelect,
   },

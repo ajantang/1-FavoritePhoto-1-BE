@@ -45,10 +45,10 @@ async function getByFilter(query) {
   const whereOr = {
     OR: [
       {
-        title: whereOrBody,
+        name: whereOrBody,
       },
       {
-        content: whereOrBody,
+        description: whereOrBody,
       },
     ],
   };
@@ -63,9 +63,11 @@ async function getByFilter(query) {
   }
 
   const where = {
-    genre: genre ?? { gte: 0 },
-    grade: grade ?? { gte: 0 },
-    whereOr,
+    Card: {
+      ...(genre ? { genre: parseInt(genre, 10) } : {}),
+      ...(grade ? { grade: parseInt(grade, 10) } : {}),
+      ...whereOr,
+    },
     ...selloutWhere,
   };
 
