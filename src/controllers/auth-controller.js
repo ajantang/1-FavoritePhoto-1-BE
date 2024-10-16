@@ -1,5 +1,4 @@
 import authService from "../services/auth-service.js";
-
 import { createCustomError } from "../lib/custom-error.js";
 
 async function signUp(req, res, next) {

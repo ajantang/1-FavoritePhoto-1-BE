@@ -1,5 +1,5 @@
 import e from "express";
-import { adminAuthMiddleware } from "../middlewares/admin";
+import { adminAuthMiddleware } from "../middlewares/admin.js";
 
 const adminRouter = e.Router();
 adminRouter.use(adminAuthMiddleware);
