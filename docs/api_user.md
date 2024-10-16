@@ -72,7 +72,7 @@
   - image : 카드 이미지 url (max-length : 2048)
   - grade : 카드 등급 (int로 전달)
   - genre : 카드 장르 (int로 전달)
-  - totalQuantity : 카드 생성 갯수
+  - quantity : 카드 생성 갯수
   - price : 카드 가격(초기 포인트 : 판매 포인트와 별도. 교환 신청에서 사용됨)
 
 ### req example
@@ -85,7 +85,7 @@
   image : http://code-it.com/test-image1.png,
   grade : 1,
   genre : 2,
-  count : 2,
+  quantity : 2,
   price : 4,
   }
 
@@ -98,7 +98,7 @@
   - image : 카드 이미지 url (max-length : 2048)
   - grade : 카드 등급 (int로 전달)
   - genre : 카드 장르 (int로 전달)
-  - totalQuantity : 카드 생성 갯수
+  - quantity : 카드 생성 갯수
   - price : 카드 가격(초기 포인트 : 판매 포인트와 별도. 교환 신청에서 사용됨)
   - authorNickname : 카드 생성자 닉네임
 
@@ -109,7 +109,7 @@
   image : http://code-it.com/test-image1.png,
   grade : 1,
   genre : 2,
-  count : 2,
+  quantity : 2,
   price : 4,
   authorNickname : 코드잇
   }
@@ -149,7 +149,7 @@
       - image : 카드 이미지 url (max-length : 2048)
       - grade : 카드 등급 (int로 전달)
       - genre : 카드 장르 (int로 전달)
-      - ownCount : 카드 보유량
+      - ownQuantity : 카드 보유량
       - price : 카드 가격(포인트)
       - authorNickname : 카드 생성자 닉네임
 
@@ -162,7 +162,7 @@
   image : http://code-it.com/test-image1.png,
   grade : 1,
   genre : 2,
-  ownCount : 2,
+  ownQuantity : 2,
   price : 4,
   authorNickname : 프로여행러
   },
