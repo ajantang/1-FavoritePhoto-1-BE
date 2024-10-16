@@ -120,8 +120,13 @@ async function countShopListByFilter(query) {
   return await shopRepository.countShopListByFilter(filter);
 }
 
+async function getShopDetailById(id) {
+  return await shopRepository.getShopDetailById(id);
+}
+
 export default {
   createShop,
   getShopListByFilter,
   countShopListByFilter,
+  getShopDetailById,
 };
