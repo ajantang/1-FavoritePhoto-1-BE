@@ -3,7 +3,7 @@ import sessionRepository from "../repositories/session-repository.js";
 import {
   createHashedPassword,
   comparePassword,
-} from "../utils/passwordUtil.js";
+} from "../utils/password-util.js";
 
 import { EXPIRE_TIME } from "../constants/session.js";
 
@@ -25,7 +25,7 @@ async function deleteSession(sessionId) {
 
 async function signUp({ email, password, nickname }) {
   const encryptedPassword = await createHashedPassword(password);
-  const createdUser = await authRepository.createdUser({
+  const createdUser = await authRepository.createUser({
     email,
     encryptedPassword,
     nickname,

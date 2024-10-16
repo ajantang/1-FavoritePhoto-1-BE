@@ -1,11 +1,11 @@
-import { cardSelect } from "./card-select";
+import { cardSelect } from "./card-select.js";
 
 export const userSelect = {
   id: true,
   email: true,
   nickname: true,
   point: true,
-  createAt: true,
+  createdAt: true,
 };
 
 export const userPasswordSelect = {
