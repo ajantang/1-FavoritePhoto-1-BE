@@ -1,23 +1,15 @@
 import e from "express";
+import shopService from "../services/shopService.js";
+import { createShopMapper } from "./mappers/shopMapper.js";
 
 const shopRouter = e.Router();
 
-shopRouter
-  .route("/")
-  .post((req, res, next) => {
-    // 내 포토 카드 판매 등록
-  })
-  .get(":shopId", (req, res, next) => {
-    // 상품에 등록된 포토카드 조회
-  })
-  .put(":shopId", (req, res, next) => {
-    // 상품에 등록된 포토카드 수정
-  })
-  .delete(":shopId", (req, res, next) => {
-    // 상품에 등록된 포토카드 삭제
-  })
-  .post(":shopId/purchase", (req, res, next) => {
-    // 포토 카드 구매
-  });
+shopRouter.route("/").post(async (req, res, next) => {
+  // 인증 후 req.body에 userId 추가
+  // req.body 유효성 검사 로직 추가 예정
+  const shop = await shopService.createShop(req.body);
+  const responseData = createShopMapper(shop);
+  res.status(201).send(responseData);
+});
 
 export default shopRouter;
