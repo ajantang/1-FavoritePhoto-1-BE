@@ -1,25 +1,15 @@
-// import { getCookie } from "cookies-next";
-// import { verifyAccessToken } from "../lib/token.js";
+import { createCustomError } from "../lib/custom-error.js";
 
-// import { adminIds } from "../constants/admin.js";
+export function authMiddleware(req, res, next) {
+  if (!req.session) {
+    return next(createCustomError(401));
+  }
 
-// // 임시로 어드민 미들웨어 생성
-// export function adminAuthMiddleware(req, res, next) {
-//   const token = getCookie("accessToken", { req });
+  if (!req.session.userId) {
+    return next(createCustomError(401));
+  }
 
-//   if (!token) {
-//     return res.status(401).json({ message: "Unauthorized : need admin count" });
-//   }
-
-//   const verifiedData = verifyAccessToken(token);
-
-//   if (!verifiedData) {
-//     return res.status(401).json({ message: "Unauthorized : need admin count" });
-//   }
-
-//   if (!adminIds.includes(verifiedData.id)) {
-//     return res.status(401).json({ message: "Unauthorized : need admin count" });
-//   }
-
-//   next();
-// }
+  if (req.session.role == "admin") {
+    return next();
+  }
+}
