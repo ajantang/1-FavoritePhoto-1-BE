@@ -37,8 +37,10 @@ async function getShopDetailById(id) {
   });
 }
 
-async function name(params) {
-  
+async function checkUserShopOwner(filter) {
+  return prisma.shop.findFirst({
+    where: filter,
+  });
 }
 
 export default {
@@ -46,4 +48,5 @@ export default {
   getShopListByQuery,
   countShopListByQuery,
   getShopDetailById,
+  checkUserShopOwner,
 };
