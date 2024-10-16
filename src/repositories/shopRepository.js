@@ -26,4 +26,15 @@ async function countShopListByFilter(filter) {
   });
 }
 
-export default { createShop, getShopListByFilter, countShopListByFilter };
+async function getShopDetailById(id) {
+  return prisma.shop.findUniqueOrThrow({
+    where: { id },
+  });
+}
+
+export default {
+  createShop,
+  getShopListByFilter,
+  countShopListByFilter,
+  getShopDetailById,
+};
