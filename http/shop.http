@@ -1,10 +1,11 @@
 ###
 POST http://localhost:3000/shop
 Content-Type: application/json
+# Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
     "cardId": "02d136e5-0e31-403b-abbd-6525b1e546ca",
-    "salesQuantity": 5,
+    "salesQuantity": 1,
     "price": 4,
     "exchangeGrade": 0,
     "exchangeGenre": 3,

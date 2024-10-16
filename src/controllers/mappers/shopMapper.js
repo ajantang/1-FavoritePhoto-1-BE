@@ -1,6 +1,6 @@
 export function createShopMapper(data) {
   const seller = data.User;
-  const card = data.card;
+  const card = data.Card;
   const creator = card.User;
 
   return {

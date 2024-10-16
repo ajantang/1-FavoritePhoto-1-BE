@@ -1,4 +1,4 @@
-import * as s from "superstruct";
+import * as s from 'superstruct'
 import isUuid from "is-uuid";
 
 import card from "../constants/card.js";
@@ -38,5 +38,7 @@ const shopStructBody = {
 export const createShopStruct = s.object({
   userId: Uuid,
   cardId: Uuid,
+  remainingQuantity: s.refine(s.number(), "remainingQuantity", (value) => value >= 1),
+  totalQuantity: s.refine(s.number(), "remainingQuantity", (value) => value >= 1),
   ...shopStructBody,
 });
