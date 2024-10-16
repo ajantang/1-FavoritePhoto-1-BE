@@ -1,6 +1,10 @@
 import prisma from "./prisma.js";
 
-import { shopCreateSelect, shopListSelect } from "./selects/shopSelect.js";
+import {
+  shopCreateSelect,
+  shopDetailSelect,
+  shopListSelect,
+} from "./selects/shopSelect.js";
 
 async function createShop(createData) {
   return await prisma.shop.create({
@@ -29,6 +33,7 @@ async function countShopListByFilter(filter) {
 async function getShopDetailById(id) {
   return prisma.shop.findUniqueOrThrow({
     where: { id },
+    select: shopDetailSelect,
   });
 }
 
