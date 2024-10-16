@@ -5,7 +5,7 @@ async function createShop(createData) {
   return await shopRepository.createShop(rest);
 }
 
-async function getByFilter(query) {
+async function getShopListByFilter(query) {
   const {
     sort,
     genre,
@@ -78,7 +78,7 @@ async function getByFilter(query) {
     where,
   };
 
-  return await shopRepository.getByFilter(filterOptions);
+  return await shopRepository.getShopListByFilter(filterOptions);
 }
 
 async function countByFilter(query) {
@@ -110,8 +110,8 @@ async function countByFilter(query) {
 
   const filter = {
     Card: {
-      ...(genre ? { genre: parseInt(genre, 10) } : {}),
-      ...(grade ? { grade: parseInt(grade, 10) } : {}),
+      ...(genre ? { genre: parseInt(genre) } : {}),
+      ...(grade ? { grade: parseInt(grade) } : {}),
       ...whereOr,
     },
     ...selloutWhere,
@@ -122,6 +122,6 @@ async function countByFilter(query) {
 
 export default {
   createShop,
-  getByFilter,
+  getShopListByFilter,
   countByFilter,
 };

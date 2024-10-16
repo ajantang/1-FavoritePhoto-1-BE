@@ -10,9 +10,9 @@ async function createShop(req, res, next) {
   res.status(201).send(responseData);
 }
 
-async function getList(req, res, next) {
-  const shops = await shopService.getByFilter(req.query);
+async function getShopList(req, res, next) {
+  const shops = await shopService.getShopListByFilter(req.query);
   res.send(shops);
 }
 
-export default { createShop, getList };
+export default { createShop, getShopList };
