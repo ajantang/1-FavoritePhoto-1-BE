@@ -1,5 +1,5 @@
 import prisma from "./prisma";
-import { userSelect } from "./selects/userSelect";
+import { userSelect, userPasswordSelect } from "./selects/user-select";
 
 async function createUser({ email, encryptedPassword, nickname }) {
   return await prisma.user.create({
@@ -15,9 +15,11 @@ async function getUserInfoByUserId(id) {
   });
 }
 
-async function getUserPasswordByEmail(email) {
+async function getUserInfoPasswordByEmail(email) {
   return await prisma.user.findUniqueOrThrow({
     where: { email },
-    select: userSelect,
+    select: userPasswordSelect,
   });
 }
+
+export { createUser, getUserInfoByUserId, getUserInfoPasswordByEmail };

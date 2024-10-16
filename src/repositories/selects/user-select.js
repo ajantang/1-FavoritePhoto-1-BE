@@ -1,4 +1,4 @@
-import { cardSelect } from "./cardSelect";
+import { cardSelect } from "./card-select";
 
 export const userSelect = {
   id: true,
@@ -6,6 +6,11 @@ export const userSelect = {
   nickname: true,
   point: true,
   createAt: true,
+};
+
+export const userPasswordSelect = {
+  ...userSelect,
+  encryptedPassword: true,
 };
 
 export const userOwnSelect = {
