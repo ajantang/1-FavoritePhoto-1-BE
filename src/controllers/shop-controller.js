@@ -12,6 +12,7 @@ async function createShop(req, res, next) {
 
 async function getShopList(req, res, next) {
   const shops = await shopService.getShopListByFilter(req.query);
+  const count = await shopService.countShopListByFilter(req.query)
   res.send(shops);
 }
 

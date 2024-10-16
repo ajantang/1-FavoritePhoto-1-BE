@@ -81,7 +81,7 @@ async function getShopListByFilter(query) {
   return await shopRepository.getShopListByFilter(filterOptions);
 }
 
-async function countByFilter(query) {
+async function countShopListByFilter(query) {
   const { genre, grade, sellout, keyword = "" } = query;
 
   const whereOrBody = {
@@ -117,11 +117,11 @@ async function countByFilter(query) {
     ...selloutWhere,
   };
 
-  return await shopRepository.countByFilter(filter);
+  return await shopRepository.countShopListByFilter(filter);
 }
 
 export default {
   createShop,
   getShopListByFilter,
-  countByFilter,
+  countShopListByFilter,
 };
