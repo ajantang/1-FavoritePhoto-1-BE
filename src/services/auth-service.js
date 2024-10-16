@@ -3,7 +3,7 @@ import sessionRepository from "../repositories/session-repository.js";
 import {
   createHashedPassword,
   comparePassword,
-} from "../utils/passwordUtil.js";
+} from "../utils/password-util.js";
 
 import { EXPIRE_TIME } from "../constants/session.js";
 
