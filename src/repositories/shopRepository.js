@@ -13,7 +13,7 @@ async function createShop(createData) {
   });
 }
 
-async function getShopListByFilter(filter) {
+async function getShopListByQuery(filter) {
   const { orderBy, skip, take, where } = filter;
   return prisma.shop.findMany({
     orderBy,
@@ -24,7 +24,7 @@ async function getShopListByFilter(filter) {
   });
 }
 
-async function countShopListByFilter(filter) {
+async function countShopListByQuery(filter) {
   return prisma.shop.count({
     where: filter,
   });
@@ -37,9 +37,13 @@ async function getShopDetailById(id) {
   });
 }
 
+async function name(params) {
+  
+}
+
 export default {
   createShop,
-  getShopListByFilter,
-  countShopListByFilter,
+  getShopListByQuery,
+  countShopListByQuery,
   getShopDetailById,
 };
