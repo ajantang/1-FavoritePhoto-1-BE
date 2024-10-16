@@ -11,3 +11,6 @@ Content-Type: application/json
     "exchangeGenre": 3,
     "exchangeDescription": "테스트 진행중"
 }
+
+###
+GET http://localhost:3000/shop?genre=0&&grade=&&keyword=&&pageSize=1&&pageNum=1&&sellout=false

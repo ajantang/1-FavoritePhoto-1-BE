@@ -4,6 +4,9 @@ import { validateCreateShopData } from "../middlewares/validateData.js";
 
 const shopRouter = express.Router();
 
-shopRouter.route("/").post(validateCreateShopData, shopController.createShop); // 인증 후 req.body에 userId 추가
+shopRouter
+  .route("/")
+  .post(validateCreateShopData, shopController.createShop) // 인증 후 req.body에 userId 추가
+  .get(shopController.getShopList);
 
 export default shopRouter;

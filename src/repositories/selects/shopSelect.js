@@ -1,4 +1,4 @@
-import { cardDetailSelect } from "./card-select.js";
+import { cardDetailSelect, cardSelect } from "./card-select.js";
 
 export const shopSelect = {
   id: true,
@@ -18,6 +18,14 @@ export const shopCreateSelect = {
     },
   },
   Card: {
-    select : cardDetailSelect,
-  }
+    select: cardDetailSelect,
+  },
+};
+
+export const shopListSelect = {
+  ...shopSelect,
+  createdAt: true,
+  Card: {
+    select: cardSelect,
+  },
 };
