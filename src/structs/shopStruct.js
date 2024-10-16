@@ -10,12 +10,12 @@ const shopStructBody = {
     s.number(),
     "exchangeGrade",
     (value) => value >= 0 && value <= 3
-  ),
+  ), // 추후 수정 가능
   exchangeGenre: s.refine(
     s.number(),
     "exchangeGrade",
     (value) => value >= 0 && value <= 3
-  ),
+  ), // 추후 수정 가능
   exchangeDescription: s.size(s.string, 0, 1024),
 };
 
