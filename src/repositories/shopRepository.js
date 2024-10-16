@@ -1,9 +1,9 @@
 import prisma from "./prisma";
 import { shopCreateSelect } from "./selects/shopSelect";
 
-async function createShop(creatData) {
-  return await prisma.shop.creat({
-    data: creatData,
+async function createShop(createData) {
+  return await prisma.shop.create({
+    data: createData,
     select: shopCreateSelect,
   });
 }
