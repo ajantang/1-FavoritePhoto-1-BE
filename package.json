@@ -1,4 +1,7 @@
 {
+  "name": "favorite-photo",
+  "version": "0.0.1",
+  "license": "UNLICENSED",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.670.0",
     "@aws-sdk/lib-storage": "^3.670.0",
