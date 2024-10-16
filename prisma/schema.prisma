@@ -30,7 +30,7 @@ model User {
   Notifications Notification[]
   LastBoxTime   LastBoxTime[]
   Card          Card[]
-  Sesseion      Sesseion[]
+  Sesseion      Session[]
 
   @@map("user")
 }
@@ -145,7 +145,7 @@ model LastBoxTime {
   @@map("last_box_time")
 }
 
-model Sesseion {
+model Session {
   id        String   @id @default(uuid()) @db.VarChar(36)
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @map("user_id") @db.VarChar(36)
