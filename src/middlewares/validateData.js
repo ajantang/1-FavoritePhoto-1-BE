@@ -1,6 +1,6 @@
 import { assert } from "superstruct";
-import ownService from "../services/ownService";
-import { createShopStruct } from "../structs/shopStruct";
+import ownService from "../services/ownService.js";
+import { createShopStruct } from "../structs/shopStruct.js";
 
 function createShop() {
   return async (req, res, next) => {
