@@ -1,6 +1,7 @@
-class CustomError extends Error {
-  constructor(message, type) {
-    super(message);
-    this.type = type;
-  }
+import { CUSTOM_ERROR_MESSAGES } from "../constants/error";
+
+export function createCustomError(status) {
+  const err = new Error(CUSTOM_ERROR_MESSAGES[status]);
+  err.status = status;
+  return err;
 }

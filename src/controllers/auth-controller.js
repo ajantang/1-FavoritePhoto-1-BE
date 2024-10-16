@@ -1,22 +1,54 @@
-import e from "express";
-import { authMiddleware } from "../middlewares/auth.js";
+import authService from "../services/auth-service.js";
+import { createCustomError } from "../lib/custom-error.js";
 
-const authRouter = e.Router();
-authRouter.use(authMiddleware);
+async function signUp(req, res, next) {
+  try {
+    const { email, password } = req.body;
+    const result = await authService.signUp({ email, password, nickname });
 
-authRouter
-  .route("/")
-  .post("sign-up", (req, res, next) => {
-    // 회원 가입
-  })
-  .post("sign-in", (req, res, next) => {
-    // 로그인
-  })
-  .post("sign-out", (req, res, next) => {
-    // 로그 아웃
-  })
-  .post("refresh", (req, res, next) => {
-    // 토큰 갱신
-  });
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
 
-export default authRouter;
+async function signIn(req, res, next) {
+  try {
+    const { email, password } = req.body;
+    const userInfo = await authService.signIn({ email, password });
+
+    if (!userInfo) {
+      return next(new createCustomError(400));
+    }
+
+    req.session.userId = userInfo.id;
+    const session = {
+      sessionId: req.session.id,
+      userId: req.session.userId,
+      sessionData: req.session,
+    };
+
+    await authService.createSession(session);
+
+    return res.status(200).send(userInfo);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+async function signOut(req, res, next) {
+  try {
+    const sessionId = req.session.id;
+
+    await authService.deleteSession(sessionId);
+    req.session.destroy();
+
+    await authService.signOut();
+
+    return res.status(200).send();
+  } catch (err) {
+    return next(err);
+  }
+}
+
+export default { signIn, signUp, signOut };

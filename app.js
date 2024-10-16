@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import dotenv from "dotenv";
 
 import adminRouter from "./src/controllers/admin-controller.js";
 import authRouter from "./src/controllers/auth-controller.js";
@@ -14,9 +15,30 @@ import {
   serverErrorHandler,
 } from "./src/middlewares/error.js";
 
+import { EXPIRE_TIME } from "./src/constants/session";
+
+dotenv.config();
 export const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      // secure: true,
+      sameSite: "none",
+      maxAge: EXPIRE_TIME,
+    },
+  })
+);
 app.use(express.json());
 
 app.use("/admin", adminRouter);
