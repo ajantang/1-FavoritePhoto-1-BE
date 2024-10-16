@@ -20,4 +20,10 @@ async function getByFilter(filter) {
   });
 }
 
-export default { createShop, getByFilter };
+async function countByFilter(filter) {
+  return prisma.shop.count({
+    where: filter,
+  });
+}
+
+export default { createShop, getByFilter, countByFilter };
