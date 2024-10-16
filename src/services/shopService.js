@@ -5,7 +5,7 @@ async function createShop(createData) {
   return await shopRepository.createShop(rest);
 }
 
-async function getByFilter(query) {
+async function getShopListByFilter(query) {
   const {
     sort,
     genre,
@@ -54,9 +54,9 @@ async function getByFilter(query) {
   };
 
   let selloutWhere;
-  if (sellout) {
+  if (sellout === "true") {
     selloutWhere = { remainingQuantity: 0 };
-  } else if (sellout === false) {
+  } else if (sellout === "false") {
     selloutWhere = { remainingQuantity: { gt: 0 } };
   } else {
     selloutWhere = { remainingQuantity: { gte: 0 } };
@@ -64,8 +64,8 @@ async function getByFilter(query) {
 
   const where = {
     Card: {
-      ...(genre ? { genre: parseInt(genre, 10) } : {}),
-      ...(grade ? { grade: parseInt(grade, 10) } : {}),
+      ...(genre ? { genre: parseInt(genre) } : {}),
+      ...(grade ? { grade: parseInt(grade) } : {}),
       ...whereOr,
     },
     ...selloutWhere,
@@ -78,10 +78,50 @@ async function getByFilter(query) {
     where,
   };
 
-  return await shopRepository.getByFilter(filterOptions);
+  return await shopRepository.getShopListByFilter(filterOptions);
+}
+
+async function countShopListByFilter(query) {
+  const { genre, grade, sellout, keyword = "" } = query;
+
+  const whereOrBody = {
+    contains: keyword,
+    mode: "insensitive",
+  };
+  const whereOr = {
+    OR: [
+      {
+        name: whereOrBody,
+      },
+      {
+        description: whereOrBody,
+      },
+    ],
+  };
+
+  let selloutWhere;
+  if (sellout === "true") {
+    selloutWhere = { remainingQuantity: 0 };
+  } else if (sellout === "false") {
+    selloutWhere = { remainingQuantity: { gt: 0 } };
+  } else {
+    selloutWhere = { remainingQuantity: { gte: 0 } };
+  }
+
+  const filter = {
+    Card: {
+      ...(genre ? { genre: parseInt(genre) } : {}),
+      ...(grade ? { grade: parseInt(grade) } : {}),
+      ...whereOr,
+    },
+    ...selloutWhere,
+  };
+
+  return await shopRepository.countShopListByFilter(filter);
 }
 
 export default {
   createShop,
-  getByFilter,
+  getShopListByFilter,
+  countShopListByFilter,
 };
