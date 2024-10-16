@@ -1,5 +1,5 @@
 import prisma from "./prisma";
-import { shopCreateSelect } from "./selects/shopSelect";
+import { shopCreateSelect } from "./selects/shopSelect.js";
 
 async function createShop(createData) {
   return await prisma.shop.create({
