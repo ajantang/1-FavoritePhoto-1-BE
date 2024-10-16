@@ -1,6 +1,6 @@
 import prisma from "./prisma.js";
 
-import { shopCreateSelect } from "./selects/shopSelect.js";
+import { shopCreateSelect, shopListSelect } from "./selects/shopSelect.js";
 
 async function createShop(createData) {
   return await prisma.shop.create({
@@ -9,4 +9,15 @@ async function createShop(createData) {
   });
 }
 
-export default { createShop };
+async function geetByFilter(filter) {
+  const { orderBy, skip, take, where } = filter;
+  return prisma.shop.findMany({
+    orderBy,
+    skip,
+    take,
+    where,
+    select: shopListSelect,
+  });
+}
+
+export default { createShop, geetByFilter };
