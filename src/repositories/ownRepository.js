@@ -1,11 +1,18 @@
-import prisma from "./prisma";
-import { userOwnSelect } from "./selects/user-select.js";
+import prisma from "./prisma.js";
+import { ownSelect } from "./selects/own-select.js";
 
 async function getByFilter(filter) {
-  return await prisma.own.findMany({
+  return await prisma.own.findFirstOrThrow({
     where: filter,
-    select: userOwnSelect
+    select: ownSelect,
   });
 }
 
-export default { getByFilter };
+async function update(where, data) {
+  return await prisma.own.update({
+    where,
+    data,
+  });
+}
+
+export default { getByFilter, update };
