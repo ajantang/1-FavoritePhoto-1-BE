@@ -30,7 +30,7 @@ model User {
   Notifications Notification[]
   LastBoxTime   LastBoxTime[]
   Card          Card[]
-  Sesseion      Session[]
+  Session       Session[]
 
   @@map("user")
 }
