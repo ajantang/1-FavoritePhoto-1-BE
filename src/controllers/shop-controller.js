@@ -14,8 +14,17 @@ async function getShopList(req, res, next) {
   const shops = await shopService.getShopListByFilter(req.query);
   const count = await shopService.countShopListByFilter(req.query);
   const [list, total] = await Promise.all([shops, count]);
-  const responseData = getShopListMapper(list, total)
+  const responseData = getShopListMapper(list, total);
   res.send(responseData);
 }
 
-export default { createShop, getShopList };
+async function getShopDetail(req, res, next) {
+  const { id } = req.params;
+  // 로그인한 유저가 등록한 상품인지 확인하는 코드 필요
+  // 로그인한 유저가 해당 상품에 교환을 신청했는지 확인하는 코드 필요
+  const shop = await shopService.getShopDetailById(id);
+  // res mapping하는 코드 필요
+  res.send();
+}
+
+export default { createShop, getShopList, getShopDetail };
