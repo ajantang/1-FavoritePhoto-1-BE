@@ -25,7 +25,7 @@ async function deleteSession(sessionId) {
 
 async function signUp({ email, password, nickname }) {
   const encryptedPassword = await createHashedPassword(password);
-  const createdUser = await authRepository.createdUser({
+  const createdUser = await authRepository.createUser({
     email,
     encryptedPassword,
     nickname,

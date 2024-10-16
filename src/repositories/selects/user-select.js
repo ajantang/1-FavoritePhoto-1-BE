@@ -5,7 +5,7 @@ export const userSelect = {
   email: true,
   nickname: true,
   point: true,
-  createAt: true,
+  createdAt: true,
 };
 
 export const userPasswordSelect = {

@@ -1,0 +1,19 @@
+###
+POST http://localhost:3000/auth/sign-up
+Content-Type : application/json
+
+{
+    "email" : "codeit03@codeit.com",
+    "password" : "!codeit03",
+    "nickname" : "코드잇03"
+}
+
+###
+POST https://one-favoritephoto-1-be.onrender.com/auth/sign-up
+Content-Type : application/json
+
+{
+    "email" : "codeit03@codeit.com",
+    "password" : "!codeit03",
+    "nickname" : "코드잇03"
+}
