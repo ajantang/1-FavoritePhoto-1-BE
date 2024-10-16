@@ -8,8 +8,7 @@ async function getByFilter(filter) {
   });
 }
 
-async function update(updateData) {
-  const { where, data } = updateData;
+async function update(where, data) {
   return await prisma.own.update({
     where,
     data,
