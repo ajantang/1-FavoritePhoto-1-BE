@@ -35,7 +35,7 @@ Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-    "cardId": "1c6ca252-c799-47d7-bf97-1253857384d2",
+    "cardId": "b5ccc355-5abb-49a4-9eef-7a8a0de57310",
     "salesQuantity": 1,
     "price": 4,
     "exchangeGrade": 0,
@@ -44,12 +44,12 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 }
 
 ###
-GET http://localhost:3000/users/my-cards/shop
+GET http://localhost:3000/users/my-cards/shop?keyword=생성
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-GET http://localhost:3000/users/my-cards/shop?genre=1&&grade=0&&pageSize=15&&pageNum=1
+GET http://localhost:3000/users/my-cards/shop?genre=0&&grade=3&&pageSize=15&&pageNum=1&&sellout=false&&keyword=
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 

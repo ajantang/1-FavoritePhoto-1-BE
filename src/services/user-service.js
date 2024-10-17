@@ -5,6 +5,7 @@ import prisma from "../repositories/prisma.js";
 import {
   myCardMapper,
   myCardListMapper,
+  myShopListMapper,
 } from "../controllers/mappers/card-mapper.js";
 import {
   createCardListFilterByQuery,
@@ -60,7 +61,7 @@ async function getMyShopList({ userId, query }) {
   const list = await shopRepository.findMyShopList({ userId, filter });
   const counts = await shopRepository.getGroupCountByGrade({ userId, filter });
 
-  return myCardListMapper({ counts, list });
+  return myShopListMapper({ counts, list });
 }
 
 export default { getMyCardList, createMyCard, getMyShopList };
