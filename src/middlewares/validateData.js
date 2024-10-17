@@ -4,20 +4,28 @@ import { createShopStruct } from "../structs/shopStruct.js";
 import { SignUpUser, SignInUser } from "../structs/user-struct.js";
 
 export async function validateCreateShopData(req, res, next) {
-  const userId = "3b11769f-2c33-4c76-b263-3b5bda200c43";
+  try {
+    assert(req.body, createShopStruct);
+  } catch (err) {
+    return next(err);
+  }
+
+  const userId = req.session.userId;
   const { cardId, salesQuantity, ...rest } = req.body;
-  // const { userId, cardId, salesQuantity, ...rest } = req.body;
   const filter = {
     userId,
     cardId,
   };
+
   const own = await ownService.getByFilter(filter);
+
   if (own.quantity < salesQuantity) {
     const error = new Error(
       "The quantity requested for sale exceeds the available stock."
     );
     error.code = 400;
-    next(error);
+
+    return next(error);
   }
 
   const newReqBody = {
@@ -28,9 +36,9 @@ export async function validateCreateShopData(req, res, next) {
     totalQuantity: salesQuantity,
   };
   req.body = newReqBody;
-  assert(req.body, createShopStruct);
   req.body.own = own;
-  next();
+
+  return next();
 }
 
 export function validateSignUpUserData(req, res, next) {

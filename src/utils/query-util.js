@@ -1,13 +1,5 @@
 export function createCardListFilterByQuery(query) {
-  const {
-    sort,
-    genre,
-    grade,
-    sellout,
-    pageNum,
-    pageSize,
-    keyword = "",
-  } = query;
+  const { sort, genre, grade, pageNum, pageSize, keyword = "" } = query;
 
   const page = pageNum || 1;
   const pageSizeNum = pageSize || 15;
@@ -46,20 +38,12 @@ export function createCardListFilterByQuery(query) {
     ],
   };
 
-  let selloutWhere = null;
-  if (sellout === "true") {
-    selloutWhere = { quantity: 0 };
-  } else if (sellout === "false") {
-    selloutWhere = { quantity: { gt: 0 } };
-  }
-
   const where = {
     Card: {
       ...(genre ? { genre: parseInt(genre) } : {}),
       ...(grade ? { grade: parseInt(grade) } : {}),
       ...whereOr,
     },
-    ...(selloutWhere && selloutWhere),
   };
 
   const filterOptions = {
@@ -68,6 +52,19 @@ export function createCardListFilterByQuery(query) {
     take: parseInt(pageSizeNum),
     where,
   };
+
+  return filterOptions;
+}
+
+export function createShopListFilterByQuery(query) {
+  const { sellout, ...rest } = query;
+  const filterOptions = createCardListFilterByQuery(rest);
+
+  if (sellout === "true") {
+    filterOptions.where.remainingQuantity = 0;
+  } else if (sellout === "false") {
+    filterOptions.where.remainingQuantity = { gt: 0 };
+  }
 
   return filterOptions;
 }

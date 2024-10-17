@@ -30,6 +30,35 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 }
 
 ###
+POST http://localhost:3000/shop
+Content-Type: application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+{
+    "cardId": "b5ccc355-5abb-49a4-9eef-7a8a0de57310",
+    "salesQuantity": 1,
+    "price": 4,
+    "exchangeGrade": 0,
+    "exchangeGenre": 3,
+    "exchangeDescription": "테스트 진행중"
+}
+
+###
+GET http://localhost:3000/users/my-cards/shop?keyword=생성
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET http://localhost:3000/users/my-cards/shop?genre=0&&grade=3&&pageSize=15&&pageNum=1&&sellout=false&&keyword=
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET http://localhost:3000/users/my-cards/shop?genre=0&&grade=&&keyword=&&pageSize=15&&pageNum=1
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
 POST http://localhost:3000/auth/sign-in
 Content-Type : application/json
 
