@@ -37,6 +37,8 @@ async function createMyCard({
       quantity,
     });
 
+    console.log("cardInfo : ", cardInfo);
+
     const ownCardInfo = await ownRepository.createOwn({
       cardId: cardInfo.id,
       userId,
@@ -45,7 +47,7 @@ async function createMyCard({
 
     return ownCardInfo;
   });
-
+  console.log("result : ", result);
   return myCardMapper(result);
 }
 

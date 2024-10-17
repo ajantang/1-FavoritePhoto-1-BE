@@ -87,6 +87,10 @@
 
 ### req example
 
+### res template
+
+- status : 상태 코드
+
 ### res example
 
 - status : 200

@@ -8,7 +8,7 @@
 - query
   - sort : recent || oldest || cheapest || highest (최신순 OR 오래된 순 OR 가격 낮은 순 OR 가격 높은 순 정렬)
   - genre : 장르 (필터 / int로 전달)
-  - sellout : true || false매진 여부 (필터)
+  - sellout : true || false매진 여부 (필터) - 삭제 예정
   - grade : 등급 (필터 / int로 전달)
   - ownerId : 판매자 ID(필터)
   - pageNum : 페이지 넘버(페이지네이션)
@@ -18,38 +18,42 @@
 ### req example
 
 - query :
-  - sort=recent&genre=travel&sellout=false&grade=SUPER_RARE&ownerId=1&pageNum=1&pageSize=9&keyword=스페인
+  - sort=recent?genre=1&&grade=0&&pageSize=15&&pageNum=1
 
 ### res template
 
 - data :
   - totalCount : 총 카드 수,
+  - countsGroupByGrade : 등급 별 카드 수
   - cards : 카드 배열
     - {카드 정보}
+      - id : 카드 아이디
       - image : 카드 이미지 url (max-length : 2048)
+      - name : 카드 이름
       - grade : 카드 등급 (int로 전달)
       - genre : 카드 장르 (int로 전달)
-      - ownCount : 카드 보유량
       - price : 카드 가격(포인트)
-      - authorNickname : 카드 생성자 닉네임
+      - nickname : 카드 생성자 닉네임
+      - quantity : 카드 보유량
 
 ### res example
 
 - data : {
-  totalCount : 100,
-  card : [
-  {
-  image : http://code-it.com/test-image1.png,
-  grade : 1,
-  genre : 2,
-  ownCount : 2,
-  price : 4,
-  authorNickname : 프로여행러
+  "totalCount": 8,
+  "countsGroupByGrade": {
+  "0": 8
   },
+  "cards": [
   {
-  ...
-  },
-  ...
+  "id": "df8d45ef-3178-46ce-959f-0f1613eb844a",
+  "image": "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
+  "name": "테스트 이미지3",
+  "grade": 0,
+  "genre": 1,
+  "price": 3,
+  "nickname": "코드잇05",
+  "quantity": 8
+  }
   ]
   }
 
@@ -60,8 +64,6 @@
 - description : 내 소유 포토 카드 등록
 - path : /users/my-card
 - method : POST
-- headers
-  - Authorization : Bearer {accessToken}
 - body
   - name : 카드 이름 (max-length 50)
   - description : 카드 설명 (max-length 1024)
@@ -73,41 +75,40 @@
 
 ### req example
 
-- headers
-  - Authorization : Bearer {accessToken}
 - body : {
-  name : 서울 밤하늘,
-  description : 남산에서 본 서늘한 가을 밤 풍경
-  image : http://code-it.com/test-image1.png,
-  grade : 1,
-  genre : 2,
-  quantity : 2,
-  price : 4,
+  "name" : "테스트 이미지6",
+  "description" : "카드 생성 테스트6",
+  "image" : "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
+  "grade" : 2,
+  "genre" : 2,
+  "price" : 3,
+  "quantity" : 7
   }
 
 ### res template
 
 - data
   - id : 카드 id
+  - image : 카드 이미지 url (max-length : 2048)
   - name : 카드 이름 (max-length 50)
   - description : 카드 설명 (max-length 1024)
-  - image : 카드 이미지 url (max-length : 2048)
   - grade : 카드 등급 (int로 전달)
   - genre : 카드 장르 (int로 전달)
-  - quantity : 카드 생성 갯수
   - price : 카드 가격(초기 포인트 : 판매 포인트와 별도. 교환 신청에서 사용됨)
-  - authorNickname : 카드 생성자 닉네임
+  - nickname : 카드 생성자 닉네임
+  - quantity : 카드 생성 갯수
 
 ### res example
 
 - data : {
-  id : c9c35842-2fda-44cc-8873-d933220e7b37
-  image : http://code-it.com/test-image1.png,
-  grade : 1,
-  genre : 2,
-  quantity : 2,
-  price : 4,
-  authorNickname : 코드잇
+  "id": "bc5b3a70-a33b-4de5-9fde-a6305d1703df",
+  "image": "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
+  "name": "테스트 이미지6",
+  "grade": 2,
+  "genre": 2,
+  "price": 3,
+  "nickname": "코드잇05",
+  "quantity": 7
   }
 
 ## GET /users/my-cards/shop

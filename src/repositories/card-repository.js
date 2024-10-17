@@ -1,5 +1,5 @@
 import prisma from "./prisma.js";
-import { cardSelect } from "./selects/card-select.js";
+import { cardSelect, cardDetailSelect } from "./selects/card-select.js";
 
 async function createCard({
   name,
@@ -22,7 +22,10 @@ async function createCard({
     totalQuantity: quantity,
   };
 
-  return await prisma.card.create({ data: newCardData, select: cardSelect });
+  return await prisma.card.create({
+    data: newCardData,
+    select: cardDetailSelect,
+  });
 }
 
 async function findMyShopCardList({}) {}

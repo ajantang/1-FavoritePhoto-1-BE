@@ -20,13 +20,13 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-  "name" : "테스트 이미지3",
-  "description" : "카드 생성 테스트3",
+  "name" : "테스트 이미지8",
+  "description" : "카드 생성 테스트8",
   "image" : "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
-  "grade" : 0,
-  "genre" : 2,
-  "price" : 3,
-  "quantity" : 4
+  "grade" : 3,
+  "genre" : 0,
+  "price" : 2,
+  "quantity" : 2
 }
 
 ###
@@ -36,4 +36,38 @@ Content-Type : application/json
 {
     "email" : "codeit05@codeit.com",
     "password" : "!codeit05"
+}
+
+###
+GET https://one-favoritephoto-1-be.onrender.com/users/my-cards
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET  https://one-favoritephoto-1-be.onrender.com/users/my-cards?genre=1&&grade=0&&pageSize=15&&pageNum=1
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+POST https://one-favoritephoto-1-be.onrender.com/users/my-cards
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+{
+  "name" : "테스트 이미지6",
+  "description" : "카드 생성 테스트6",
+  "image" : "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
+  "grade" : 2,
+  "genre" : 2,
+  "price" : 3,
+  "quantity" : 7
+}
+
+###
+POST https://one-favoritephoto-1-be.onrender.com/auth/sign-in
+Content-Type : application/json
+
+{
+  "email" : "codeit05@codeit.com",
+  "password" : "!codeit05"
 }
