@@ -1,14 +1,25 @@
-import e from "express";
+import pointService from "../services/point-service.js";
 
-const pointRouter = e.Router();
+async function openBox(req, res, next) {
+  try {
+    const userId = req.session.userId;
+    const result = pointService.openBox(userId);
 
-pointRouter
-  .route("/")
-  .post((req, res, next) => {
-    // 포인트 획득
-  })
-  .get((req, res, next) => {
-    // 포인트 획득 기록 조회
-  });
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
 
-export default pointRouter;
+async function getLastOpenBoxTime(req, res, next) {
+  try {
+    const userId = req.session.userId;
+    const result = pointService.getLastOpenBoxTime(userId);
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+export default { openBox, getLastOpenBoxTime };

@@ -1,4 +1,6 @@
-import authRepository from "../repositories/auth-repository.js";
+import prisma from "../repositories/prisma.js";
+import userRepository from "../repositories/user-repository.js";
+import lastBoxTimeRepository from "../repositories/last-box-time-repository.js";
 import sessionRepository from "../repositories/session-repository.js";
 import {
   createHashedPassword,
@@ -25,18 +27,23 @@ async function deleteSession(sessionId) {
 
 async function signUp({ email, password, nickname }) {
   const encryptedPassword = await createHashedPassword(password);
-  const createdUser = await authRepository.createUser({
-    email,
-    encryptedPassword,
-    nickname,
-  });
 
-  return createdUser;
+  return prisma.$transaction(async () => {
+    const createdUser = await userRepository.createUser({
+      email,
+      encryptedPassword,
+      nickname,
+    });
+
+    await lastBoxTimeRepository.createLastBoxTime(createdUser.id);
+
+    return createdUser;
+  });
 }
 
 async function signIn({ email, password }) {
   const { encryptedPassword, ...rest } =
-    await authRepository.getUserInfoPasswordByEmail(email);
+    await userRepository.getUserInfoPasswordByEmail(email);
 
   if (!encryptedPassword) {
     return null;
