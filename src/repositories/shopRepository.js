@@ -1,6 +1,10 @@
 import prisma from "./prisma.js";
 
-import { shopCreateSelect, shopListSelect } from "./selects/shopSelect.js";
+import {
+  shopCreateSelect,
+  shopDetailSelect,
+  shopListSelect,
+} from "./selects/shopSelect.js";
 
 async function createShop(createData) {
   return await prisma.shop.create({
@@ -9,7 +13,7 @@ async function createShop(createData) {
   });
 }
 
-async function getShopListByFilter(filter) {
+async function getShopListByQuery(filter) {
   const { orderBy, skip, take, where } = filter;
   return prisma.shop.findMany({
     orderBy,
@@ -20,10 +24,29 @@ async function getShopListByFilter(filter) {
   });
 }
 
-async function countShopListByFilter(filter) {
+async function countShopListByQuery(filter) {
   return prisma.shop.count({
     where: filter,
   });
 }
 
-export default { createShop, getShopListByFilter, countShopListByFilter };
+async function getShopDetailById(id) {
+  return prisma.shop.findUniqueOrThrow({
+    where: { id },
+    select: shopDetailSelect,
+  });
+}
+
+async function checkUserShopOwner(filter) {
+  return prisma.shop.findFirst({
+    where: filter,
+  });
+}
+
+export default {
+  createShop,
+  getShopListByQuery,
+  countShopListByQuery,
+  getShopDetailById,
+  checkUserShopOwner,
+};

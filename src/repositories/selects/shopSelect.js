@@ -29,3 +29,24 @@ export const shopListSelect = {
     select: cardSelect,
   },
 };
+
+export const shopDetailSelect = {
+  ...shopSelect,
+  Card: {
+    select: cardDetailSelect,
+  },
+  User: {
+    select: {
+      nickname: true,
+    },
+  },
+  Exchanges: {
+    select: {
+      id: true,
+      description: true,
+      Card: {
+        select: cardSelect,
+      },
+    },
+  },
+};

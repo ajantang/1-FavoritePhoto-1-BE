@@ -5,7 +5,7 @@ async function createShop(createData) {
   return await shopRepository.createShop(rest);
 }
 
-async function getShopListByFilter(query) {
+async function getShopListByQuery(query) {
   const {
     sort,
     genre,
@@ -78,10 +78,10 @@ async function getShopListByFilter(query) {
     where,
   };
 
-  return await shopRepository.getShopListByFilter(filterOptions);
+  return await shopRepository.getShopListByQuery(filterOptions);
 }
 
-async function countShopListByFilter(query) {
+async function countShopListByQuery(query) {
   const { genre, grade, sellout, keyword = "" } = query;
 
   const whereOrBody = {
@@ -99,14 +99,12 @@ async function countShopListByFilter(query) {
     ],
   };
 
-  let selloutWhere;
+  let selloutWhere = null
   if (sellout === "true") {
     selloutWhere = { remainingQuantity: 0 };
   } else if (sellout === "false") {
     selloutWhere = { remainingQuantity: { gt: 0 } };
-  } else {
-    selloutWhere = { remainingQuantity: { gte: 0 } };
-  }
+  } 
 
   const filter = {
     Card: {
@@ -117,11 +115,26 @@ async function countShopListByFilter(query) {
     ...selloutWhere,
   };
 
-  return await shopRepository.countShopListByFilter(filter);
+  return await shopRepository.countShopListByQuery(filter);
+}
+
+async function getShopDetailById(id) {
+  return await shopRepository.getShopDetailById(id);
+}
+
+async function checkUserShopOwner(userId, shopId) {
+  const filter = {
+    userId,
+    shopId,
+  };
+
+  return await shopRepository.checkUserShopOwner(filter);
 }
 
 export default {
   createShop,
-  getShopListByFilter,
-  countShopListByFilter,
+  getShopListByQuery,
+  countShopListByQuery,
+  getShopDetailById,
+  checkUserShopOwner,
 };
