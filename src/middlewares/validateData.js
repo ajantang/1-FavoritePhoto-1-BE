@@ -3,6 +3,7 @@ import ownService from "../services/ownService.js";
 import { createShopStruct, updateShopStruct } from "../structs/shopStruct.js";
 import { SignUpUser, SignInUser } from "../structs/user-struct.js";
 import shopService from "../services/shopService.js";
+import userService from "../services/user-service.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -170,5 +171,15 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(error);
   }
 
-  
+  const user = await userService.getUserInfoByUserId(userId);
+  const totalPrice = purchaseQuantity * shop.price;
+
+  // 총 판매가와 보유 포인트 대조
+  if (totalPrice > user.point) {
+    const error = new Error("Insufficient points to complete the purchase.");
+    error.code = 402;
+    return next(error);
+  }
+
+  return next();
 }

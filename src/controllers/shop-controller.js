@@ -53,7 +53,7 @@ async function purchaseController(req, res, next) {
   const { id } = req.params;
   const userId = req.session.userId;
   const { purchaseQuantity } = req.body;
-  // 총 판매가와 보유 포인트 대조
+  
   // 구매자 포인트 차감
   // 상점 잔여수량 차감
   // 구매자 해당 카드 보유 추가
