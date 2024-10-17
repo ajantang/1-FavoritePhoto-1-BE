@@ -7,8 +7,8 @@ export const exchangeSelect = {
 };
 
 export const exchangeCardInfo = {
-    ...exchangeSelect,
-    Card: {
-        select: cardSelect
-    }
-}
+  ...exchangeSelect,
+  Card: {
+    select: cardSelect,
+  },
+};

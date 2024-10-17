@@ -7,7 +7,7 @@ import adminRouter from "./src/controllers/admin-controller.js";
 import authRouter from "./src/routes/auth-router.js";
 import cardRouter from "./src/controllers/cards-controller.js";
 import notificationRouter from "./src/controllers/notification-controller.js";
-import pointRouter from "./src/controllers/points-controller.js";
+import pointRouter from "./src/routes/point-router.js";
 import shopRouter from "./src/routes/shop-router.js";
 import userRouter from "./src/routes/user-router.js";
 import imageRouter from "./src/routes/image-router.js";
@@ -33,6 +33,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    rolling: true,
     cookie: {
       httpOnly: true,
       // secure: true,
