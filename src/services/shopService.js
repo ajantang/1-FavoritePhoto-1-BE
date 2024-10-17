@@ -1,4 +1,7 @@
+import ownRepository from "../repositories/ownRepository.js";
+import prisma from "../repositories/prisma.js";
 import shopRepository from "../repositories/shopRepository.js";
+import ownService from "./ownService.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
@@ -129,8 +132,39 @@ async function checkUserShopOwner(userId, shopId) {
   return await shopRepository.checkUserShopOwner(filter);
 }
 
+// async function updateShop(id, updateData) {
+//   return await shopRepository.updateShop(id, updateData);
+// }
+
+async function updateOrDeleteOwn(id, updateData) {
+  const { ownId, ownUpdateQuantity, isOutOfStock, ...rest } = updateData;
+  const where = { ownId };
+  const updateData = { quantity: ownUpdateQuantity };
+
+  if (isOutOfStock) {
+    return await prisma.$transaction(async () => {
+      const shop = await shopRepository.updateShop(id, rest);
+      await ownRepository.deleteById(ownId);
+
+      return shop;
+    });
+  } else if (!isOutOfStock) {
+    return await prisma.$transaction(async () => {
+      const shop = await shopRepository.updateShop(id, rest);
+      await ownRepository.update(where, updateData);
+
+      return shop;
+    });
+  }
+}
+
 async function updateShop(id, updateData) {
-  return await shopRepository.updateShop(id, updateData);
+  const { ownId, ownUpdateQuantity, isOutOfStock, ...rest } = updateData;
+  if (ownId) {
+    return await updateOrDeleteOwn(id, updateData);
+  } else {
+    return await shopRepository.updateShop(id, rest);
+  }
 }
 
 export default {

@@ -44,11 +44,8 @@ async function getShopDetail(req, res, next) {
 
 async function updateShop(req, res, next) {
   const { id } = req.params;
-  // 유효성 검사 필요
-  // 유저가 등록자인지 검사
-  // 보유량 총합
-  // 보유량에서 0이되면 delete
   const shop = await shopService.updateShop(id, req.body);
+  // 보유량에서 0이되면 delete
   // 수량 관련 업데이트 시 own도 업데이트하는 코드 필요
 }
 

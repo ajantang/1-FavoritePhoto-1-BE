@@ -71,6 +71,8 @@ export async function validateCreateShopData(req, res, next) {
     next(error);
   }
   const newReqBody = { ...rest };
+  let ownId;
+  let ownUpdateQuantity;
   let isOutOfStock = false;
 
   // 보유량 총합 확인
@@ -81,6 +83,7 @@ export async function validateCreateShopData(req, res, next) {
     };
     const own = await ownService.getByFilter(ownFilter);
     const userTotalStock = isOwner.remainingQuantity + own.quantity;
+    ownId = own.id;
 
     if (salesQuantity > userTotalStock) {
       const error = new Error("Sale quantity exceeds available stock.");
@@ -91,6 +94,7 @@ export async function validateCreateShopData(req, res, next) {
     }
 
     const addQuantity = salesQuantity - isOwner.remainingQuantity;
+    ownUpdateQuantity = own.quantity - addQuantity
 
     newReqBody.remainingQuantity = salesQuantity;
     newReqBody.totalQuantity = isOwner.totalQuantity + addQuantity;
@@ -99,6 +103,8 @@ export async function validateCreateShopData(req, res, next) {
   req.body = newReqBody;
   assert(req.body, updateShopStruct);
 
+  req.body.ownId = ownId;
+  req.body.ownUpdateQuantity = ownUpdateQuantity;
   req.body.isOutOfStock = isOutOfStock;
   next();
 }

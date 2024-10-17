@@ -70,10 +70,17 @@ async function getGroupCountByGrade({ userId, filter }) {
   return counts;
 }
 
+async function deleteById(id) {
+  return await prisma.own.delete({
+    where: { id },
+  });
+}
+
 export default {
   getByFilter,
   update,
   createOwn,
   findOwnCardList,
   getGroupCountByGrade,
+  deleteById,
 };
