@@ -6,7 +6,7 @@ async function signUp(req, res, next) {
     const { email, password, nickname } = req.body;
     const result = await authService.signUp({ email, password, nickname });
 
-    return res.status(200).send(result);
+    return res.status(201).send(result);
   } catch (err) {
     return next(err);
   }

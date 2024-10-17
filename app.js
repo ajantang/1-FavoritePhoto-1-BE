@@ -10,6 +10,7 @@ import notificationRouter from "./src/controllers/notification-controller.js";
 import pointRouter from "./src/controllers/points-controller.js";
 import shopRouter from "./src/routes/shop-router.js";
 import userRouter from "./src/routes/user-router.js";
+import imageRouter from "./src/routes/image-router.js";
 import {
   logErrors,
   clientErrorHandler,
@@ -49,6 +50,7 @@ app.use("/notifications", notificationRouter);
 app.use("/points", pointRouter);
 app.use("/shop", shopRouter);
 app.use("/users", userRouter);
+app.use("/images", imageRouter);
 
 app.use(logErrors);
 app.use(clientErrorHandler);

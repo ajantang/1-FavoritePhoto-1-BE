@@ -5,13 +5,8 @@
 - description : 포토 카드 판매 내역/판매 매진/교환 요청/교환 성사 등의 알림 목록 조회
 - path : /notifications
 - method : GET
-- header
-  - Authorization : Bearer {accessToken}
 
 ### req example
-
-- header
-  - Authorization : Bearer {accessToken}
 
 ### res template
 
@@ -51,16 +46,12 @@
 - description : 알림 수정(알림 확인만 수정하는 UI 존재)
 - path : /notifications/{notificationId}
 - method : PATCH
-- header
-  - Authorization : Bearer {accessToken}
 - body
   - message : 알림 메세지(max-length : 1024)
   - check : 알림 확인 여부(bool)
 
 ### req example
 
-- header
-  - Authorization : Bearer accessToken
 - body : {
   check : true,
   }

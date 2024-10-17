@@ -1,0 +1,40 @@
+###
+POST http://localhost:3000/images/upload
+Content-Type: multipart/form-data; boundary=image-boundary
+
+--image-boundary
+Content-Disposition: form-data; name="image"; filename="test_fetch.png"
+Content-Type: image/jpeg
+
+< C:\Users\SnowRang\Pictures\wolverine.jpg
+--image-boundary--
+
+###
+POST http://localhost:3000/auth/sign-in
+Content-Type : application/json
+
+{
+    "email" : "codeit05@codeit.com",
+    "password" : "!codeit05"
+}
+
+
+###
+POST https://one-favoritephoto-1-be.onrender.com/images/upload
+Content-Type: multipart/form-data; boundary=image-boundary
+
+--image-boundary
+Content-Disposition: form-data; name="image"; filename="test_fetch.png"
+Content-Type: image/jpeg
+
+< C:\Users\SnowRang\Pictures\wolverine.jpg
+--image-boundary--
+
+###
+POST https://one-favoritephoto-1-be.onrender.com/auth/sign-in
+Content-Type : application/json
+
+{
+    "email" : "codeit04@codeit.com",
+    "password" : "!codeit04"
+}
