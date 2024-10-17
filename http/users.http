@@ -10,13 +10,13 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-  "name" : "테스트 이미지2",
-  "description" : "카드 생성 테스트2",
+  "name" : "테스트 이미지3",
+  "description" : "카드 생성 테스트3",
   "image" : "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
-  "grade" : 3,
-  "genre" : 2,
-  "price" : 1,
-  "quantity" : 1
+  "grade" : 0,
+  "genre" : 1,
+  "price" : 3,
+  "quantity" : 8
 }
 
 ###
