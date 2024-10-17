@@ -1,4 +1,4 @@
-import exchangeRepository from "../repositories/excahnge-repository";
+import exchangeRepository from "../repositories/exchange-repository.js";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {
