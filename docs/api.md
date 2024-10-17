@@ -5,7 +5,7 @@
 - description :
 - path :
 - type :
-- header
+- headers
   - property1 :
   - property2 :
 - body
@@ -14,7 +14,7 @@
 
 ### req example
 
-- header :
+- headers :
 - body :
 
 ### res example

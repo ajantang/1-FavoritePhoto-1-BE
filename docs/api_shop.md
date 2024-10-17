@@ -5,7 +5,7 @@
 - description : 내 포토 카드 판매 등록
 - path : /shop
 - method : POST
-- header
+- headers
   - Authorization : Bearer {accessToken}
 - body
   - cardId: 카드ID
@@ -17,7 +17,7 @@
 
 ### req example
 
-- header
+- headers
   - Authorization : Bearer {accessToken}
 - body : {
   cardId: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
@@ -149,7 +149,7 @@
 - description :
 - path :
 - method :
-- header
+- headers
   - property1 :
   - property2 :
 - body
@@ -158,7 +158,7 @@
 
 ### req example
 
-- header :
+- headers :
 - body :
 
 ### res template

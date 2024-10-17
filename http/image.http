@@ -1,7 +1,6 @@
 ###
 POST http://localhost:3000/images/upload
 Content-Type: multipart/form-data; boundary=image-boundary
-authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRkNzAwNWJlLWU3YTctNGNkZi04NTE3LTE2YmVjMjUzOGEwMiIsImlhdCI6MTcyODUyNzAxNSwiZXhwIjoxNzI4Nzg2MjE1fQ.NirtWHfa1lfusE2rX1OYsVFcnmClXcXmKKDnLvpEBB4
 
 --image-boundary
 Content-Disposition: form-data; name="image"; filename="test_fetch.png"
@@ -9,3 +8,33 @@ Content-Type: image/jpeg
 
 < C:\Users\SnowRang\Pictures\wolverine.jpg
 --image-boundary--
+
+###
+POST http://localhost:3000/auth/sign-in
+Content-Type : application/json
+
+{
+    "email" : "codeit05@codeit.com",
+    "password" : "!codeit05"
+}
+
+
+###
+POST https://one-favoritephoto-1-be.onrender.com/images/upload
+Content-Type: multipart/form-data; boundary=image-boundary
+
+--image-boundary
+Content-Disposition: form-data; name="image"; filename="test_fetch.png"
+Content-Type: image/jpeg
+
+< C:\Users\SnowRang\Pictures\wolverine.jpg
+--image-boundary--
+
+###
+POST https://one-favoritephoto-1-be.onrender.com/auth/sign-in
+Content-Type : application/json
+
+{
+    "email" : "codeit04@codeit.com",
+    "password" : "!codeit04"
+}

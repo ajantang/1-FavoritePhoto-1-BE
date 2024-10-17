@@ -5,8 +5,6 @@
 - description : 구매한 포토 카드 조회 (정렬 / 필터 / 키워드 / 페이지네이션)
 - path : /users/my-cards
 - method : GET
-- header
-  - Authorization : Bearer {accessToken}
 - query
   - sort : recent || oldest || cheapest || highest (최신순 OR 오래된 순 OR 가격 낮은 순 OR 가격 높은 순 정렬)
   - genre : 장르 (필터 / int로 전달)
@@ -19,8 +17,6 @@
 
 ### req example
 
-- header :
-  - Authorization : Bearer {accessToken}
 - query :
   - sort=recent&genre=travel&sellout=false&grade=SUPER_RARE&ownerId=1&pageNum=1&pageSize=9&keyword=스페인
 
@@ -64,7 +60,7 @@
 - description : 내 소유 포토 카드 등록
 - path : /users/my-card
 - method : POST
-- header
+- headers
   - Authorization : Bearer {accessToken}
 - body
   - name : 카드 이름 (max-length 50)
@@ -77,7 +73,7 @@
 
 ### req example
 
-- header
+- headers
   - Authorization : Bearer {accessToken}
 - body : {
   name : 서울 밤하늘,
@@ -121,8 +117,6 @@
 - description : 내가 상점에 등록한 포토 카드 목록 조회 (필터 : 등급, 장르, 매진 / 페이지네이션)
 - path : /users/my-cards/shop
 - method : GET
-- header
-  - Authorization : Bearer {accessToken}
 - query
   - sort : recent || oldest || cheapest || highest (최신순 OR 오래된 순 OR 가격 낮은 순 OR 가격 높은 순 정렬)
   - genre : 장르 (필터 / int로 전달)
@@ -135,8 +129,6 @@
 
 ### req example
 
-- header :
-  - Authorization : Bearer {accessToken}
 - query :
   - sort=recent&genre=travel&sellout=false&grade=SUPER_RARE&ownerId=1&pageNum=1&pageSize=9&keyword=스페인
 
@@ -180,8 +172,6 @@
 - description : 내가 교환 제시한 포토 카드 목록 조회
 - path : /users/my-cards/exchange
 - method : GET
-- header
-  - Authorization : Bearer {accessToken}
 - query
   - sort : recent || oldest || cheapest || highest (최신순 OR 오래된 순 OR 가격 낮은 순 OR 가격 높은 순 정렬)
   - genre : 장르 (필터 / int로 전달)
@@ -194,8 +184,6 @@
 
 ### req example
 
-- header :
-  - Authorization : Bearer {accessToken}
 - query :
   - sort=recent&genre=travel&sellout=false&grade=SUPER_RARE&ownerId=1&pageNum=1&pageSize=9&keyword=스페인
 
@@ -239,12 +227,12 @@
 - description : 사용자 프로필(닉네임) 조회
 - path : /users/profile
 - method : GET
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### req example
 
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### res template
@@ -266,12 +254,12 @@
 - description : 이메일 중복 여부 확인(확인하는 별도 UI 기획이 없음)
 - path : /users/check-email
 - method : GET
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### req example
 
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### res template
@@ -293,12 +281,12 @@
 - description : 닉네임 중복 여부 확인(확인하는 별도 UI 기획이 없음)
 - path : /users/check-nickname
 - method : GET
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### req example
 
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### res template
