@@ -1,15 +1,23 @@
 import { calculateTotalCountByObject } from "../../utils/number-util.js";
 
-export function myCardMapper(ownCardSelect) {
+export function basicCardMapper(basicSelect) {
   return {
-    id: ownCardSelect.Card.id,
-    image: ownCardSelect.Card.image,
-    name: ownCardSelect.Card.name,
+    id: basicSelect.Card.id,
+    image: basicSelect.Card.image,
+    name: basicSelect.Card.name,
+    grade: basicSelect.Card.grade,
+    genre: basicSelect.Card.genre,
+    price: basicSelect.Card.price,
+    nickname: basicSelect.Card.User.nickname,
+  };
+}
+
+export function myCardMapper(ownCardSelect) {
+  const basicSelect = basicCardMapper(ownCardSelect);
+
+  return {
+    ...basicSelect,
     description: ownCardSelect.Card.description,
-    grade: ownCardSelect.Card.grade,
-    genre: ownCardSelect.Card.genre,
-    price: ownCardSelect.Card.price,
-    nickname: ownCardSelect.Card.User.nickname,
     quantity: ownCardSelect.quantity,
   };
 }
@@ -29,6 +37,7 @@ export function myCardListMapper({ counts, list }) {
 }
 
 export function myShopMapper(shopCardSelect) {
+  const basicSelect = basicCardMapper(shopCardSelect);
   let sellout = false;
 
   if (shopCardSelect.remainingQuantity === 0) {
@@ -36,13 +45,7 @@ export function myShopMapper(shopCardSelect) {
   }
 
   return {
-    id: shopCardSelect.Card.id,
-    image: shopCardSelect.Card.image,
-    name: shopCardSelect.Card.name,
-    grade: shopCardSelect.Card.grade,
-    genre: shopCardSelect.Card.genre,
-    price: shopCardSelect.Card.price,
-    nickname: shopCardSelect.Card.User.nickname,
+    ...basicSelect,
     remainingQuantity: shopCardSelect.remainingQuantity,
     totalQuantity: shopCardSelect.totalQuantity,
     sellout,
@@ -58,6 +61,20 @@ export function myShopListMapper({ counts, list }) {
     totalCount,
     countsGroupByGrade: counts,
     shops: mappedList,
+  };
+
+  return mappedData;
+}
+
+export function myExchangeListMapper({ counts, list }) {
+  const totalCount = calculateTotalCountByObject(counts);
+  const mappedList = list.map((item) => {
+    return basicCardMapper(item);
+  });
+  const mappedData = {
+    totalCount,
+    countsGroupByGrade: counts,
+    exchanges: mappedList,
   };
 
   return mappedData;

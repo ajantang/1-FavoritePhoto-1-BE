@@ -22,4 +22,21 @@ async function getUserInfoPasswordByEmail(email) {
   });
 }
 
-export default { createUser, getUserInfoByUserId, getUserInfoPasswordByEmail };
+async function increaseUserPoint({ id, earnedPoint }) {
+  return prisma.user.update({
+    where: { id },
+    data: {
+      point: {
+        increment: earnedPoint,
+      },
+    },
+    select: userSelect,
+  });
+}
+
+export default {
+  createUser,
+  getUserInfoByUserId,
+  getUserInfoPasswordByEmail,
+  increaseUserPoint,
+};

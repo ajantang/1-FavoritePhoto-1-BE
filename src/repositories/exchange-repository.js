@@ -8,4 +8,52 @@ async function checkExchangeByUser(filter) {
   });
 }
 
-export default { checkExchangeByUser };
+async function findMyExchangeList({ userId, filter }) {
+  const { orderBy, skip, take, where } = filter;
+
+  return await prisma.exchange.findMany({
+    orderBy,
+    skip,
+    take,
+    where: { userId, ...where },
+    select: exchangeCardInfo,
+  });
+}
+
+async function getGroupCountByGrade({ userId, filter }) {
+  const { where } = filter;
+
+  const exchanges = await prisma.exchange.findMany({
+    where: {
+      userId,
+      ...where,
+    },
+    select: {
+      Card: {
+        select: {
+          grade: true,
+        },
+      },
+    },
+  });
+
+  const counts = exchanges.reduce((acc, exchange) => {
+    const grade = exchange.Card.grade;
+
+    if (!acc[grade]) {
+      acc[grade] = 0;
+    }
+
+    acc[grade]++;
+
+    return acc;
+  }, {});
+
+  return counts;
+}
+
+export default {
+  checkExchangeByUser,
+  findMyExchangeList,
+  getGroupCountByGrade,
+};

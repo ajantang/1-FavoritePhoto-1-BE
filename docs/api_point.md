@@ -10,16 +10,19 @@
 
 ### res template
 
-- data : {
-  earnedPoint : 획득한 포인트,
-  point : 사용자 포인트
-  }
+- data :
+  - id : 사용자 id,
+  - success : 포인트 획득 성공 여부,
+  - earnedPoint : 얻은 포인트,
+  - point : 현재 포인트
 
 ### res example
 
 - data : {
-  earnedPoint : 2,
-  point : 14
+  "id": "30789d03-5f9b-4ba9-8743-28820d0d89f5",
+  "success": false,
+  "earnedPoint": 0,
+  "point": 9
   }
 
 ## GET /points/last-box-time
@@ -34,12 +37,13 @@
 
 ### res template
 
-- data : {
-  time-gap : 시간 단위로 버림된 값을 전달(int로 전달)
-  }
+- data :
+  - timeDifference : 마지막 박스 오픈 시간과 차이
+  - success : 박스 오픈 가능 시간 경과 여부
 
 ### res example
 
 - data : {
-  time-gap : 2
+  "timeDifference": 26569,
+  "success": false
   }
