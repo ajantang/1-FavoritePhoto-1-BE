@@ -99,14 +99,12 @@ async function countShopListByQuery(query) {
     ],
   };
 
-  let selloutWhere;
+  let selloutWhere = null
   if (sellout === "true") {
     selloutWhere = { remainingQuantity: 0 };
   } else if (sellout === "false") {
     selloutWhere = { remainingQuantity: { gt: 0 } };
-  } else {
-    selloutWhere = { remainingQuantity: { gte: 0 } };
-  }
+  } 
 
   const filter = {
     Card: {
