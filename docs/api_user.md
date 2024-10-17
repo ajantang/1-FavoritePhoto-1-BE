@@ -132,14 +132,14 @@
 ### req example
 
 - query :
-  - sort=recent&genre=travel&sellout=false&grade=SUPER_RARE&ownerId=1&pageNum=1&pageSize=9&keyword=스페인
+  - sort=recent?genre=1&&grade=0&&pageSize=15&&pageNum=1&&sellout=false
 
 ### res template
 
 - data :
   - totalCount : 총 카드 수,
   - countsGroupByGrade : 등급 별 카드 수
-  - cards : 카드 배열
+  - shops : 카드 배열
     - {카드 정보}
       - id : 카드 아이디
       - image : 카드 이미지 url (max-length : 2048)
@@ -148,7 +148,9 @@
       - genre : 카드 장르 (int로 전달)
       - price : 카드 가격(포인트)
       - nickname : 카드 생성자 닉네임
-      - quantity : 카드 보유량
+      - remainingQuantity : 판매 카드 잔여량,
+      - totalQuantity : 판매 카드 총량,
+      - sellout : 매진 여부
 
 ### res example
 
@@ -157,7 +159,7 @@
   "countsGroupByGrade": {
   "3": 2
   },
-  "cards": [
+  "shops": [
   {
   "id": "b5ccc355-5abb-49a4-9eef-7a8a0de57310",
   "image": "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
@@ -165,7 +167,10 @@
   "grade": 3,
   "genre": 0,
   "price": 2,
-  "nickname": "코드잇05"
+  "nickname": "코드잇05",
+  "remainingQuantity": 1,
+  "totalQuantity": 1,
+  "sellout": false
   },
   {
   "id": "b5ccc355-5abb-49a4-9eef-7a8a0de57310",
@@ -174,7 +179,10 @@
   "grade": 3,
   "genre": 0,
   "price": 2,
-  "nickname": "코드잇05"
+  "nickname": "코드잇05",
+  "remainingQuantity": 1,
+  "totalQuantity": 1,
+  "sellout": false
   }
   ]
   }

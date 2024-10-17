@@ -57,7 +57,7 @@ export function myShopListMapper({ counts, list }) {
   const mappedData = {
     totalCount,
     countsGroupByGrade: counts,
-    cards: mappedList,
+    shops: mappedList,
   };
 
   return mappedData;
