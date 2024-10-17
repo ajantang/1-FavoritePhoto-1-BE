@@ -112,7 +112,7 @@ async function countShopListByQuery(query) {
       ...(grade ? { grade: parseInt(grade) } : {}),
       ...whereOr,
     },
-    ...selloutWhere,
+    ...(selloutWhere && selloutWhere),
   };
 
   return await shopRepository.countShopListByQuery(filter);

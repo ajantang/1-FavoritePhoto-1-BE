@@ -21,9 +21,9 @@ async function getShopList(req, res, next) {
 async function getShopDetail(req, res, next) {
   const { id } = req.params;
   const { userId } = req.body; // 인증 후 req.body에 userId 추가
-  const shop = await shopService.getShopDetailById(id);
-  const isUserShopOwner = await shopService.checkUserShopOwner(userId, id);
-  if (!isUserShopOwner) {
+  const shop = await shopService.getShopDetailById(id); // 상세정보 가져오기
+  const isUserShopOwner = await shopService.checkUserShopOwner(userId, id); // 유저가 만든건지 확인
+  if (!isUserShopOwner) { //없으면 교환을 제시했는지 확인
     // 로그인한 유저가 해당 상품에 교환을 신청했는지 확인하는 코드 필요(상품 아이디와 유저아이디 이용 exchange에서)
   }
   // res mapping하는 코드 필요
