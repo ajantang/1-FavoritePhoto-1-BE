@@ -13,6 +13,7 @@ import {
   createCardListFilterByQuery,
   createShopListFilterByQuery,
 } from "../utils/query-util.js";
+import userRepository from "../repositories/user-repository.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
@@ -75,4 +76,14 @@ async function getMyRequestList({ userId, query }) {
   return myExchangeListMapper({ counts, list });
 }
 
-export default { getMyCardList, createMyCard, getMyShopList, getMyRequestList };
+async function getUserInfoByUserId(id) {
+  return await userRepository.getUserInfoByUserId(id);
+}
+
+export default {
+  getMyCardList,
+  createMyCard,
+  getMyShopList,
+  getMyRequestList,
+  getUserInfoByUserId,
+};

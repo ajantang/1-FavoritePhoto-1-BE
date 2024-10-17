@@ -169,4 +169,6 @@ export async function validatePurchaseConditions(req, res, next) {
     error.code = 400;
     return next(error);
   }
+
+  
 }
