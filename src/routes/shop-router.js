@@ -7,7 +7,7 @@ const shopRouter = express.Router();
 
 shopRouter
   .route("/")
-  .post(authMiddleware, validateCreateShopData, shopController.createShop) // 인증 후 req.body에 userId 추가
+  .post(authMiddleware, validateCreateShopData, shopController.createShop)
   .get(shopController.getShopList);
 
 shopRouter.route("/:id").get(shopController.getShopDetail);

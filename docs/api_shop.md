@@ -2,7 +2,7 @@
 
 ### req template
 
-- description : 내 포토 카드 판매 등록
+- description : 포토 카드 판매 등록
 - path : /shop
 - method : POST
 - headers
@@ -146,7 +146,7 @@
 
 ### req template
 
-- description : 상점에 등록된 포토 카드 상세 조회
+- description : 상점 상세 조회
 - path : /shop/:shopId
 - method : GET
 - header
@@ -213,7 +213,8 @@
 		description: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다",
 		grade: 0,
 		genre: 4,
-	}
+	},
+  "exchangeList": [],
 }
 
 - 내가 상점에 등록한 포토카드인 경우 OR 내가 교환 제시를 했던 포토카드인 경우
@@ -259,6 +260,81 @@
   ]
 }
 
+
+## PATCH /shop/:shopId
+
+### req template
+
+- description : 내가 판매 등록한 포토 카드 수정
+- path : /shop/:shopId
+- method : PATCH
+- - header
+    - Authorization : Bearer {accessToken}
+- params
+    - shopId: 상점 ID
+- body
+    - salesQuantity: 판매수량
+    - price: 장당 가격
+    - grade: 교환 희망 등급
+    - genre: 교환 희망 장르
+    - description: 교환 희망 설명
+
+### req example
+
+- header
+  - Authorization : Bearer {accessToken}
+- params
+  - adfc1706-a7f6-4c6e-a006-1733a854afbb
+- body : {
+    salesQuantity: 3,
+    price: 20,
+    grade: 5,
+    genre: 4,
+    description: "아무거나 좋아요"
+  }
+
+### res template
+
+- data 
+  - salesInfo : 판매정보
+      - id: 상점ID
+      - image: 사진
+      - name: 카드 이름
+      - grade: 등급
+      - genre: 장르
+      - creatorNickname: 원작자 이름
+      - sellerNickname: 판매자 이름
+      - description: 설명
+      - price: 장당 가격
+      - remainingQuantity: 잔여 수량
+      - totalQuantity: 총 판매 수량
+  - exchangePreference: 교환 희망 정보
+      - description: 교환 희망 설명
+      - grade: 교환 희망 등급
+      - genre: 교환 희망 장르
+
+### res example
+
+- data : {
+	salesInfo : {
+		id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
+		image: "url 주소",
+		name: "우리집 앞마당",
+		grade: 1,
+		genre: 4,
+		creatorNickname: "유디",
+		sellerNickname: "미스쏜",
+		description: "우리집 앞마당 포토카드입니다. 우리집 앞마당 포토카드입니다.",
+		price: 20,
+		remainingQuantity: 3,
+		totalQuantity: 3
+	},
+	exchangePreference: {
+		description: "아무거나 좋아요",
+		grade: 5,
+		genre: 4,
+	}		
+}
 
 ## api template
 
