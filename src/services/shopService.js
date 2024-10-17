@@ -133,10 +133,11 @@ async function checkUserShopOwner(userId, shopId) {
 }
 
 async function updateOrDeleteOwn(id, updateData) {
-  const { ownId, ownUpdateQuantity, isOutOfStock, ...rest } = updateData;
+  const { ownData, userId, cardId, ...rest } = updateData;
+  const { ownId, ownUpdateQuantity, isOutOfStock, isOwn, creatOwnQuantity } = ownData;
+
   const where = { id: ownId };
   const updateQuantity = { quantity: ownUpdateQuantity };
-  console.log(isOutOfStock)
 
   if (isOutOfStock) {
     return await prisma.$transaction(async () => {
@@ -156,9 +157,22 @@ async function updateOrDeleteOwn(id, updateData) {
 }
 
 async function updateShop(id, updateData) {
-  const { ownId, ownUpdateQuantity, isOutOfStock, ...rest } = updateData;
+  const { ownData, userId, cardId, ...rest } = updateData;
+  const { ownId, ownUpdateQuantity, isOutOfStock, isOwn, creatOwnQuantity } = ownData;
   if (ownId) {
     return await updateOrDeleteOwn(id, updateData);
+  } else if (!isOwn) {
+    return await prisma.$transaction(async () => {
+      const createOwnData = {
+        userId,
+        cardId,
+        quantity: creatOwnQuantity,
+      };
+      const shop = await shopRepository.updateShop(id, rest);
+      const q = await ownRepository.createOwn(createOwnData);
+      console.log(q)
+      return shop
+    });
   } else {
     return await shopRepository.updateShop(id, rest);
   }
