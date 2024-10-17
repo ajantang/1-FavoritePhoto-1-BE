@@ -22,9 +22,9 @@ async function getUserInfoPasswordByEmail(email) {
   });
 }
 
-async function increaseUserPoint({ userId, earnedPoint }) {
+async function increaseUserPoint({ id, earnedPoint }) {
   return prisma.user.update({
-    where: { userId },
+    where: { id },
     data: {
       point: {
         increment: earnedPoint,

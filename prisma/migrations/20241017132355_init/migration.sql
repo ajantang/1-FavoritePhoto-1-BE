@@ -99,7 +99,6 @@ CREATE TABLE "notification" (
 -- CreateTable
 CREATE TABLE "last_box_time" (
     "id" VARCHAR(36) NOT NULL,
-    "user_id" VARCHAR(36) NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -162,9 +161,6 @@ ALTER TABLE "notification" ADD CONSTRAINT "notification_user_id_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "notification" ADD CONSTRAINT "notification_shop_id_fkey" FOREIGN KEY ("shop_id") REFERENCES "shop"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "last_box_time" ADD CONSTRAINT "last_box_time_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
