@@ -1,9 +1,10 @@
 import userService from "../services/user-service.js";
-import { myCardMapper } from "./mappers/card-mapper.js";
 
 async function getMyCardList(req, res, next) {
   try {
-    const result = await userService.getMyCardList(req.session.userId);
+    const userId = req.session.userId;
+    const query = req.query;
+    const result = await userService.getMyCardList({ userId, query });
 
     return res.status(200).send(result);
   } catch (err) {

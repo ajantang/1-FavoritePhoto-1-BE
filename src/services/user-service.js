@@ -5,10 +5,12 @@ import {
   myCardMapper,
   myCardListMapper,
 } from "../controllers/mappers/card-mapper.js";
+import { createCardListFilterByQuery } from "../utils/query-util.js";
 
-async function getMyCardList(userId) {
-  const list = await ownRepository.findOwnCardList(userId);
-  const counts = await ownRepository.getGroupCountByGrade(userId);
+async function getMyCardList({ userId, query }) {
+  const filter = createCardListFilterByQuery(query);
+  const list = await ownRepository.findOwnCardList({ userId, filter });
+  const counts = await ownRepository.getGroupCountByGrade({ userId, filter });
 
   return myCardListMapper({ counts, list });
 }

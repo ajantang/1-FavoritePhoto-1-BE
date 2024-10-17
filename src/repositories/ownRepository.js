@@ -1,4 +1,5 @@
 import prisma from "./prisma.js";
+import { createCardListFilterByQuery } from "../utils/query-util.js";
 import { ownSelect, ownCardSelect } from "./selects/own-select.js";
 
 async function getByFilter(filter) {
@@ -24,17 +25,25 @@ async function createOwn({ cardId, userId, quantity }) {
   });
 }
 
-async function findOwnCardList(userId) {
+async function findOwnCardList({ userId, filter }) {
+  const { orderBy, skip, take, where } = filter;
+
   return await prisma.own.findMany({
-    where: { userId },
+    orderBy,
+    skip,
+    take,
+    where: { userId, ...where },
     select: ownCardSelect,
   });
 }
 
-async function getGroupCountByGrade(userId) {
+async function getGroupCountByGrade({ userId, filter }) {
+  const { where } = filter;
+
   const owns = await prisma.own.findMany({
     where: {
       userId,
+      ...where,
     },
     select: {
       quantity: true,

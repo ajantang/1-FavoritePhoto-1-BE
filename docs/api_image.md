@@ -8,12 +8,12 @@
 - headers
   - Content-Type: multipart/form-data;
 - body
-  - image : binary 형식의 파일
+  - image(binary 형식의 파일)
 
 ### req example
 
 - headers
-  Content-Type: multipart/form-data; boundary=image-boundary
+  Content-Type: multipart/form-data;
 - body
   {생략}
 
@@ -25,7 +25,7 @@
 ### res example
 
 - data : {
-  url : https://storage.googleapis.com/image-unload-codeit-test/1729128675467.png
+  "url": "https://storage.googleapis.com/image-unload-codeit-test/1729129317809.png"
   }
 
 ### 참고(.http)
