@@ -48,7 +48,7 @@ async function UploadGoogelCloud(file) {
     blobStream.end(file.buffer);
   });
 
-  return fileUrl;
+  return { url: fileUrl };
 }
 
 export default { UploadGoogelCloud };
