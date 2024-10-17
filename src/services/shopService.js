@@ -112,7 +112,7 @@ async function countShopListByQuery(query) {
       ...(grade ? { grade: parseInt(grade) } : {}),
       ...whereOr,
     },
-    ...selloutWhere,
+    ...(selloutWhere && selloutWhere),
   };
 
   return await shopRepository.countShopListByQuery(filter);
@@ -125,7 +125,7 @@ async function getShopDetailById(id) {
 async function checkUserShopOwner(userId, shopId) {
   const filter = {
     userId,
-    shopId,
+    id: shopId,
   };
 
   return await shopRepository.checkUserShopOwner(filter);

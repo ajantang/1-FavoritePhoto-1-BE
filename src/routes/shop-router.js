@@ -9,4 +9,6 @@ shopRouter
   .post(validateCreateShopData, shopController.createShop) // 인증 후 req.body에 userId 추가
   .get(shopController.getShopList);
 
+shopRouter.route("/:id").get(shopController.getShopDetail);
+
 export default shopRouter;
