@@ -1,28 +1,84 @@
-import e from "express";
+import userService from "../services/user-service.js";
+import { myCardMapper } from "./mappers/card-mapper.js";
 
-const userRouter = e.Router();
+async function getMyCardList(req, res, next) {
+  try {
+    const result = await userService.getMyCardList(req.session.userId);
 
-userRouter
-  .get("/cards", (req, res, next) => {
-    // 구매? 보유?한 내 포토 카드 목록 조회
-  })
-  .post("/cards", (req, res, next) => {
-    // 내 포토 카드 등록
-  })
-  .get("/cards/sale", (req, res, next) => {
-    // 내가 판매 등록한 포토 카드 목록 조회
-  })
-  .get("/cards/exchange", (req, res, next) => {
-    // 내가 교환 신청한 포토 카드 목록 조회
-  })
-  .get("/profile", (req, res, next) => {
-    // 내 프로필 조회
-  })
-  .get("/check-email", (req, res, next) => {
-    // 이메일 중복 확인 (리턴 방식/데이터 죠율 필요)
-  })
-  .get("/check-nickname", (req, res, next) => {
-    // 닉네임 중복 확인 (리턴 방식/데이터 죠율 필요)
-  });
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
 
-export default userRouter;
+async function createMyCard(req, res, next) {
+  try {
+    const { name, description, image, grade, genre, price, quantity } =
+      req.body;
+
+    const result = await userService.createMyCard({
+      name,
+      description,
+      image,
+      grade,
+      genre,
+      price,
+      userId: req.session.userId,
+      quantity,
+    });
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+// async function getMyShopList(req, res, next){
+//   try{
+//     const result = ;
+//     return res.status(200).send(result);
+//   }catch(err){
+//     return next(err);
+//   }
+// }
+
+// async function getMyRequestList(req, res, next){
+//   try{
+//     const result = ;
+//     return res.status(200).send(result);
+//   }catch(err){
+//     return next(err);
+//   }
+// }
+
+// async function getMyProfile(req, res, next){
+//   try{
+//     const result = ;
+//     return res.status(200).send(result);
+//   }catch(err){
+//     return next(err);
+//   }
+// }
+
+// async function checkValidateEmail(req, res, next){
+//   try{
+//     const result = ;
+//     return res.status(200).send(result);
+//   }catch(err){
+//     return next(err);
+//   }
+// }
+
+// async function checkValidateNickname(req, res, next){
+//   try{
+//     const result = ;
+//     return res.status(200).send(result);
+//   }catch(err){
+//     return next(err);
+//   }
+// }
+
+export default {
+  getMyCardList,
+  createMyCard,
+};
