@@ -25,15 +25,18 @@ async function getShopList(req, res, next) {
 
 async function getShopDetail(req, res, next) {
   const { id } = req.params;
-  const { userId } = req.body; // 인증 후 req.body에 userId 추가
+  // const { userId } = req.body; // 인증 후 req.body에 userId 추가
+  const userId = "";
   const shop = await shopService.getShopDetailById(id); // 상세정보 가져오기
   const isUserShopOwner = await shopService.checkUserShopOwner(userId, id); // 유저가 만든건지 확인
+  const [data, isowner] = await Promise.all([shop, isUserShopOwner]);
   let responseData = {};
-  if (!isUserShopOwner) {
+  if (!isowner) {
     const isExchange = await exchangeService.checkExchangeByUser(userId, id); // 교환 신청한게 있는지 확인
-    responseData = getShopDetailMapper(shop, isExchange);
+    responseData = getShopDetailMapper(data, isExchange);
+  } else {
+    responseData = getShopDetailMapper(data);
   }
-  responseData = getShopDetail(shop);
   res.send(responseData);
 }
 

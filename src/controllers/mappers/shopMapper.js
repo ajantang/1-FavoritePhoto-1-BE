@@ -62,13 +62,8 @@ export function getShopDetailMapper(data, isExchanges) {
   const card = data.Card;
   const seller = data.User;
   const creator = card.User;
-  let exchangesData
-  if(isExchanges) {
-    exchangesData = isExchanges
-  } else {
-    exchangesData = data.Exchanges
-  }
-
+  const exchangesData = Array.isArray(isExchanges) ? isExchanges : data.Exchanges
+ 
   const exchanges = exchangesData.map((exchange) => {
     const card = exchange.Card;
     const creator = card.User;

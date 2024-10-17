@@ -125,7 +125,7 @@ async function getShopDetailById(id) {
 async function checkUserShopOwner(userId, shopId) {
   const filter = {
     userId,
-    shopId,
+    id: shopId,
   };
 
   return await shopRepository.checkUserShopOwner(filter);
