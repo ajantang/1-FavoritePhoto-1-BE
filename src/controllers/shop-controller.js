@@ -12,6 +12,7 @@ async function createShop(req, res, next) {
   const own = await ownService.update(req.body);
   const [shopResult, ownResult] = await Promise.all([shop, own]);
   // 보유량에서 0이되면 delete
+  // 카드를 보유하고 있는지 확인하는 코드 추가
   const responseData = createShopMapper(shopResult);
   res.status(201).send(responseData);
 }
