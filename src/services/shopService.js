@@ -132,27 +132,23 @@ async function checkUserShopOwner(userId, shopId) {
   return await shopRepository.checkUserShopOwner(filter);
 }
 
-// async function updateShop(id, updateData) {
-//   return await shopRepository.updateShop(id, updateData);
-// }
-
 async function updateOrDeleteOwn(id, updateData) {
   const { ownId, ownUpdateQuantity, isOutOfStock, ...rest } = updateData;
-  const where = { ownId };
-  const updateData = { quantity: ownUpdateQuantity };
+  const where = { id: ownId };
+  const updateQuantity = { quantity: ownUpdateQuantity };
 
   if (isOutOfStock) {
     return await prisma.$transaction(async () => {
       const shop = await shopRepository.updateShop(id, rest);
-      await ownRepository.deleteById(ownId);
-
+      const q = await ownRepository.deleteById(ownId);
+      console.log(q);
       return shop;
     });
   } else if (!isOutOfStock) {
     return await prisma.$transaction(async () => {
       const shop = await shopRepository.updateShop(id, rest);
-      await ownRepository.update(where, updateData);
-
+      const q = await ownRepository.update(where, updateQuantity);
+      console.log(q);
       return shop;
     });
   }

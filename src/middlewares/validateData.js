@@ -58,17 +58,18 @@ export function validateSignInUserData(req, res, next) {
   }
 }
 
-export async function validateCreateShopData(req, res, next) {
+export async function validateUpdaeShopData(req, res, next) {
   const userId = req.session.userId;
   const { id } = req.params;
   const { salesQuantity, ...rest } = req.body;
   const isOwner = await shopService.checkUserShopOwner(userId, id);
-  if (!isOwner) {
+  
+  if (isOwner === null || isOwner === undefined) {
     const error = new Error(
       "You do not have permission to access this product."
     );
     error.code = 403;
-    next(error);
+    return next(error);
   }
   const newReqBody = { ...rest };
   let ownId;
@@ -94,7 +95,7 @@ export async function validateCreateShopData(req, res, next) {
     }
 
     const addQuantity = salesQuantity - isOwner.remainingQuantity;
-    ownUpdateQuantity = own.quantity - addQuantity
+    ownUpdateQuantity = own.quantity - addQuantity;
 
     newReqBody.remainingQuantity = salesQuantity;
     newReqBody.totalQuantity = isOwner.totalQuantity + addQuantity;

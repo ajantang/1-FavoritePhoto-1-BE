@@ -45,8 +45,7 @@ async function getShopDetail(req, res, next) {
 async function updateShop(req, res, next) {
   const { id } = req.params;
   const shop = await shopService.updateShop(id, req.body);
-  // 보유량에서 0이되면 delete
-  // 수량 관련 업데이트 시 own도 업데이트하는 코드 필요
+  res.send(shop)
 }
 
 export default { createShop, getShopList, getShopDetail, updateShop };
