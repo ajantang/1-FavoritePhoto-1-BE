@@ -140,3 +140,33 @@ export async function validateUpdaeShopData(req, res, next) {
   req.body.cardId = isOwner.cardId;
   next();
 }
+
+export async function validatePurchaseConditions(req, res, next) {
+  const { id } = req.params;
+  const userId = req.session.userId;
+  const { purchaseQuantity } = req.body;
+
+  // 상점 등록자인지 확인
+  const isOwner = await shopService.checkUserShopOwner(userId, id);
+  if (isOwner) {
+    const error = new Error("You cannot purchase your own product.");
+    error.code = 400;
+    return next(error);
+  }
+
+  const shop = await shopService.getShopDetailById(id);
+  const { remainingQuantity } = shop;
+
+  // 매진 여부 확인
+  if (remainingQuantity === 0) {
+    const error = new Error("This product is sold out.");
+    error.code = 400;
+    return next(error);
+
+    // 구매량과 잔여 수량 대조
+  } else if (remainingQuantity < purchaseQuantity) {
+    const error = new Error("Insufficient stock for this product.");
+    error.code = 400;
+    return next(error);
+  }
+}
