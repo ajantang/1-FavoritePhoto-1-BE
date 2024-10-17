@@ -58,7 +58,7 @@ async function getShopListByQuery(query) {
     selloutWhere = { remainingQuantity: 0 };
   } else if (sellout === "false") {
     selloutWhere = { remainingQuantity: { gt: 0 } };
-  } 
+  }
 
   const where = {
     Card: {
@@ -129,10 +129,15 @@ async function checkUserShopOwner(userId, shopId) {
   return await shopRepository.checkUserShopOwner(filter);
 }
 
+async function updateShop(id, updateData) {
+  return await shopRepository.updateShop(id, updateData);
+}
+
 export default {
   createShop,
   getShopListByQuery,
   countShopListByQuery,
   getShopDetailById,
   checkUserShopOwner,
+  updateShop,
 };
