@@ -70,10 +70,31 @@ async function getGroupCountByGrade({ userId, filter }) {
   return counts;
 }
 
+async function addQuantity({ userId, cardId, increment }) {
+  return prisma.own.upsert({
+    where: {
+      userId_cardId: {
+        userId,
+        cardId,
+      },
+    },
+    update: {
+      quantity: { increment },
+    },
+    create: {
+      userId,
+      cardId,
+      quantity: increment,
+    },
+    select: ownCardSelect,
+  });
+}
+
 export default {
   getByFilter,
   update,
   createOwn,
   findOwnCardList,
   getGroupCountByGrade,
+  addQuantity,
 };

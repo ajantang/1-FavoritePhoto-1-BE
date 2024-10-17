@@ -27,7 +27,7 @@ async function getShopList(req, res, next) {
 
 async function getShopDetail(req, res, next) {
   // 보유량 + 판매량
-  const { id } = req.params;
+  const { shopId } = req.params;
   const userId = req.session?.userId || "";
   const shop = await shopService.getShopDetailById(id);
   const isUserShopOwner = await shopService.checkUserShopOwner(userId, id);
@@ -43,7 +43,7 @@ async function getShopDetail(req, res, next) {
 }
 
 async function updateShop(req, res, next) {
-  const { id } = req.params;
+  const { shopId } = req.params;
   // 유효성 검사 필요
   // 유저가 등록자인지 검사
   // 보유량 총합
@@ -52,4 +52,22 @@ async function updateShop(req, res, next) {
   // 수량 관련 업데이트 시 own도 업데이트하는 코드 필요
 }
 
-export default { createShop, getShopList, getShopDetail, updateShop };
+async function deleteShop(req, res, next) {
+  try {
+    const { shopId } = req.params;
+    const userId = req.session.userId;
+    const result = await shopService.deleteShop({ userId, shopId });
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+export default {
+  createShop,
+  getShopList,
+  getShopDetail,
+  updateShop,
+  deleteShop,
+};

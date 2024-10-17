@@ -1,4 +1,6 @@
+import prisma from "../repositories/prisma.js";
 import shopRepository from "../repositories/shopRepository.js";
+import ownRepository from "../repositories/ownRepository.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
@@ -133,6 +135,21 @@ async function updateShop(id, updateData) {
   return await shopRepository.updateShop(id, updateData);
 }
 
+async function deleteShop({ userId, shopId }) {
+  return prisma.$transaction(async () => {
+    const shop = await shopRepository.getShopDetailById(shopId);
+
+    const own = await ownRepository.addQuantity({
+      userId,
+      cardId: shop.Card.id,
+      increment: shop.remainingQuantity,
+    });
+    await shopRepository.deleteShop(shopId);
+
+    return own;
+  });
+}
+
 export default {
   createShop,
   getShopListByQuery,
@@ -140,4 +157,5 @@ export default {
   getShopDetailById,
   checkUserShopOwner,
   updateShop,
+  deleteShop,
 };
