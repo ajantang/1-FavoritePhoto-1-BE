@@ -53,14 +53,12 @@ async function getShopListByQuery(query) {
     ],
   };
 
-  let selloutWhere;
+  let selloutWhere = null;
   if (sellout === "true") {
     selloutWhere = { remainingQuantity: 0 };
   } else if (sellout === "false") {
     selloutWhere = { remainingQuantity: { gt: 0 } };
-  } else {
-    selloutWhere = { remainingQuantity: { gte: 0 } };
-  }
+  } 
 
   const where = {
     Card: {
@@ -68,7 +66,7 @@ async function getShopListByQuery(query) {
       ...(grade ? { grade: parseInt(grade) } : {}),
       ...whereOr,
     },
-    ...selloutWhere,
+    ...(selloutWhere && selloutWhere),
   };
 
   const filterOptions = {
@@ -99,12 +97,12 @@ async function countShopListByQuery(query) {
     ],
   };
 
-  let selloutWhere = null
+  let selloutWhere = null;
   if (sellout === "true") {
     selloutWhere = { remainingQuantity: 0 };
   } else if (sellout === "false") {
     selloutWhere = { remainingQuantity: { gt: 0 } };
-  } 
+  }
 
   const filter = {
     Card: {

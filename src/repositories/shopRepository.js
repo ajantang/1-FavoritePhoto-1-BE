@@ -43,10 +43,18 @@ async function checkUserShopOwner(filter) {
   });
 }
 
+async function updateShop(id, updateData) {
+  return prisma.shop.update({
+    where: { id },
+    data: updateData,
+  });
+}
+
 export default {
   createShop,
   getShopListByQuery,
   countShopListByQuery,
   getShopDetailById,
   checkUserShopOwner,
+  updateShop,
 };

@@ -2,7 +2,7 @@
 
 ### req template
 
-- description : 내 포토 카드 판매 등록
+- description : 포토 카드 판매 등록
 - path : /shop
 - method : POST
 - header
@@ -146,7 +146,7 @@
 
 ### req template
 
-- description : 상점에 등록된 포토 카드 상세 조회
+- description : 상점 상세 조회
 - path : /shop/:shopId
 - method : GET
 - header
@@ -213,7 +213,8 @@
 		description: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다",
 		grade: 0,
 		genre: 4,
-	}
+	},
+  "exchangeList": [],
 }
 
 - 내가 상점에 등록한 포토카드인 경우 OR 내가 교환 제시를 했던 포토카드인 경우

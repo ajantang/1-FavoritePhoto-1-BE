@@ -40,4 +40,10 @@ async function getShopDetail(req, res, next) {
   res.send(responseData);
 }
 
-export default { createShop, getShopList, getShopDetail };
+async function updateShop(req, res, next) {
+  // 유효성 검사 필요
+  // 업데이트 코드 필요
+  // 수량 관련 업데이트 시 own도 업데이트하는 코드 필요
+}
+
+export default { createShop, getShopList, getShopDetail, updateShop };

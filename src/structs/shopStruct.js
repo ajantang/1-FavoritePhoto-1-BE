@@ -7,12 +7,12 @@ import shop from "../constants/shop.js";
 const Uuid = s.define("Uuid", (value) => isUuid.v4(value));
 
 const shopStructBody = {
-  salesQuantity: s.refine(
-    s.number(),
-    "salesQuantity",
-    (value) =>
-      card.QUANTITY_MIN_VALUE <= value && value <= card.QUANTITY_MAX_VALUE
-  ),
+  // salesQuantity: s.refine(
+  //   s.number(),
+  //   "salesQuantity",
+  //   (value) =>
+  //     card.QUANTITY_MIN_VALUE <= value && value <= card.QUANTITY_MAX_VALUE
+  // ),
   price: s.refine(
     s.number(),
     "price",
