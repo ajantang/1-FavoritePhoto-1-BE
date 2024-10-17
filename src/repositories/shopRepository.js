@@ -43,6 +43,13 @@ async function checkUserShopOwner(filter) {
   });
 }
 
+async function updateShop(id, updateData) {
+  return prisma.shop.update({
+    where: { id },
+    data: updateData,
+  });
+}
+
 async function findMyShopList({ userId, filter }) {
   const { orderBy, skip, take, where } = filter;
 
@@ -94,6 +101,7 @@ export default {
   countShopListByQuery,
   getShopDetailById,
   checkUserShopOwner,
+  updateShop,
   findMyShopList,
   getGroupCountByGrade,
 };
