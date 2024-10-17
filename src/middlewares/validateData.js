@@ -1,6 +1,6 @@
 import { assert } from "superstruct";
 import ownService from "../services/ownService.js";
-import { createShopStruct } from "../structs/shopStruct.js";
+import { createShopStruct, updateShopStruct } from "../structs/shopStruct.js";
 import { SignUpUser, SignInUser } from "../structs/user-struct.js";
 import shopService from "../services/shopService.js";
 
@@ -58,17 +58,47 @@ export function validateSignInUserData(req, res, next) {
   }
 }
 
-// export async function validateCreateShopData(req, res, next) {
-//   const userId = req.session.userId;
-//   const { id } = req.params;
-//   const isOwner = await shopService.checkUserShopOwner(userId, id);
-//   if (!isOwner) {
-//     const error = new Error(
-//       "You do not have permission to access this product."
-//     );
-//     error.code = 403;
-//     next(error);
-//   }
+export async function validateCreateShopData(req, res, next) {
+  const userId = req.session.userId;
+  const { id } = req.params;
+  const { salesQuantity, ...rest } = req.body;
+  const isOwner = await shopService.checkUserShopOwner(userId, id);
+  if (!isOwner) {
+    const error = new Error(
+      "You do not have permission to access this product."
+    );
+    error.code = 403;
+    next(error);
+  }
+  const newReqBody = { ...rest };
+  let isOutOfStock = false;
 
-//   // 보유량 총합
-// }
+  // 보유량 총합 확인
+  if (salesQuantity) {
+    const ownFilter = {
+      cardId: isOwner.cardId,
+      userId,
+    };
+    const own = await ownService.getByFilter(ownFilter);
+    const userTotalStock = isOwner.remainingQuantity + own.quantity;
+
+    if (salesQuantity > userTotalStock) {
+      const error = new Error("Sale quantity exceeds available stock.");
+      error.code = 400;
+      next(error);
+    } else if (req.salesQuantity === userTotalStock) {
+      isOutOfStock = true;
+    }
+
+    const addQuantity = salesQuantity - isOwner.remainingQuantity;
+
+    newReqBody.remainingQuantity = salesQuantity;
+    newReqBody.totalQuantity = isOwner.totalQuantity + addQuantity;
+  }
+
+  req.body = newReqBody;
+  assert(req.body, updateShopStruct);
+
+  req.body.isOutOfStock = isOutOfStock;
+  next();
+}

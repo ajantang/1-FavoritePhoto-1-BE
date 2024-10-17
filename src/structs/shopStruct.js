@@ -50,7 +50,7 @@ export const updateShopStruct = s.partial(
     remainingQuantity: s.refine(
       s.number(),
       "remainingQuantity",
-      (value) => value >= 0
+      (value) => value >= card.QUANTITY_MIN_VALUE
     ),
     totalQuantity: s.refine(
       s.number(),
