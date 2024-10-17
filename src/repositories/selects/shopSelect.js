@@ -32,15 +32,7 @@ export const shopListSelect = {
 };
 
 export const shopDetailSelect = {
-  ...shopSelect,
-  Card: {
-    select: cardDetailSelect,
-  },
-  User: {
-    select: {
-      nickname: true,
-    },
-  },
+  ...shopCreateSelect,
   Exchanges: {
     select: exchangeCardInfo,
   },

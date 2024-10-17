@@ -1,6 +1,11 @@
+import exchangeService from "../services/exchange-service.js";
 import ownService from "../services/ownService.js";
 import shopService from "../services/shopService.js";
-import { createShopMapper, getShopListMapper } from "./mappers/shopMapper.js";
+import {
+  createShopMapper,
+  getShopDetailMapper,
+  getShopListMapper,
+} from "./mappers/shopMapper.js";
 
 async function createShop(req, res, next) {
   const shop = await shopService.createShop(req.body);
@@ -23,11 +28,13 @@ async function getShopDetail(req, res, next) {
   const { userId } = req.body; // 인증 후 req.body에 userId 추가
   const shop = await shopService.getShopDetailById(id); // 상세정보 가져오기
   const isUserShopOwner = await shopService.checkUserShopOwner(userId, id); // 유저가 만든건지 확인
-  if (!isUserShopOwner) { //없으면 교환을 제시했는지 확인
-    // 로그인한 유저가 해당 상품에 교환을 신청했는지 확인하는 코드 필요(상품 아이디와 유저아이디 이용 exchange에서)
+  let responseData = {};
+  if (!isUserShopOwner) {
+    const isExchange = await exchangeService.checkExchangeByUser(userId, id); // 교환 신청한게 있는지 확인
+    responseData = getShopDetailMapper(shop, isExchange);
   }
-  // res mapping하는 코드 필요
-  res.send();
+  responseData = getShopDetail(shop);
+  res.send(responseData);
 }
 
 export default { createShop, getShopList, getShopDetail };
