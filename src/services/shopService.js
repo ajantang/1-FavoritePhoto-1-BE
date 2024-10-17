@@ -190,7 +190,13 @@ async function purchaseService(id, userId, purchaseData) {
       tradePoints,
     });
     console.log({ decreaseUserPoint: decreasePoint });
-    
+
+    // 판매자 포인트 증가
+    const increasePoint = await userRepository.increaseUserPoint({
+      sellerUserId,
+      tradePoints,
+    });
+    console.log({ increaseUserPoint: increasePoint });
   });
 }
 
