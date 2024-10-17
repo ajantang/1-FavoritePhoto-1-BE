@@ -4,9 +4,8 @@ import { createShopStruct } from "../structs/shopStruct.js";
 import { SignUpUser, SignInUser } from "../structs/user-struct.js";
 
 export async function validateCreateShopData(req, res, next) {
-  const userId = "3b11769f-2c33-4c76-b263-3b5bda200c43";
+  const userId = req.session.userId;
   const { cardId, salesQuantity, ...rest } = req.body;
-  // const { userId, cardId, salesQuantity, ...rest } = req.body;
   const filter = {
     userId,
     cardId,
