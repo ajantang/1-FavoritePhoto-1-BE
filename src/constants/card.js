@@ -9,7 +9,7 @@ const PRICE_MAX_VALUE = 999;
 const GRADE_MIN_VALUE = 0;
 const GRADE_MAX_VALUE = 3;
 const GENRE_MIN_VALUE = 0;
-const GENRE_MAX_VALUE = 3;
+const GENRE_MAX_VALUE = 5;
 const QUANTITY_MIN_VALUE = 1;
 const QUANTITY_MAX_VALUE = 99;
 

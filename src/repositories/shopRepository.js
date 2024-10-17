@@ -50,6 +50,51 @@ async function updateShop(id, updateData) {
   });
 }
 
+async function findMyShopList({ userId, filter }) {
+  const { orderBy, skip, take, where } = filter;
+
+  return await prisma.shop.findMany({
+    orderBy,
+    skip,
+    take,
+    where: { userId, ...where },
+    select: shopListSelect,
+  });
+}
+
+async function getGroupCountByGrade({ userId, filter }) {
+  const { where } = filter;
+
+  const shops = await prisma.shop.findMany({
+    where: {
+      userId,
+      ...where,
+    },
+    select: {
+      remainingQuantity: true,
+      Card: {
+        select: {
+          grade: true,
+        },
+      },
+    },
+  });
+
+  const counts = shops.reduce((acc, shop) => {
+    const grade = shop.Card.grade;
+
+    if (!acc[grade]) {
+      acc[grade] = 0;
+    }
+
+    acc[grade] += shop.remainingQuantity;
+
+    return acc;
+  }, {});
+
+  return counts;
+}
+
 export default {
   createShop,
   getShopListByQuery,
@@ -57,4 +102,6 @@ export default {
   getShopDetailById,
   checkUserShopOwner,
   updateShop,
+  findMyShopList,
+  getGroupCountByGrade,
 };

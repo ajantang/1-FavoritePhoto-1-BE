@@ -3,6 +3,16 @@ GET http://localhost:3000/users/my-cards
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
+###
+GET http://localhost:3000/users/my-cards?genre=1&&grade=0&&pageSize=15&&pageNum=1
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET http://localhost:3000/users/my-cards?genre=0&&grade=&&keyword=&&pageSize=15&&pageNum=1
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
 
 ###
 POST http://localhost:3000/users/my-cards
@@ -10,14 +20,43 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-  "name" : "테스트 이미지2",
-  "description" : "카드 생성 테스트2",
+  "name" : "테스트 이미지12",
+  "description" : "카드 생성 테스트12",
   "image" : "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
   "grade" : 3,
-  "genre" : 2,
-  "price" : 1,
-  "quantity" : 1
+  "genre" : 0,
+  "price" : 2,
+  "quantity" : 2
 }
+
+###
+POST http://localhost:3000/shop
+Content-Type: application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+{
+    "cardId": "b5ccc355-5abb-49a4-9eef-7a8a0de57310",
+    "salesQuantity": 1,
+    "price": 4,
+    "exchangeGrade": 0,
+    "exchangeGenre": 3,
+    "exchangeDescription": "테스트 진행중"
+}
+
+###
+GET http://localhost:3000/users/my-cards/shop?keyword=생성
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET http://localhost:3000/users/my-cards/shop?genre=0&&grade=3&&pageSize=15&&pageNum=1&&sellout=false&&keyword=
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET http://localhost:3000/users/my-cards/shop?genre=0&&grade=&&keyword=&&pageSize=15&&pageNum=1
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
 POST http://localhost:3000/auth/sign-in
@@ -26,4 +65,38 @@ Content-Type : application/json
 {
     "email" : "codeit05@codeit.com",
     "password" : "!codeit05"
+}
+
+###
+GET https://one-favoritephoto-1-be.onrender.com/users/my-cards
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET  https://one-favoritephoto-1-be.onrender.com/users/my-cards?genre=1&&grade=0&&pageSize=15&&pageNum=1
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+POST https://one-favoritephoto-1-be.onrender.com/users/my-cards
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+{
+  "name" : "테스트 이미지6",
+  "description" : "카드 생성 테스트6",
+  "image" : "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
+  "grade" : 2,
+  "genre" : 2,
+  "price" : 3,
+  "quantity" : 7
+}
+
+###
+POST https://one-favoritephoto-1-be.onrender.com/auth/sign-in
+Content-Type : application/json
+
+{
+  "email" : "codeit05@codeit.com",
+  "password" : "!codeit05"
 }

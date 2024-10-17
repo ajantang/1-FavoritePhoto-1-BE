@@ -5,12 +5,10 @@
 - description : 구매한 포토 카드 조회 (정렬 / 필터 / 키워드 / 페이지네이션)
 - path : /users/my-cards
 - method : GET
-- header
-  - Authorization : Bearer {accessToken}
 - query
   - sort : recent || oldest || cheapest || highest (최신순 OR 오래된 순 OR 가격 낮은 순 OR 가격 높은 순 정렬)
   - genre : 장르 (필터 / int로 전달)
-  - sellout : true || false매진 여부 (필터)
+  - sellout : true || false매진 여부 (필터) - 삭제 예정
   - grade : 등급 (필터 / int로 전달)
   - ownerId : 판매자 ID(필터)
   - pageNum : 페이지 넘버(페이지네이션)
@@ -19,41 +17,43 @@
 
 ### req example
 
-- header :
-  - Authorization : Bearer {accessToken}
 - query :
-  - sort=recent&genre=travel&sellout=false&grade=SUPER_RARE&ownerId=1&pageNum=1&pageSize=9&keyword=스페인
+  - sort=recent?genre=1&&grade=0&&pageSize=15&&pageNum=1
 
 ### res template
 
 - data :
   - totalCount : 총 카드 수,
+  - countsGroupByGrade : 등급 별 카드 수
   - cards : 카드 배열
     - {카드 정보}
+      - id : 카드 아이디
       - image : 카드 이미지 url (max-length : 2048)
+      - name : 카드 이름
       - grade : 카드 등급 (int로 전달)
       - genre : 카드 장르 (int로 전달)
-      - ownCount : 카드 보유량
       - price : 카드 가격(포인트)
-      - authorNickname : 카드 생성자 닉네임
+      - nickname : 카드 생성자 닉네임
+      - quantity : 카드 보유량
 
 ### res example
 
 - data : {
-  totalCount : 100,
-  card : [
-  {
-  image : http://code-it.com/test-image1.png,
-  grade : 1,
-  genre : 2,
-  ownCount : 2,
-  price : 4,
-  authorNickname : 프로여행러
+  "totalCount": 8,
+  "countsGroupByGrade": {
+  "0": 8
   },
+  "cards": [
   {
-  ...
-  },
-  ...
+  "id": "df8d45ef-3178-46ce-959f-0f1613eb844a",
+  "image": "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
+  "name": "테스트 이미지3",
+  "grade": 0,
+  "genre": 1,
+  "price": 3,
+  "nickname": "코드잇05",
+  "quantity": 8
+  }
   ]
   }
 
@@ -62,10 +62,8 @@
 ### req template
 
 - description : 내 소유 포토 카드 등록
-- path : /users/my-card
+- path : /users/my-cards
 - method : POST
-- header
-  - Authorization : Bearer {accessToken}
 - body
   - name : 카드 이름 (max-length 50)
   - description : 카드 설명 (max-length 1024)
@@ -77,41 +75,41 @@
 
 ### req example
 
-- header
-  - Authorization : Bearer {accessToken}
 - body : {
-  name : 서울 밤하늘,
-  description : 남산에서 본 서늘한 가을 밤 풍경
-  image : http://code-it.com/test-image1.png,
-  grade : 1,
-  genre : 2,
-  quantity : 2,
-  price : 4,
+  "name" : "테스트 이미지12",
+  "description" : "카드 생성 테스트12",
+  "image" : "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
+  "grade" : 3,
+  "genre" : 0,
+  "price" : 2,
+  "quantity" : 2
   }
 
 ### res template
 
 - data
   - id : 카드 id
+  - image : 카드 이미지 url (max-length : 2048)
   - name : 카드 이름 (max-length 50)
   - description : 카드 설명 (max-length 1024)
-  - image : 카드 이미지 url (max-length : 2048)
   - grade : 카드 등급 (int로 전달)
   - genre : 카드 장르 (int로 전달)
-  - quantity : 카드 생성 갯수
   - price : 카드 가격(초기 포인트 : 판매 포인트와 별도. 교환 신청에서 사용됨)
-  - authorNickname : 카드 생성자 닉네임
+  - nickname : 카드 생성자 닉네임
+  - quantity : 카드 생성 갯수
 
 ### res example
 
 - data : {
-  id : c9c35842-2fda-44cc-8873-d933220e7b37
-  image : http://code-it.com/test-image1.png,
-  grade : 1,
-  genre : 2,
-  quantity : 2,
-  price : 4,
-  authorNickname : 코드잇
+  "id": "1c6ca252-c799-47d7-bf97-1253857384d2",
+  "image": "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
+  "name": "테스트 이미지12",
+  "description": "카드 생성 테스트12",
+  "grade": 3,
+  "genre": 0,
+  "price": 2,
+  "nickname": "코드잇05",
+  "quantity": 2
   }
 
 ## GET /users/my-cards/shop
@@ -121,8 +119,6 @@
 - description : 내가 상점에 등록한 포토 카드 목록 조회 (필터 : 등급, 장르, 매진 / 페이지네이션)
 - path : /users/my-cards/shop
 - method : GET
-- header
-  - Authorization : Bearer {accessToken}
 - query
   - sort : recent || oldest || cheapest || highest (최신순 OR 오래된 순 OR 가격 낮은 순 OR 가격 높은 순 정렬)
   - genre : 장르 (필터 / int로 전달)
@@ -135,41 +131,59 @@
 
 ### req example
 
-- header :
-  - Authorization : Bearer {accessToken}
 - query :
-  - sort=recent&genre=travel&sellout=false&grade=SUPER_RARE&ownerId=1&pageNum=1&pageSize=9&keyword=스페인
+  - sort=recent?genre=1&&grade=0&&pageSize=15&&pageNum=1&&sellout=false
 
 ### res template
 
 - data :
   - totalCount : 총 카드 수,
-  - cards : 카드 배열
+  - countsGroupByGrade : 등급 별 카드 수
+  - shops : 카드 배열
     - {카드 정보}
+      - id : 카드 아이디
       - image : 카드 이미지 url (max-length : 2048)
+      - name : 카드 이름
       - grade : 카드 등급 (int로 전달)
       - genre : 카드 장르 (int로 전달)
-      - ownQuantity : 카드 보유량
       - price : 카드 가격(포인트)
-      - authorNickname : 카드 생성자 닉네임
+      - nickname : 카드 생성자 닉네임
+      - remainingQuantity : 판매 카드 잔여량,
+      - totalQuantity : 판매 카드 총량,
+      - sellout : 매진 여부
 
 ### res example
 
 - data : {
-  totalCount : 100,
-  card : [
+  "totalCount": 2,
+  "countsGroupByGrade": {
+  "3": 2
+  },
+  "shops": [
   {
-  image : http://code-it.com/test-image1.png,
-  grade : 1,
-  genre : 2,
-  ownQuantity : 2,
-  price : 4,
-  authorNickname : 프로여행러
+  "id": "b5ccc355-5abb-49a4-9eef-7a8a0de57310",
+  "image": "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
+  "name": "테스트 이미지12",
+  "grade": 3,
+  "genre": 0,
+  "price": 2,
+  "nickname": "코드잇05",
+  "remainingQuantity": 1,
+  "totalQuantity": 1,
+  "sellout": false
   },
   {
-  ...
-  },
-  ...
+  "id": "b5ccc355-5abb-49a4-9eef-7a8a0de57310",
+  "image": "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
+  "name": "테스트 이미지12",
+  "grade": 3,
+  "genre": 0,
+  "price": 2,
+  "nickname": "코드잇05",
+  "remainingQuantity": 1,
+  "totalQuantity": 1,
+  "sellout": false
+  }
   ]
   }
 
@@ -180,8 +194,6 @@
 - description : 내가 교환 제시한 포토 카드 목록 조회
 - path : /users/my-cards/exchange
 - method : GET
-- header
-  - Authorization : Bearer {accessToken}
 - query
   - sort : recent || oldest || cheapest || highest (최신순 OR 오래된 순 OR 가격 낮은 순 OR 가격 높은 순 정렬)
   - genre : 장르 (필터 / int로 전달)
@@ -194,8 +206,6 @@
 
 ### req example
 
-- header :
-  - Authorization : Bearer {accessToken}
 - query :
   - sort=recent&genre=travel&sellout=false&grade=SUPER_RARE&ownerId=1&pageNum=1&pageSize=9&keyword=스페인
 
@@ -239,12 +249,12 @@
 - description : 사용자 프로필(닉네임) 조회
 - path : /users/profile
 - method : GET
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### req example
 
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### res template
@@ -266,12 +276,12 @@
 - description : 이메일 중복 여부 확인(확인하는 별도 UI 기획이 없음)
 - path : /users/check-email
 - method : GET
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### req example
 
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### res template
@@ -293,12 +303,12 @@
 - description : 닉네임 중복 여부 확인(확인하는 별도 UI 기획이 없음)
 - path : /users/check-nickname
 - method : GET
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### req example
 
-- header :
+- headers :
   - Authorization : Bearer {accessToken}
 
 ### res template

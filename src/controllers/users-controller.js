@@ -1,9 +1,10 @@
 import userService from "../services/user-service.js";
-import { myCardMapper } from "./mappers/card-mapper.js";
 
 async function getMyCardList(req, res, next) {
   try {
-    const result = await userService.getMyCardList(req.session.userId);
+    const userId = req.session.userId;
+    const query = req.query;
+    const result = await userService.getMyCardList({ userId, query });
 
     return res.status(200).send(result);
   } catch (err) {
@@ -33,14 +34,17 @@ async function createMyCard(req, res, next) {
   }
 }
 
-// async function getMyShopList(req, res, next){
-//   try{
-//     const result = ;
-//     return res.status(200).send(result);
-//   }catch(err){
-//     return next(err);
-//   }
-// }
+async function getMyShopList(req, res, next) {
+  try {
+    const userId = req.session.userId;
+    const query = req.query;
+    const result = await userService.getMyShopList({ userId, query });
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
 
 // async function getMyRequestList(req, res, next){
 //   try{
@@ -81,4 +85,5 @@ async function createMyCard(req, res, next) {
 export default {
   getMyCardList,
   createMyCard,
+  getMyShopList,
 };

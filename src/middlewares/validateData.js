@@ -11,13 +11,16 @@ export async function validateCreateShopData(req, res, next) {
     userId,
     cardId,
   };
+
   const own = await ownService.getByFilter(filter);
+
   if (own.quantity < salesQuantity) {
     const error = new Error(
       "The quantity requested for sale exceeds the available stock."
     );
     error.code = 400;
-    next(error);
+
+    return next(error);
   }
 
   const newReqBody = {
@@ -29,8 +32,10 @@ export async function validateCreateShopData(req, res, next) {
   };
   req.body = newReqBody;
   assert(req.body, createShopStruct);
+
   req.body.own = own;
-  next();
+
+  return next();
 }
 
 export function validateSignUpUserData(req, res, next) {

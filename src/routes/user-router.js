@@ -8,9 +8,7 @@ const userRouter = express.Router();
 userRouter
   .get("/my-cards", authMiddleware, userController.getMyCardList)
   .post("/my-cards", authMiddleware, userController.createMyCard)
-  .get("/cards/sale", (req, res, next) => {
-    // 내가 판매 등록한 포토 카드 목록 조회
-  })
+  .get("/my-cards/shop", authMiddleware, userController.getMyShopList)
   .get("/cards/exchange", (req, res, next) => {
     // 내가 교환 신청한 포토 카드 목록 조회
   })

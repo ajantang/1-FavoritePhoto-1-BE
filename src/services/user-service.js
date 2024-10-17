@@ -1,14 +1,21 @@
 import cardRepository from "../repositories/card-repository.js";
 import ownRepository from "../repositories/ownRepository.js";
+import shopRepository from "../repositories/shopRepository.js";
 import prisma from "../repositories/prisma.js";
 import {
   myCardMapper,
   myCardListMapper,
+  myShopListMapper,
 } from "../controllers/mappers/card-mapper.js";
+import {
+  createCardListFilterByQuery,
+  createShopListFilterByQuery,
+} from "../utils/query-util.js";
 
-async function getMyCardList(userId) {
-  const list = await ownRepository.findOwnCardList(userId);
-  const counts = await ownRepository.getGroupCountByGrade(userId);
+async function getMyCardList({ userId, query }) {
+  const filter = createCardListFilterByQuery(query);
+  const list = await ownRepository.findOwnCardList({ userId, filter });
+  const counts = await ownRepository.getGroupCountByGrade({ userId, filter });
 
   return myCardListMapper({ counts, list });
 }
@@ -35,6 +42,8 @@ async function createMyCard({
       quantity,
     });
 
+    console.log("cardInfo : ", cardInfo);
+
     const ownCardInfo = await ownRepository.createOwn({
       cardId: cardInfo.id,
       userId,
@@ -43,8 +52,16 @@ async function createMyCard({
 
     return ownCardInfo;
   });
-
+  console.log("result : ", result);
   return myCardMapper(result);
 }
 
-export default { getMyCardList, createMyCard };
+async function getMyShopList({ userId, query }) {
+  const filter = createShopListFilterByQuery(query);
+  const list = await shopRepository.findMyShopList({ userId, filter });
+  const counts = await shopRepository.getGroupCountByGrade({ userId, filter });
+
+  return myShopListMapper({ counts, list });
+}
+
+export default { getMyCardList, createMyCard, getMyShopList };
