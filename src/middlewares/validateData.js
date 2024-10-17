@@ -85,12 +85,13 @@ export async function validateUpdaeShopData(req, res, next) {
     const own = await ownService.getByFilter(ownFilter);
     const userTotalStock = isOwner.remainingQuantity + own.quantity;
     ownId = own.id;
+    console.log(userTotalStock)
 
     if (salesQuantity > userTotalStock) {
       const error = new Error("Sale quantity exceeds available stock.");
       error.code = 400;
       next(error);
-    } else if (req.salesQuantity === userTotalStock) {
+    } else if (salesQuantity === userTotalStock) {
       isOutOfStock = true;
     }
 
@@ -99,6 +100,10 @@ export async function validateUpdaeShopData(req, res, next) {
 
     newReqBody.remainingQuantity = salesQuantity;
     newReqBody.totalQuantity = isOwner.totalQuantity + addQuantity;
+  } else if (salesQuantity === 0) {
+    const error = new Error("Action unsuccessful: No records were updated.")
+    error.code = 400
+    return next(error)
   }
 
   req.body = newReqBody;

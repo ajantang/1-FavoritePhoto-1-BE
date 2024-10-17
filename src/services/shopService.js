@@ -136,6 +136,7 @@ async function updateOrDeleteOwn(id, updateData) {
   const { ownId, ownUpdateQuantity, isOutOfStock, ...rest } = updateData;
   const where = { id: ownId };
   const updateQuantity = { quantity: ownUpdateQuantity };
+  console.log(isOutOfStock)
 
   if (isOutOfStock) {
     return await prisma.$transaction(async () => {

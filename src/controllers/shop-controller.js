@@ -45,7 +45,8 @@ async function getShopDetail(req, res, next) {
 async function updateShop(req, res, next) {
   const { id } = req.params;
   const shop = await shopService.updateShop(id, req.body);
-  res.send(shop)
+  const responseData = createShopMapper(shop)
+  res.send(responseData)
 }
 
 export default { createShop, getShopList, getShopDetail, updateShop };
