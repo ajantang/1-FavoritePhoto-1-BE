@@ -3,7 +3,7 @@ import { createCardListFilterByQuery } from "../utils/query-util.js";
 import { ownSelect, ownCardSelect } from "./selects/own-select.js";
 
 async function getByFilter(filter) {
-  return await prisma.own.findFirstOrThrow({
+  return await prisma.own.findFirst({
     where: filter,
     select: ownSelect,
   });
