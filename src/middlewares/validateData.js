@@ -181,5 +181,8 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(error);
   }
 
+  req.body.sellerUserId = shop.userId;
+  req.body.tradePoints = totalPrice
+
   return next();
 }

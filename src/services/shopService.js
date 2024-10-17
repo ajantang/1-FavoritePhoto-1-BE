@@ -1,6 +1,7 @@
 import ownRepository from "../repositories/ownRepository.js";
 import prisma from "../repositories/prisma.js";
 import shopRepository from "../repositories/shopRepository.js";
+import userRepository from "../repositories/user-repository.js";
 import ownService from "./ownService.js";
 
 async function createShop(createData) {
@@ -179,6 +180,20 @@ async function updateShop(id, updateData) {
   }
 }
 
+async function purchaseService(id, userId, purchaseData) {
+  const { purchaseQuantity, sellerUserId, tradePoints } = purchaseData;
+
+  return await prisma.$transaction(async () => {
+    // 구매자 포인트 차감
+    const decreasePoint = await userRepository.decreaseUserPoint({
+      userId,
+      tradePoints,
+    });
+    console.log({ decreaseUserPoint: decreasePoint });
+    
+  });
+}
+
 export default {
   createShop,
   getShopListByQuery,
@@ -186,4 +201,5 @@ export default {
   getShopDetailById,
   checkUserShopOwner,
   updateShop,
+  purchaseService,
 };

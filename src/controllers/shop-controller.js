@@ -52,9 +52,9 @@ async function updateShop(req, res, next) {
 async function purchaseController(req, res, next) {
   const { id } = req.params;
   const userId = req.session.userId;
-  const { purchaseQuantity } = req.body;
-  
-  // 구매자 포인트 차감
+
+  const purchase = await shopService.purchaseService(id, userId, req.body);
+  // 판매자 포인트 증가
   // 상점 잔여수량 차감
   // 구매자 해당 카드 보유 추가
   // 상점 잔여 수량이 0이 될 시 매진 표시
