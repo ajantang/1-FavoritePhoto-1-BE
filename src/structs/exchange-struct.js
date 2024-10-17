@@ -1,14 +1,12 @@
-import * as ss from "superstruct";
-import isUuid from "is-uuid";
+import { object, string, size } from "superstruct";
+import Uuid from "./uuid.js";
 
 import exchange from "../constants/exchange.js";
 
-const uuid = ss.define("Uuid", (value) => isUuid.v4(value));
-
-export const Exchange = ss.object({
-  cardId: uuid,
-  exchangeDescription: s.size(
-    s.string,
+export const Exchange = object({
+  cardId: Uuid,
+  exchangeDescription: size(
+    string(),
     exchange.DESCRIPTION_MIN_LENGTH,
     exchange.DESCRIPTION_MAX_LENGTH
   ),

@@ -1,24 +1,27 @@
-import * as ss from "superstruct";
+import { object, refine, size, string } from "superstruct";
 
-import user from "../constants/user";
-import { emailPattern } from "./patterns/pattern";
+import user from "../constants/user.js";
+import { emailPattern } from "./patterns/pattern.js";
 
-export const User = ss.object({
-  email: ss.refine(
+export const SignUpUser = object({
+  email: refine(
     emailPattern,
     "Email Length",
     (value) =>
       user.EMAIL_MIN_LENGTH <= value.length &&
       value.length <= user.EMAIL_MAX_LENGTH
   ),
-  nickname: ss.size(
-    ss.string(),
-    user.NICKNAME_MIN_LENGTH,
-    user.NICKNAME_MAX_LENGTH
+  nickname: size(string(), user.NICKNAME_MIN_LENGTH, user.NICKNAME_MAX_LENGTH),
+  password: size(string(), user.PASSWORD_MIN_LENGTH, user.PASSWORD_MAX_LENGTH),
+});
+
+export const SignInUser = object({
+  email: refine(
+    emailPattern,
+    "Email Length",
+    (value) =>
+      user.EMAIL_MIN_LENGTH <= value.length &&
+      value.length <= user.EMAIL_MAX_LENGTH
   ),
-  password: ss.size(
-    ss.string(),
-    user.PASSWORD_MIN_LENGTH,
-    user.PASSWORD_MAX_LENGTH
-  ),
+  password: size(string(), user.PASSWORD_MIN_LENGTH, user.PASSWORD_MAX_LENGTH),
 });
