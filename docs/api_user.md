@@ -62,7 +62,7 @@
 ### req template
 
 - description : 내 소유 포토 카드 등록
-- path : /users/my-card
+- path : /users/my-cards
 - method : POST
 - body
   - name : 카드 이름 (max-length 50)
@@ -76,13 +76,13 @@
 ### req example
 
 - body : {
-  "name" : "테스트 이미지6",
-  "description" : "카드 생성 테스트6",
+  "name" : "테스트 이미지12",
+  "description" : "카드 생성 테스트12",
   "image" : "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
-  "grade" : 2,
-  "genre" : 2,
-  "price" : 3,
-  "quantity" : 7
+  "grade" : 3,
+  "genre" : 0,
+  "price" : 2,
+  "quantity" : 2
   }
 
 ### res template
@@ -101,14 +101,15 @@
 ### res example
 
 - data : {
-  "id": "bc5b3a70-a33b-4de5-9fde-a6305d1703df",
+  "id": "1c6ca252-c799-47d7-bf97-1253857384d2",
   "image": "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
-  "name": "테스트 이미지6",
-  "grade": 2,
-  "genre": 2,
-  "price": 3,
+  "name": "테스트 이미지12",
+  "description": "카드 생성 테스트12",
+  "grade": 3,
+  "genre": 0,
+  "price": 2,
   "nickname": "코드잇05",
-  "quantity": 7
+  "quantity": 2
   }
 
 ## GET /users/my-cards/shop

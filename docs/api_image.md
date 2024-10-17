@@ -30,8 +30,6 @@
 
 ### 참고(.http)
 
-###
-
 POST https://one-favoritephoto-1-be.onrender.com/images/upload
 Content-Type: multipart/form-data; boundary=image-boundary
 

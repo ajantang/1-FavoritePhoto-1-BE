@@ -20,8 +20,8 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-  "name" : "테스트 이미지8",
-  "description" : "카드 생성 테스트8",
+  "name" : "테스트 이미지12",
+  "description" : "카드 생성 테스트12",
   "image" : "https://cdn.pixabay.com/photo/2023/06/14/23/12/sunset-8064078_1280.jpg",
   "grade" : 3,
   "genre" : 0,
