@@ -57,3 +57,48 @@ export function getShopListMapper(list, total) {
     shops,
   };
 }
+
+export function getShopDetailMapper(data, isExchanges) {
+  const card = data.Card;
+  const seller = data.User;
+  const creator = card.User;
+  const exchangesData = Array.isArray(isExchanges) ? isExchanges : data.Exchanges
+ 
+  const exchanges = exchangesData.map((exchange) => {
+    const card = exchange.Card;
+    const creator = card.User;
+    return {
+      id: exchange.id,
+      image: card.image,
+      name: card.name,
+      grade: card.grade,
+      genre: card.genre,
+      price: card.price,
+      creatorNickname: creator.nickname,
+      description: exchange.description,
+    };
+  });
+
+  return {
+    shopInfo: {
+      id: data.id,
+      image: card.image,
+      name: card.name,
+      grade: card.grade,
+      genre: card.genre,
+      creatorNickname: creator.nickname,
+      sellerNickname: seller.nickname,
+      description: card.description,
+      price: data.price,
+      remainingQuantity: data.remainingQuantity,
+      totalQuantity: data.totalQuantity,
+      isOwner: true,
+    },
+    exchangeInfo: {
+      description: data.exchangeDescription,
+      grade: data.exchangeGrade,
+      genre: data.exchangeGenre,
+    },
+    exchangeList: exchanges,
+  };
+}

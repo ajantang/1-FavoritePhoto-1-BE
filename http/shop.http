@@ -13,4 +13,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3000/shop?genre=0&&grade=&&keyword=&&pageSize=1&&pageNum=1&&sellout=false
+GET http://localhost:3000/shop?genre=0&&grade=&&keyword=&&pageSize=1&&pageNum=1&&sellout=
+
+###
+GET http://localhost:3000/shop/55f26fb8-902b-4912-9cc3-d0886f02c216
