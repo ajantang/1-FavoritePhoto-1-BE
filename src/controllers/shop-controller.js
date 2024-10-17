@@ -45,8 +45,38 @@ async function getShopDetail(req, res, next) {
 async function updateShop(req, res, next) {
   const { id } = req.params;
   const shop = await shopService.updateShop(id, req.body);
-  const responseData = createShopMapper(shop)
-  res.send(responseData)
+  const responseData = createShopMapper(shop);
+  res.send(responseData);
 }
 
-export default { createShop, getShopList, getShopDetail, updateShop };
+async function purchaseController(req, res, next) {
+  const { id } = req.params;
+  const userId = req.session.userId;
+  const { purchaseQuantity } = req.body;
+  // 상점 등록자인지 확인
+  const isOwner = await shopService.checkUserShopOwner(userId, id);
+
+  if (isOwner) {
+    const error = new Error("You cannot purchase your own product.");
+    error.code = 400;
+    return next(error);
+  }
+  // 매진 여부 확인
+  // 구매량과 잔여 수량 대조
+  // 총 판매가와 보유 포인트 대조
+  // 구매자 포인트 차감
+  // 상점 잔여수량 차감
+  // 구매자 해당 카드 보유 추가
+  // 상점 잔여 수량이 0이 될 시 매진 표시
+  // 매진 시 교환 신청 삭제
+  // 구매 관련 알림 추가(구매자, 판매자).
+  // 교환 취소 알림 추가
+}
+
+export default {
+  createShop,
+  getShopList,
+  getShopDetail,
+  updateShop,
+  purchaseController,
+};

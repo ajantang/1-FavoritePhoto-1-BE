@@ -132,6 +132,7 @@ async function checkUserShopOwner(userId, shopId) {
   return await shopRepository.checkUserShopOwner(filter);
 }
 
+// service 파일 내에서 사용
 async function updateOrDeleteOwn(id, updateData) {
   const { ownData, userId, cardId, ...rest } = updateData;
   const { ownId, ownUpdateQuantity, isOutOfStock } = ownData;
