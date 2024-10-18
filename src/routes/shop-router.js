@@ -1,7 +1,13 @@
 import express from "express";
 import shopController from "../controllers/shop-controller.js";
-import { validateCreateShopData, validateUpdaeShopData } from "../middlewares/validateData.js";
-import { authMiddleware } from "../middlewares/auth.js";
+import {
+  validateCreateShopData,
+  validateUpdaeShopData,
+} from "../middlewares/validateData.js";
+import {
+  authMiddleware,
+  authMiddlewareByShopIdParam,
+} from "../middlewares/auth.js";
 
 const shopRouter = express.Router();
 
@@ -11,8 +17,14 @@ shopRouter
   .get(shopController.getShopList);
 
 shopRouter
-  .route("/:id")
+
+  .route("/:shopId")
   .get(shopController.getShopDetail)
-  .patch(authMiddleware, validateUpdaeShopData, shopController.updateShop);
+  .patch(authMiddleware, validateUpdaeShopData, shopController.updateShop)
+  .delete(
+    authMiddleware,
+    authMiddlewareByShopIdParam,
+    shopController.deleteShop
+  );
 
 export default shopRouter;

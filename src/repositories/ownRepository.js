@@ -69,10 +69,29 @@ async function getGroupCountByGrade({ userId, filter }) {
 
   return counts;
 }
-
 async function deleteById(id) {
   return await prisma.own.delete({
     where: { id },
+  });
+}
+
+async function addQuantity({ userId, cardId, increment }) {
+  return prisma.own.upsert({
+    where: {
+      userId_cardId: {
+        userId,
+        cardId,
+      },
+    },
+    update: {
+      quantity: { increment },
+    },
+    create: {
+      userId,
+      cardId,
+      quantity: increment,
+    },
+    select: ownCardSelect,
   });
 }
 
@@ -83,4 +102,5 @@ export default {
   findOwnCardList,
   getGroupCountByGrade,
   deleteById,
+  addQuantity,
 };

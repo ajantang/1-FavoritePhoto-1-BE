@@ -26,15 +26,17 @@ async function getShopList(req, res, next) {
 }
 
 async function getShopDetail(req, res, next) {
-  // 보유량 + 총판매량
-  const { id } = req.params;
+  const { shopId } = req.params;
   const userId = req.session?.userId || "";
-  const shop = await shopService.getShopDetailById(id);
-  const isUserShopOwner = await shopService.checkUserShopOwner(userId, id);
+  const shop = await shopService.getShopDetailById(shopId);
+  const isUserShopOwner = await shopService.checkUserShopOwner(userId, shopId);
   const [data, isowner] = await Promise.all([shop, isUserShopOwner]);
   let responseData = {};
   if (!isowner) {
-    const isExchange = await exchangeService.checkExchangeByUser(userId, id);
+    const isExchange = await exchangeService.checkExchangeByUser(
+      userId,
+      shopId
+    );
     responseData = getShopDetailMapper(data, isExchange);
   } else {
     responseData = getShopDetailMapper(data);
@@ -43,10 +45,28 @@ async function getShopDetail(req, res, next) {
 }
 
 async function updateShop(req, res, next) {
-  const { id } = req.params;
-  const shop = await shopService.updateShop(id, req.body);
-  const responseData = createShopMapper(shop)
-  res.send(responseData)
+  const { shopId } = req.params;
+  const shop = await shopService.updateShop(shopId, req.body);
+  const responseData = createShopMapper(shop);
+  res.send(responseData);
 }
 
-export default { createShop, getShopList, getShopDetail, updateShop };
+async function deleteShop(req, res, next) {
+  try {
+    const { shopId } = req.params;
+    const userId = req.session.userId;
+    const result = await shopService.deleteShop({ userId, shopId });
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+export default {
+  createShop,
+  getShopList,
+  getShopDetail,
+  updateShop,
+  deleteShop,
+};

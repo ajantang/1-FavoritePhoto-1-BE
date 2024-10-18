@@ -37,3 +37,11 @@ export const shopDetailSelect = {
     select: exchangeCardInfo,
   },
 };
+
+export const shopOwnerSelect = {
+  User: {
+    select: {
+      id: true,
+    },
+  },
+};
