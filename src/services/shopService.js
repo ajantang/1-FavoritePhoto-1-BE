@@ -181,7 +181,13 @@ async function updateShop(id, updateData) {
 }
 
 async function purchaseService(id, userId, purchaseData) {
-  const { purchaseQuantity, sellerUserId, tradePoints } = purchaseData;
+  const {
+    purchaseQuantity,
+    sellerUserId,
+    tradePoints,
+    isSellOut,
+    updatedQuantity,
+  } = purchaseData;
 
   return await prisma.$transaction(async () => {
     // 구매자 포인트 차감
@@ -197,6 +203,13 @@ async function purchaseService(id, userId, purchaseData) {
       tradePoints,
     });
     console.log({ increaseUserPoint: increasePoint });
+
+    // 상점 잔여수량 차감
+    const quantityData = { remainingQuantity: updatedQuantity };
+    const decreaseQuantity = await shopRepository.updateShop(id, quantityData);
+    console.log(decreaseQuantity);
+
+    
   });
 }
 

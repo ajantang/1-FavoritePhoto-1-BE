@@ -54,10 +54,9 @@ async function purchaseController(req, res, next) {
   const userId = req.session.userId;
 
   const purchase = await shopService.purchaseService(id, userId, req.body);
-  // 상점 잔여수량 차감
-  // 구매자 해당 카드 보유 추가
   // 상점 잔여 수량이 0이 될 시 매진 표시
   // 매진 시 교환 신청 삭제
+  // 구매자 해당 카드 보유 추가
   // 구매 관련 알림 추가(구매자, 판매자).
   // 교환 취소 알림 추가
 }

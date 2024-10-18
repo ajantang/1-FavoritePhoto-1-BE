@@ -157,6 +157,8 @@ export async function validatePurchaseConditions(req, res, next) {
 
   const shop = await shopService.getShopDetailById(id);
   const { remainingQuantity } = shop;
+  const updatedQuantity = remainingQuantity - purchaseQuantity;
+  let isSellOut = fasle;
 
   // 매진 여부 확인
   if (remainingQuantity === 0) {
@@ -171,6 +173,11 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(error);
   }
 
+  // 구매 성공 시 매진 여부
+  if (remainingQuantity === purchaseQuantity) {
+    isSellOut = true;
+  }
+
   const user = await userService.getUserInfoByUserId(userId);
   const totalPrice = purchaseQuantity * shop.price;
 
@@ -181,8 +188,11 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(error);
   }
 
+  
   req.body.sellerUserId = shop.userId;
-  req.body.tradePoints = totalPrice
+  req.body.tradePoints = totalPrice;
+  req.body.isSellOut = isSellOut;
+  req.body.updatedQuantity = updatedQuantity
 
   return next();
 }
