@@ -1,6 +1,9 @@
 import express from "express";
 import shopController from "../controllers/shop-controller.js";
-import { validateCreateShopData } from "../middlewares/validateData.js";
+import {
+  validateCreateShopData,
+  validateUpdaeShopData,
+} from "../middlewares/validateData.js";
 import {
   authMiddleware,
   authMiddlewareByShopIdParam,
@@ -14,8 +17,10 @@ shopRouter
   .get(shopController.getShopList);
 
 shopRouter
+
   .route("/:shopId")
   .get(shopController.getShopDetail)
+  .patch(authMiddleware, validateUpdaeShopData, shopController.updateShop)
   .delete(
     authMiddleware,
     authMiddlewareByShopIdParam,

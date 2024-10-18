@@ -1,6 +1,7 @@
 import prisma from "../repositories/prisma.js";
 import shopRepository from "../repositories/shopRepository.js";
 import ownRepository from "../repositories/ownRepository.js";
+
 import { myCardMapper } from "../controllers/mappers/card-mapper.js";
 
 async function createShop(createData) {
@@ -132,8 +133,50 @@ async function checkUserShopOwner(userId, shopId) {
   return await shopRepository.checkUserShopOwner(filter);
 }
 
+async function updateOrDeleteOwn(id, updateData) {
+  const { ownData, userId, cardId, ...rest } = updateData;
+  const { ownId, ownUpdateQuantity, isOutOfStock } = ownData;
+
+  const where = { id: ownId };
+  const updateQuantity = { quantity: ownUpdateQuantity };
+
+  if (isOutOfStock) {
+    return await prisma.$transaction(async () => {
+      const shop = await shopRepository.updateShop(id, rest);
+      const q = await ownRepository.deleteById(ownId);
+
+      return shop;
+    });
+  } else if (!isOutOfStock) {
+    return await prisma.$transaction(async () => {
+      const shop = await shopRepository.updateShop(id, rest);
+      const q = await ownRepository.update(where, updateQuantity);
+
+      return shop;
+    });
+  }
+}
+
 async function updateShop(id, updateData) {
-  return await shopRepository.updateShop(id, updateData);
+  const { ownData, userId, cardId, ...rest } = updateData;
+  const { ownId, isOwn, creatOwnQuantity } = ownData;
+  if (ownId) {
+    return await updateOrDeleteOwn(id, updateData);
+  } else if (!isOwn) {
+    return await prisma.$transaction(async () => {
+      const createOwnData = {
+        userId,
+        cardId,
+        quantity: creatOwnQuantity,
+      };
+      const shop = await shopRepository.updateShop(id, rest);
+      const q = await ownRepository.createOwn(createOwnData);
+
+      return shop;
+    });
+  } else {
+    return await shopRepository.updateShop(id, rest);
+  }
 }
 
 async function deleteShop({ userId, shopId }) {

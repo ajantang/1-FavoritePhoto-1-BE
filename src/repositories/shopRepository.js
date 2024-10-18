@@ -48,6 +48,7 @@ async function updateShop(id, updateData) {
   return prisma.shop.update({
     where: { id },
     data: updateData,
+    select: shopCreateSelect,
   });
 }
 

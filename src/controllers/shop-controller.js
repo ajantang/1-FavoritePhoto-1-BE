@@ -26,15 +26,17 @@ async function getShopList(req, res, next) {
 }
 
 async function getShopDetail(req, res, next) {
-  // 보유량 + 판매량
   const { shopId } = req.params;
   const userId = req.session?.userId || "";
-  const shop = await shopService.getShopDetailById(id);
-  const isUserShopOwner = await shopService.checkUserShopOwner(userId, id);
+  const shop = await shopService.getShopDetailById(shopId);
+  const isUserShopOwner = await shopService.checkUserShopOwner(userId, shopId);
   const [data, isowner] = await Promise.all([shop, isUserShopOwner]);
   let responseData = {};
   if (!isowner) {
-    const isExchange = await exchangeService.checkExchangeByUser(userId, id);
+    const isExchange = await exchangeService.checkExchangeByUser(
+      userId,
+      shopId
+    );
     responseData = getShopDetailMapper(data, isExchange);
   } else {
     responseData = getShopDetailMapper(data);
@@ -44,12 +46,9 @@ async function getShopDetail(req, res, next) {
 
 async function updateShop(req, res, next) {
   const { shopId } = req.params;
-  // 유효성 검사 필요
-  // 유저가 등록자인지 검사
-  // 보유량 총합
-  // 보유량에서 0이되면 delete
-  const shop = await shopService.updateShop(id, req.body);
-  // 수량 관련 업데이트 시 own도 업데이트하는 코드 필요
+  const shop = await shopService.updateShop(shopId, req.body);
+  const responseData = createShopMapper(shop);
+  res.send(responseData);
 }
 
 async function deleteShop(req, res, next) {
