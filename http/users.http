@@ -44,7 +44,7 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 }
 
 ###
-DELETE http://localhost:3000/shop/d67f4b52-4bdc-4a2a-85cb-689dd9342eb2
+DELETE http://localhost:3000/shop/20f8df52-5e57-41da-99ff-8487564fd022
 Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 

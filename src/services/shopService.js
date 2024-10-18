@@ -1,6 +1,7 @@
 import prisma from "../repositories/prisma.js";
 import shopRepository from "../repositories/shopRepository.js";
 import ownRepository from "../repositories/ownRepository.js";
+import { myCardMapper } from "../controllers/mappers/card-mapper.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
@@ -146,7 +147,7 @@ async function deleteShop({ userId, shopId }) {
     });
     await shopRepository.deleteShop(shopId);
 
-    return own;
+    return myCardMapper(own);
   });
 }
 

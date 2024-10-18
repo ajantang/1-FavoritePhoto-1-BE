@@ -20,12 +20,12 @@
 - headers
   - Authorization : Bearer {accessToken}
 - body : {
-    cardId: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
-    salesQuantity: 3,
-    price: 4,
-    exchangeGrade: 0,
-    exchangeGenre: 2,
-    exchangeDescription: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다"
+  cardId: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
+  salesQuantity: 3,
+  price: 4,
+  exchangeGrade: 0,
+  exchangeGenre: 2,
+  exchangeDescription: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다"
   }
 
 ### res template
@@ -51,24 +51,24 @@
 ### res example
 
 - data : {
-    salesInfo : {
-      id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
-      image: "url 주소",
-      name: "우리집 앞마당",
-      grade: 1,
-      genre: 4,
-      creatorNickname: "미스쏜",
-      sellerNickname: "유디",
-      description: "우리집 앞마당 포토카드입니다. 우리집 앞마당 포토카드입니다.",
-      price: 4,
-      remainingQuantity: 3,
-      totalQuantity: 3
-    },
-      exchangePreference: {
-      description: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다",
-      grade: 0,
-      genre: 4,
-    }
+  salesInfo : {
+  id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
+  image: "url 주소",
+  name: "우리집 앞마당",
+  grade: 1,
+  genre: 4,
+  creatorNickname: "미스쏜",
+  sellerNickname: "유디",
+  description: "우리집 앞마당 포토카드입니다. 우리집 앞마당 포토카드입니다.",
+  price: 4,
+  remainingQuantity: 3,
+  totalQuantity: 3
+  },
+  exchangePreference: {
+  description: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다",
+  grade: 0,
+  genre: 4,
+  }
   }
 
 ## GET /shop
@@ -115,31 +115,31 @@
 ### res example
 
 - data : {
-    total: 10,
-    shops: [
-      {
-        id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
-        cardId:"8f1e54c6-f439-4b3b-b710-296bd27cdd72",
-        sellout: false,
-        image: "url 주소",
-        name: "우리집 앞마당",
-        grade: 1,
-        genre: 4,
-        creatorNickname: "미스쏜",
-        price: 4,
-        remainingQuantity: 3,
-        totalQuantity: 5
-      },
-      {
-        id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
-        cardId:"8f1e54c6-f439-4b3b-b710-296bd27cdd72",
-        sellout: false,
-        image: "url 주소",
-        name: "우리집 앞마당",
-        ...
-      },
-      ...
-    ]
+  total: 10,
+  shops: [
+  {
+  id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
+  cardId:"8f1e54c6-f439-4b3b-b710-296bd27cdd72",
+  sellout: false,
+  image: "url 주소",
+  name: "우리집 앞마당",
+  grade: 1,
+  genre: 4,
+  creatorNickname: "미스쏜",
+  price: 4,
+  remainingQuantity: 3,
+  totalQuantity: 5
+  },
+  {
+  id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
+  cardId:"8f1e54c6-f439-4b3b-b710-296bd27cdd72",
+  sellout: false,
+  image: "url 주소",
+  name: "우리집 앞마당",
+  ...
+  },
+  ...
+  ]
   }
 
 ## GET /shop/:shopId
@@ -150,9 +150,9 @@
 - path : /shop/:shopId
 - method : GET
 - header
-    - Authorization : Bearer {accessToken}
+  - Authorization : Bearer {accessToken}
 - params
-    - shopId : 상점ID
+  - shopId : 상점ID
 
 ### req example
 
@@ -163,8 +163,8 @@
 
 ### res template
 
-- data 
-  - shopInfo:  판매카드 정보
+- data
+  - shopInfo: 판매카드 정보
     - id: 상점ID
     - name: 카드 이름
     - image: 사진
@@ -187,7 +187,7 @@
     - name: 카드 이름
     - grade: 등급
     - genre: 장르
-    - price:  원가
+    - price: 원가
     - creatorNickname: 원작자 이름
     - description: 교환 제시 내용
 
@@ -195,71 +195,70 @@
 
 - 내가 상점에 등록한 포토카드가 아닌 경우
 - data : {
-	shopInfo: {
-		id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
-		name: "우리집 앞마당",
-		image: "url 주소",
-		grade: 1,
-		genre: 4,
-		creatorNickname: "유디",
-		sellerNickname: "미스쏜",
-		description: "우리집 앞마당 포토카드입니다. 우리집 앞마당 포토카드입니다.",
-		price: 4,
-		remainingQuantity: 3,
-		totalQuantity: 5,
-		isOwner: false
-	},
-	exchangeInfo: {
-		description: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다",
-		grade: 0,
-		genre: 4,
-	},
+  shopInfo: {
+  id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
+  name: "우리집 앞마당",
+  image: "url 주소",
+  grade: 1,
+  genre: 4,
+  creatorNickname: "유디",
+  sellerNickname: "미스쏜",
+  description: "우리집 앞마당 포토카드입니다. 우리집 앞마당 포토카드입니다.",
+  price: 4,
+  remainingQuantity: 3,
+  totalQuantity: 5,
+  isOwner: false
+  },
+  exchangeInfo: {
+  description: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다",
+  grade: 0,
+  genre: 4,
+  },
   "exchangeList": [],
-}
+  }
 
 - 내가 상점에 등록한 포토카드인 경우 OR 내가 교환 제시를 했던 포토카드인 경우
 - data : {
-	shopInfo: {
-		id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
-		name: "우리집 앞마당",
-		image: "url 주소",
-		grade: 1,
-		genre: 4,
-		creatorNickname: "유디",
-		sellerNickname: "미스쏜",
-		description: "우리집 앞마당 포토카드입니다. 우리집 앞마당 포토카드입니다.",
-		price: 4,
-		remainingQuantity: 3,
-		totalQuantity: 5,
-		isOwner: true
-	},
-	exchangeInfo: {
-		grade: 0,
-		genre: 4,
-		description: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다",
-	},
-	exchangeList: [
-		{
-			id: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
-			image: "url 주소",
-			name: "스페인 여행",
-			grade: 0,
-			genre: 4,
-			price: 4,
-			creatorNickname: "프로 여행러",
-			description: "스페인 여행 사진도 좋은데.. 우리집 앞마당 포토카드와 교환하고 싶습니다!"
-		},
-		{
-			id: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
-			image: "url 주소",
-			name: "스페인 여행",
-			grade: 0,
-			...
-    },
-    ...
+  shopInfo: {
+  id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
+  name: "우리집 앞마당",
+  image: "url 주소",
+  grade: 1,
+  genre: 4,
+  creatorNickname: "유디",
+  sellerNickname: "미스쏜",
+  description: "우리집 앞마당 포토카드입니다. 우리집 앞마당 포토카드입니다.",
+  price: 4,
+  remainingQuantity: 3,
+  totalQuantity: 5,
+  isOwner: true
+  },
+  exchangeInfo: {
+  grade: 0,
+  genre: 4,
+  description: "푸릇푸릇한 여름 풍경, 눈 많이 내린 겨울 풍경 사진에 관심이 많습니다",
+  },
+  exchangeList: [
+  {
+  id: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
+  image: "url 주소",
+  name: "스페인 여행",
+  grade: 0,
+  genre: 4,
+  price: 4,
+  creatorNickname: "프로 여행러",
+  description: "스페인 여행 사진도 좋은데.. 우리집 앞마당 포토카드와 교환하고 싶습니다!"
+  },
+  {
+  id: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
+  image: "url 주소",
+  name: "스페인 여행",
+  grade: 0,
+  ...
+  },
+  ...
   ]
-}
-
+  }
 
 ## PATCH /shop/:shopId
 
@@ -271,13 +270,13 @@
 - - header
     - Authorization : Bearer {accessToken}
 - params
-    - shopId: 상점 ID
+  - shopId: 상점 ID
 - body
-    - salesQuantity: 판매수량
-    - price: 장당 가격
-    - grade: 교환 희망 등급
-    - genre: 교환 희망 장르
-    - description: 교환 희망 설명
+  - salesQuantity: 판매수량
+  - price: 장당 가격
+  - grade: 교환 희망 등급
+  - genre: 교환 희망 장르
+  - description: 교환 희망 설명
 
 ### req example
 
@@ -286,69 +285,65 @@
 - params
   - adfc1706-a7f6-4c6e-a006-1733a854afbb
 - body : {
-    salesQuantity: 3,
-    price: 20,
-    grade: 5,
-    genre: 4,
-    description: "아무거나 좋아요"
+  salesQuantity: 3,
+  price: 20,
+  grade: 5,
+  genre: 4,
+  description: "아무거나 좋아요"
   }
 
 ### res template
 
-- data 
+- data
   - salesInfo : 판매정보
-      - id: 상점ID
-      - image: 사진
-      - name: 카드 이름
-      - grade: 등급
-      - genre: 장르
-      - creatorNickname: 원작자 이름
-      - sellerNickname: 판매자 이름
-      - description: 설명
-      - price: 장당 가격
-      - remainingQuantity: 잔여 수량
-      - totalQuantity: 총 판매 수량
+    - id: 상점ID
+    - image: 사진
+    - name: 카드 이름
+    - grade: 등급
+    - genre: 장르
+    - creatorNickname: 원작자 이름
+    - sellerNickname: 판매자 이름
+    - description: 설명
+    - price: 장당 가격
+    - remainingQuantity: 잔여 수량
+    - totalQuantity: 총 판매 수량
   - exchangePreference: 교환 희망 정보
-      - description: 교환 희망 설명
-      - grade: 교환 희망 등급
-      - genre: 교환 희망 장르
+    - description: 교환 희망 설명
+    - grade: 교환 희망 등급
+    - genre: 교환 희망 장르
 
 ### res example
 
 - data : {
-	salesInfo : {
-		id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
-		image: "url 주소",
-		name: "우리집 앞마당",
-		grade: 1,
-		genre: 4,
-		creatorNickname: "유디",
-		sellerNickname: "미스쏜",
-		description: "우리집 앞마당 포토카드입니다. 우리집 앞마당 포토카드입니다.",
-		price: 20,
-		remainingQuantity: 3,
-		totalQuantity: 3
-	},
-	exchangePreference: {
-		description: "아무거나 좋아요",
-		grade: 5,
-		genre: 4,
-	}		
-}
+  salesInfo : {
+  id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
+  image: "url 주소",
+  name: "우리집 앞마당",
+  grade: 1,
+  genre: 4,
+  creatorNickname: "유디",
+  sellerNickname: "미스쏜",
+  description: "우리집 앞마당 포토카드입니다. 우리집 앞마당 포토카드입니다.",
+  price: 20,
+  remainingQuantity: 3,
+  totalQuantity: 3
+  },
+  exchangePreference: {
+  description: "아무거나 좋아요",
+  grade: 5,
+  genre: 4,
+  }
+  }
 
-## api template
+## DELETE /shop/:shopId
 
 ### req template
 
-- description :
-- path :
-- method :
-- headers
-  - property1 :
-  - property2 :
-- body
-  - property1 :
-  - property2 :
+- description: 내가 판매 등록한 포토 카드 삭제
+- path: /shop/:shopId
+- method: DELETE
+- params
+  - shopId: 상점 ID
 
 ### req example
 
@@ -357,8 +352,27 @@
 
 ### res template
 
-- data :
+- data
+  - id : 카드 id
+  - image : 카드 이미지 url
+  - name : 카드 이름
+  - grade : 카드 등급
+  - genre : 카드 장르
+  - price : 카드 가격(초기 포인트 : 판매 포인트와 별도. 교환 신청에서 사용됨)
+  - nickname : 카드 생성자 닉네임
+  - description : 카드 설명
+  - quantity : 카드 보유량
 
 ### res example
 
-- data :
+- data : {
+  "id": "c618558f-f82a-456e-bb98-62084afc7954",
+  "image": "https://cdn.pixabay.com/photo/2024/09/07/02/34/penguins-9028827_640.jpg",
+  "name": "낮 펭귄",
+  "grade": 3,
+  "genre": 2,
+  "price": 4,
+  "nickname": "코드잇05",
+  "description": "동물 펭귄01",
+  "quantity": 7
+  }
