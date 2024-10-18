@@ -12,6 +12,18 @@ async function getMyCardList(req, res, next) {
   }
 }
 
+async function getMyCard(req, res, next) {
+  try {
+    const { cardId } = req.params;
+    const userId = req.session.userId;
+    const result = await userService.getMyCard({ userId, cardId });
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
+
 async function createMyCard(req, res, next) {
   try {
     const { name, description, image, grade, genre, price, quantity } =
@@ -87,6 +99,7 @@ async function getMyRequestList(req, res, next) {
 
 export default {
   getMyCardList,
+  getMyCard,
   createMyCard,
   getMyShopList,
   getMyRequestList,

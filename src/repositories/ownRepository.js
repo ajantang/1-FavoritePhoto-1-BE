@@ -37,6 +37,16 @@ async function findOwnCardList({ userId, filter }) {
   });
 }
 
+async function findOwnCard({ userId, cardId }) {
+  return await prisma.own.findFirst({
+    where: {
+      userId,
+      cardId,
+    },
+    select: ownCardSelect,
+  });
+}
+
 async function getGroupCountByGrade({ userId, filter }) {
   const { where } = filter;
 
@@ -95,12 +105,21 @@ async function addQuantity({ userId, cardId, increment }) {
   });
 }
 
+async function findShopOwnerId({ userId, cardId }) {
+  return prisma.own.findFirst({
+    where: { userId, cardId },
+    select: ownCardSelect,
+  });
+}
+
 export default {
   getByFilter,
   update,
   createOwn,
   findOwnCardList,
+  findOwnCard,
   getGroupCountByGrade,
   deleteById,
   addQuantity,
+  findShopOwnerId,
 };
