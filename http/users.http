@@ -1,5 +1,5 @@
 ###
-GET http://localhost:3000/users/my-cards
+GET http://localhost:3000/users/my-cards/c618558f-f82a-456e-bb98-62084afc7954
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
@@ -83,8 +83,8 @@ POST http://localhost:3000/auth/sign-in
 Content-Type : application/json
 
 {
-    "email" : "codeit05@codeit.com",
-    "password" : "!codeit05"
+    "email" : "codeit04@codeit.com",
+    "password" : "!codeit04"
 }
 
 ###
