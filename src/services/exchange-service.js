@@ -1,7 +1,7 @@
 import ownRepository from "../repositories/ownRepository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import { ownCardSelect } from "../repositories/selects/own-select.js";
-import { exchangeShopInfo } from "../repositories/selects/exchange-select.js";
+import { exchangeShopIdSelect } from "../repositories/selects/exchange-select.js";
 import prisma from "../repositories/prisma.js";
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 
@@ -40,7 +40,7 @@ async function createExchange({ userId, shopId, cardId, description }) {
 
     const exchange = await exchangeRepository.createData({
       data: exchangeData,
-      select: exchangeShopInfo,
+      select: exchangeShopIdSelect,
     });
 
     return exchange;

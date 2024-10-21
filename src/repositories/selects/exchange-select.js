@@ -13,9 +13,7 @@ export const exchangeCardInfo = {
   },
 };
 
-export const exchangeShopInfo = {
+export const exchangeShopIdSelect = {
   ...exchangeSelect,
-  Shop: {
-    select: { shopId: true },
-  },
+  shopId: true,
 };
