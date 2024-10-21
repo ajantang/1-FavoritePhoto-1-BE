@@ -7,7 +7,7 @@ import {
 import {
   authMiddleware,
   authMiddlewareByShopIdParam,
-  authMiddlewareByCardIdParam,
+  authMiddlewareByCardIdBody,
 } from "../middlewares/auth.js";
 
 const shopRouter = express.Router();
@@ -20,7 +20,7 @@ shopRouter
 shopRouter.post(
   "/exchange",
   authMiddleware,
-  authMiddlewareByCardIdParam,
+  authMiddlewareByCardIdBody,
   shopController.createExchange
 );
 

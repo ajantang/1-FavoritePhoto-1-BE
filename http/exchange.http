@@ -29,7 +29,7 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-GET http://localhost:3000/users/my-cards
+GET http://localhost:3000/users/my-cards/fd3d66c0-b702-40b9-928a-371b68f0fd64
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
@@ -39,7 +39,7 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-GET http://localhost:3000/users/my-cards/exchange
+GET http://localhost:3000/users/exchange
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 

@@ -11,8 +11,11 @@ import {
 } from "../controllers/mappers/card-mapper.js";
 import {
   createCardListFilterByQuery,
+  createOrderBy,
   createShopListFilterByQuery,
+  createGenreGradeKeywordWhere,
 } from "../utils/query-util.js";
+import { exchangeCardInfo } from "../repositories/selects/exchange-select.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
@@ -71,11 +74,24 @@ async function getMyShopList({ userId, query }) {
 }
 
 async function getMyRequestList({ userId, query }) {
-  const filter = createCardListFilterByQuery(query);
-  const list = await exchangeRepository.findMyExchangeList({ userId, filter });
-  const counts = await exchangeRepository.getGroupCountByGrade({
+  const { sort, genre, grade, pageNum, pageSize, keyword = "" } = query;
+  const orderBy = createOrderBy(sort);
+  const page = pageNum || 1;
+  const pageSizeNum = pageSize || 15;
+  const offset = (page - 1) * pageSizeNum;
+  const skip = parseInt(offset);
+  const take = parseInt(pageSizeNum);
+  const where = createGenreGradeKeywordWhere({ genre, grade, keyword });
+  const list = await exchangeRepository.findManyByPaginationData({
+    orderBy,
+    skip,
+    take,
+    where,
+    select: exchangeCardInfo,
+  });
+  const counts = await exchangeRepository.countGroupCountByGrade({
     userId,
-    filter,
+    where,
   });
 
   return myExchangeListMapper({ counts, list });

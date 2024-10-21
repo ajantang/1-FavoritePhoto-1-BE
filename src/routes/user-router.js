@@ -4,12 +4,14 @@ import userController from "../controllers/users-controller.js";
 import {
   authMiddleware,
   authMiddlewareByCardIdParam,
+  authMiddlewareByCardIdBody,
 } from "../middlewares/auth.js";
 
 const userRouter = express.Router();
 
 userRouter
   .get("/my-cards", authMiddleware, userController.getMyCardList)
+  .get("/exchange", authMiddleware, userController.getMyRequestList)
   .get(
     "/my-cards/:cardId",
     authMiddleware,
@@ -18,7 +20,6 @@ userRouter
   )
   .post("/my-cards", authMiddleware, userController.createMyCard)
   .get("/my-cards/shop", authMiddleware, userController.getMyShopList)
-  .get("/my-cards/exchange", authMiddleware, userController.getMyRequestList)
   .get("/profile", (req, res, next) => {
     // 내 프로필 조회
   })
