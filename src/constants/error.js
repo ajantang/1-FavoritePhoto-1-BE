@@ -8,3 +8,7 @@ export const CUSTOM_ERROR_MESSAGES = {
   400: "Client Error",
   500: "Server error",
 };
+
+export const CUSTOM_ERROR_INFO = {
+  40001: "Not Enough Quantity",
+};

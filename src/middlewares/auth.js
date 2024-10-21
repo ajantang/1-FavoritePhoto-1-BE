@@ -1,5 +1,7 @@
 import { createCustomError } from "../lib/custom-error.js";
+import ownRepository from "../repositories/ownRepository.js";
 import shopRepository from "../repositories/shopRepository.js";
+import { ownSelect } from "../repositories/selects/own-select.js";
 
 export function authMiddleware(req, res, next) {
   if (req.session && req.session.userId) {
@@ -24,6 +26,26 @@ export async function authMiddlewareByShopIdParam(req, res, next) {
     }
 
     return next(createCustomError(401));
+  } catch (err) {
+    return next(err);
+  }
+}
+
+export async function authMiddlewareByCardIdParam(req, res, next) {
+  const { cardId } = req.body;
+
+  if (!cardId) {
+    return next(createCustomError(400));
+  }
+
+  try {
+    const where = { cardId, userId: req.session.userId };
+    await ownRepository.findUniqueOrThrowtData({
+      where,
+      select: ownSelect,
+    });
+
+    return next();
   } catch (err) {
     return next(err);
   }

@@ -12,3 +12,10 @@ export const exchangeCardInfo = {
     select: cardSelect,
   },
 };
+
+export const exchangeShopInfo = {
+  ...exchangeSelect,
+  Shop: {
+    select: { shopId: true },
+  },
+};

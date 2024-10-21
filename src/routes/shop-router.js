@@ -7,6 +7,7 @@ import {
 import {
   authMiddleware,
   authMiddlewareByShopIdParam,
+  authMiddlewareByCardIdParam,
 } from "../middlewares/auth.js";
 
 const shopRouter = express.Router();
@@ -16,8 +17,14 @@ shopRouter
   .post(authMiddleware, validateCreateShopData, shopController.createShop)
   .get(shopController.getShopList);
 
-shopRouter
+shopRouter.post(
+  "/exchange",
+  authMiddleware,
+  authMiddlewareByCardIdParam,
+  shopController.createExchange
+);
 
+shopRouter
   .route("/:shopId")
   .get(shopController.getShopDetail)
   .patch(authMiddleware, validateUpdaeShopData, shopController.updateShop)
