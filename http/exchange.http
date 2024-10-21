@@ -71,4 +71,4 @@ POST http://localhost:3000/auth/sign-out
 
 
 ###
-POST http://localhost:3000/exchange/e810630c-9cf9-439f-8a3b-59fe3b1d5410/accept
+POST http://localhost:3000/exchange/00e33ff3-6c0f-4d90-808f-5f45a77fc698/accept
