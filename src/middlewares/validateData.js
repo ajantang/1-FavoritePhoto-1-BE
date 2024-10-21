@@ -226,6 +226,7 @@ export async function validateExchangeConditions(req, res, next) {
       userId,
       id: shopId,
     },
+    select: exchangeCardInfo,
   });
 
   if (isOwner === null || isOwner === undefined) {
@@ -264,10 +265,11 @@ export async function validateExchangeConditions(req, res, next) {
     },
   });
 
+  req.body.exchangeData = exchange;
   req.body.shopId = shopId;
   req.body.exchangeCardId = exchangeCardId;
   req.body.sellerId = sellerId;
-  req.body.shopCardId = shopCardId
+  req.body.shopCardId = shopCardId;
   req.body.hasSellerExchangeCard = hasSellerExchangeCard;
   req.body.hasBuyershopCard = hasBuyershopCard;
 

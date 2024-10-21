@@ -53,6 +53,7 @@ async function createExchange({ userId, shopId, cardId, description }) {
 
 async function acceptByExchange(userId, exchangeId, reqBody) {
   const {
+    exchangeData,
     shopId,
     exchangeCardId,
     sellerId,
@@ -120,8 +121,23 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
         });
         console.log({ increaseBuyerCard });
       }
-      // 관련된 알림 추가
+
       // 승인된 exchange 삭제
+      const delteeExchange = await exchangeRepository.deleteData({
+        where: {
+          id: exchangeId,
+        },
+      });
+      console.log(delteeExchange);
+
+      const responseMappeing = exchangeMapper(exchangeData);
+
+      return {
+        successStatus: true,
+        ...responseMappeing,
+      };
+
+      // 관련된 알림 추가
     } catch (e) {
       throw e;
     }
