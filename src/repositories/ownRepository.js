@@ -76,6 +76,46 @@ async function deleteById(id) {
   });
 }
 
+//
+
+async function createData({ data, select }) {
+  return await prisma.own.create({ data, select });
+}
+
+async function findFirstData({ where, select }) {
+  return await prisma.own.findFirst({ where, select });
+}
+
+async function findUniqueOrThrowtData({ where, select }) {
+  return await prisma.own.findFirst({ where, select });
+}
+
+async function conutData(where) {
+  return await prisma.own.count({ where });
+}
+
+async function findManyData({ where, select }) {
+  return await prisma.own.findMany({ where, select });
+}
+
+async function findManyByPaginationData({
+  orderBy,
+  skip,
+  take,
+  where,
+  select,
+}) {
+  return await prisma.own.findMany({ orderBy, skip, take, where, select });
+}
+
+async function updateData({ where, update, select }) {
+  return await prisma.own.update({ where, update, select });
+}
+
+async function deleteData(where) {
+  await prisma.own.delete({ where });
+}
+
 export default {
   getByFilter,
   update,
@@ -83,4 +123,12 @@ export default {
   findOwnCardList,
   getGroupCountByGrade,
   deleteById,
+  createData,
+  findFirstData,
+  findUniqueOrThrowtData,
+  conutData,
+  findManyData,
+  findManyByPaginationData,
+  updateData,
+  deleteData,
 };

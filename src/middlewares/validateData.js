@@ -188,6 +188,9 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(error);
   }
 
+  // 구매자가 해당 카드를 소유하는지 확인
+  
+
   req.body.sellerUserId = shop.userId;
   req.body.tradePoints = totalPrice;
   req.body.isSellOut = isSellOut;

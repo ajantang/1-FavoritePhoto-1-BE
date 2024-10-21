@@ -234,6 +234,9 @@ async function purchaseService(id, userId, purchaseData) {
     };
     const purchase = await purchaseRepository.create(createData);
     console.log({ purchase: purchase });
+
+    // 구매자 해당 카드 보유 추가
+    
   });
 }
 
