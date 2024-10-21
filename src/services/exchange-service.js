@@ -52,12 +52,12 @@ async function createExchange({ userId, shopId, cardId, description }) {
 }
 
 async function acceptByExchange(userId, exchangeId, reqBody) {
-  const { shopId, exchangeCardId, sellerId, hasSellerCard } = reqBody;
+  const { shopId, exchangeCardId, sellerId, hasSellerExchangeCard, hasBuyershopCard } = reqBody;
 
   return await prisma.$transaction(async () => {
     try {
       // 상점의 잔여량 감소
-      const decreaseQuantity = await shopRepository.updateData({
+      const decreaseShopQuantity = await shopRepository.updateData({
         where: { id: shopId },
         data: {
           remainingQuantity: {
@@ -65,10 +65,13 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
           },
         },
       });
-      console.log({ decreaseQuantity });
+      console.log({ decreaseShopQuantity });
 
       // 판매자에게 제시된 카드 보유량 증가 혹은 생성
-      if (hasSellerCard === null || hasSellerCard == undefined) {
+      if (
+        hasSellerExchangeCard === null ||
+        hasSellerExchangeCard == undefined
+      ) {
         const createSellerOwn = await ownRepository.createData({
           data: {
             userId: sellerId,
@@ -87,7 +90,7 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
         });
         console.log({ increaseSellerCard });
       }
-      // 구매자의 제시한 카드 보유량 감소
+
       // 구매자가 교환을 시도했던 상점 카드 보유 확인
       // 구매자가 교환을 시도했던 상점 카드의 보유량 생성 혹은 증가
       // 관련된 알림 추가

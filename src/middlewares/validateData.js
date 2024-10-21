@@ -246,19 +246,29 @@ export async function validateExchangeConditions(req, res, next) {
   }
 
   const sellerId = shop.userId;
+  const shopCardId = shop.cardId;
 
   // 판매자가 제시된 카드를 보유히는지 확인하는 코드
-  const hasSellerCard = await ownRepository.findFirstData({
+  const hasSellerExchangeCard = await ownRepository.findFirstData({
     where: {
       cardId: exchangeCardId,
       userId: sellerId,
     },
   });
 
+  // 구매자가 교환을 시도했던 상점 카드 보유 확인
+  const hasBuyershopCard = await ownRepository.findFirstData({
+    where: {
+      cardId: shopCardId,
+      userId,
+    },
+  });
+
   req.body.shopId = shopId;
-  req.body.exchangeCardId = exchangeCardId
-  req.body.sellerId = sellerId
-  req.body.hasSellerCard = hasSellerCard;
+  req.body.exchangeCardId = exchangeCardId;
+  req.body.sellerId = sellerId;
+  req.body.hasSellerExchangeCard = hasSellerExchangeCard;
+  req.body.hasBuyershopCard = hasBuyershopCard;
 
   next();
 }
