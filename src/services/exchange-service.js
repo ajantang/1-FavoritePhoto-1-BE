@@ -49,9 +49,7 @@ async function createExchange({ userId, shopId, cardId, description }) {
 
 async function acceptByExchange() {
   return await prisma.$transaction(async () => {
-    // 상점 오너인지 확인
     // 품절인지 확인
-    // exchange 테이블이 존재하는지 확인
     // 상점의 잔여량 감소
     // 판매자에게 제시된 카드 보유 확인
     // 판매자에게 제시된 카드 보유량 증가 혹은 생성

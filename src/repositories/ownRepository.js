@@ -136,7 +136,7 @@ async function findFirstData({ where, select }) {
 }
 
 async function findUniqueOrThrowtData({ where, select }) {
-  return await prisma.own.findFirst({ where, select });
+  return await prisma.own.findUniqueOrThrow({ where, select });
 }
 
 async function conutData(where) {

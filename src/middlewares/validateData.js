@@ -5,6 +5,7 @@ import { SignUpUser, SignInUser } from "../structs/user-struct.js";
 import shopService from "../services/shopService.js";
 import userService from "../services/user-service.js";
 import ownRepository from "../repositories/ownRepository.js";
+import exchangeRepository from "../repositories/exchange-repository.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -201,4 +202,21 @@ export async function validatePurchaseConditions(req, res, next) {
   req.body.ownsCard = ownsCard;
 
   return next();
+}
+
+export async function validateExchangeConditions(req, res, next) {
+  const { exchangeId } = req.params;
+  const userId = req.session.userId;
+
+  // exchange 테이블이 존재하는지 확인
+  const exchange = await exchangeRepository.findUniqueOrThrowtData({
+    where: {
+      id: exchangeId,
+    },
+  });
+
+  const cardId = exchange.cardId;
+  const shopId = exchange.shopId;
+
+  // 상점 오너인지 확인
 }
