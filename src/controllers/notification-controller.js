@@ -1,16 +1,44 @@
-import e from "express";
+import notificationService from "../services/notification-service.js";
 
-const notificationRouter = e.Router();
+async function getUserNotification(req, res, next) {
+  try {
+    const userId = req.session.userId;
+    const query = req.query;
+    const result = await notificationService.getUserNotification({
+      userId,
+      query,
+    });
 
-notificationRouter
-  .get("/", (req, res, next) => {
-    // 알림 정보 조회 (포토카드 교환 제안/성사, 포토카드 판매 완료, 품절 등 알림)
-  })
-  .patch("/:notificationId", (req, res, next) => {
-    // 해당 알림 수정(알림 확인 여부 수정 예정)
-  })
-  .delete("/:notificationId", (req, res, next) => {
-    // 해당 알림 삭제
-  });
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
 
-export default notificationRouter;
+async function checkNotification(req, res, next) {
+  try {
+    const { notificationId } = req.params;
+    const result = await notificationService.checkNotification(notificationId);
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+async function deleteNotification(req, res, next) {
+  try {
+    const { notificationId } = req.params;
+    await notificationService.deleteNotification(notificationId);
+
+    return res.status(204).send();
+  } catch (err) {
+    return next(err);
+  }
+}
+
+export default {
+  getUserNotification,
+  checkNotification,
+  deleteNotification,
+};

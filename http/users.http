@@ -79,6 +79,11 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
+GET http://localhost:3000/users/my-info
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
 POST http://localhost:3000/auth/sign-in
 Content-Type : application/json
 

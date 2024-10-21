@@ -139,7 +139,7 @@ async function findUniqueOrThrowtData({ where, select }) {
   return await prisma.own.findFirstOrThrow({ where, select });
 }
 
-async function conutData(where) {
+async function countData(where) {
   return await prisma.own.count({ where });
 }
 
@@ -185,7 +185,7 @@ export default {
   createData,
   findFirstData,
   findUniqueOrThrowtData,
-  conutData,
+  countData,
   findManyData,
   findManyByPaginationData,
   updateData,
