@@ -37,7 +37,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false, // 개발용
-      sameSite: "lax", // 개발용
+      sameSite: "none", // 개발용
       maxAge: EXPIRE_TIME,
     },
   })

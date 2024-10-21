@@ -19,7 +19,7 @@ userRouter
   .post("/my-cards", authMiddleware, userController.createMyCard)
   .get("/exchange", authMiddleware, userController.getMyRequestList)
   .get("/shop", authMiddleware, userController.getMyShopList)
-  .get("/profile", (req, res, next) => {
+  .get("/profile", authMiddleware, (req, res, next) => {
     // 내 프로필 조회
   })
   .get("/check-email", (req, res, next) => {
