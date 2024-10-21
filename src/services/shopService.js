@@ -1,6 +1,7 @@
 import exchangeRepository from "../repositories/exchange-repository.js";
 import ownRepository from "../repositories/ownRepository.js";
 import prisma from "../repositories/prisma.js";
+import purchaseRepository from "../repositories/purchase-repository.js";
 import shopRepository from "../repositories/shopRepository.js";
 import userRepository from "../repositories/user-repository.js";
 import ownService from "./ownService.js";
@@ -209,18 +210,30 @@ async function purchaseService(id, userId, purchaseData) {
     // 상점 잔여수량 차감
     const quantityData = { remainingQuantity: updatedShopQuantity };
     const decreaseQuantity = await shopRepository.updateShop(id, quantityData);
-    console.log(decreaseQuantity);
+    console.log({ decreaseQuantity: decreaseQuantity });
 
     // 매진 시 교환 신청 삭제
     if (isSellOut) {
       const exchangesCardInfo = shopDetailData.Exchanges;
-      await Promise.all(
+      const exchangeDelete = await Promise.all(
         exchangesCardInfo.map(async (exchangeInfo) => {
           const id = exchangeInfo.id;
           await exchangeRepository.deleteByExchangeId(id);
         })
       );
+      console.log({ exchangeDelete: exchangeDelete });
     }
+
+    // 구매 이력 추가
+    const createData = {
+      consumerId: sellerUserId,
+      purchaserId: userId,
+      cardId: shopDetailData.Card.id,
+      purchaseVolumn: purchaseQuantity,
+      cardPrice: shopDetailData.price,
+    };
+    const purchase = await purchaseRepository.create(createData);
+    console.log({ purchase: purchase });
   });
 }
 
