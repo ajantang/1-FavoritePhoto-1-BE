@@ -1,7 +1,15 @@
-import prisma from "../repositories/prisma.js";
-import shopRepository from "../repositories/shopRepository.js";
+import card from "../constants/card.js";
+import exchangeRepository from "../repositories/exchange-repository.js";
 import ownRepository from "../repositories/ownRepository.js";
-import { myCardMapper } from "../controllers/mappers/card-mapper.js";
+import prisma from "../repositories/prisma.js";
+import purchaseRepository from "../repositories/purchase-repository.js";
+import shopRepository from "../repositories/shopRepository.js";
+import userRepository from "../repositories/user-repository.js";
+import {
+  basicCardMapper,
+  myCardMapper,
+} from "../controllers/mappers/card-mapper.js";
+import { ownCardListSelect } from "../repositories/selects/own-select.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
@@ -132,6 +140,7 @@ async function checkUserShopOwner(userId, shopId) {
   return await shopRepository.checkUserShopOwner(filter);
 }
 
+// service 파일 내에서 사용
 async function updateOrDeleteOwn(id, updateData) {
   const { ownData, userId, cardId, ...rest } = updateData;
   const { ownId, ownUpdateQuantity, isOutOfStock } = ownData;
@@ -178,6 +187,111 @@ async function updateShop(id, updateData) {
   }
 }
 
+async function purchaseService(id, userId, purchaseData) {
+  const {
+    purchaseQuantity,
+    sellerUserId,
+    tradePoints,
+    updatedShopQuantity,
+    shopDetailData,
+    ownsCard,
+  } = purchaseData;
+
+  return await prisma.$transaction(async () => {
+    try {
+      // 구매자 포인트 차감
+      const decreasePoint = await userRepository.decreaseUserPoint({
+        id: userId,
+        lostPoint: tradePoints,
+      });
+
+      // 판매자 포인트 증가
+      const increasePoint = await userRepository.increaseUserPoint({
+        id: sellerUserId,
+        earnedPoint: tradePoints,
+      });
+
+      // 상점 잔여수량 차감
+      const quantityData = { remainingQuantity: updatedShopQuantity };
+      const decreaseQuantity = await shopRepository.updateShop(
+        id,
+        quantityData
+      );
+
+      // 매진 시 교환 신청 삭제
+      if (updatedShopQuantity === 0) {
+        const exchangesCardInfo = shopDetailData.Exchanges;
+        const exchangeDelete = await Promise.all(
+          exchangesCardInfo.map(async (exchangeInfo) => {
+            const id = exchangeInfo.id;
+            const userId = exchangeInfo.userId;
+            const cardId = exchangeInfo.Card.id;
+            const updateWhere = {
+              userId_cardId: {
+                userId,
+                cardId,
+              },
+            };
+            const updateData = {
+              quantity: {
+                increment: 1,
+              },
+            };
+            await exchangeRepository.deleteByExchangeId(id);
+            await ownRepository.updateData({
+              where: { updateWhere },
+              data: { updateData },
+            });
+          })
+        );
+      }
+
+      // 구매 이력 추가
+      const createpurchaseData = {
+        consumerId: sellerUserId,
+        purchaserId: userId,
+        cardId: shopDetailData.Card.id,
+        purchaseVolumn: purchaseQuantity,
+        cardPrice: shopDetailData.price,
+      };
+      const purchase = await purchaseRepository.create(createpurchaseData);
+
+      // 구매자 해당 카드 보유 추가
+      const updateOwnWhere = {
+        userId,
+        cardId: shopDetailData.Card.id,
+      };
+      let purchaserOwn;
+      if (ownsCard === null || ownsCard === undefined) {
+        const createOwnData = { ...updateOwnWhere, quantity: purchaseQuantity };
+        purchaserOwn = await ownRepository.createData({
+          data: createOwnData,
+        });
+      } else {
+        const updateOwnData = { quantity: { increment: purchaseQuantity } };
+        purchaserOwn = await ownRepository.updateData({
+          where: {
+            userId_cardId: {
+              ...updateOwnWhere,
+            },
+          },
+          data: updateOwnData,
+          select: ownCardListSelect,
+        });
+      }
+
+      const responseMapping = basicCardMapper(purchaserOwn);
+
+      return {
+        ...responseMapping,
+        purchaseQuantity,
+      };
+    } catch (e) {
+      throw e;
+    }
+  });
+}
+
 async function deleteShop({ userId, shopId }) {
   return prisma.$transaction(async () => {
     const shop = await shopRepository.getShopDetailById(shopId);
@@ -200,5 +314,6 @@ export default {
   getShopDetailById,
   checkUserShopOwner,
   updateShop,
+  purchaseService,
   deleteShop,
 };

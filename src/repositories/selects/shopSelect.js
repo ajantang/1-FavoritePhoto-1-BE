@@ -3,6 +3,7 @@ import { exchangeCardInfo } from "./exchange-select.js";
 
 export const shopSelect = {
   id: true,
+  userId: true,
   price: true,
   remainingQuantity: true,
   totalQuantity: true,

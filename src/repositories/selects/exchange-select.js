@@ -24,4 +24,5 @@ export const exchangeCardShopSelect = {
     select: cardSelect,
   },
   shopId: true,
+  userId: true,
 };

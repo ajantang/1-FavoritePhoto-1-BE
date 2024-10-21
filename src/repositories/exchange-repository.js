@@ -52,6 +52,12 @@ async function getGroupCountByGrade({ userId, filter }) {
   return counts;
 }
 
+async function deleteByExchangeId(id) {
+  return await prisma.exchange.delete({
+    where: { id },
+  });
+}
+
 async function createData({ data, select }) {
   return await prisma.exchange.create({ data, select });
 }
@@ -124,6 +130,7 @@ export default {
   checkExchangeByUser,
   findMyExchangeList,
   getGroupCountByGrade,
+  deleteByExchangeId,
   createData,
   findFirstData,
   findUniqueOrThrowtData,
