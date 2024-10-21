@@ -280,7 +280,7 @@ async function purchaseService(id, userId, purchaseData) {
         });
       }
 
-      const responseMapping = basicCardMapper(purchaserOwn.Card);
+      const responseMapping = basicCardMapper(purchaserOwn);
 
       return {
         ...responseMapping,
