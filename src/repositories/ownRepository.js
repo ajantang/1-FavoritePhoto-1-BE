@@ -108,8 +108,8 @@ async function findManyByPaginationData({
   return await prisma.own.findMany({ orderBy, skip, take, where, select });
 }
 
-async function updateData({ where, update, select }) {
-  return await prisma.own.update({ where, update, select });
+async function updateData({ where, data, select }) {
+  return await prisma.own.update({ where, data, select });
 }
 
 async function deleteData(where) {

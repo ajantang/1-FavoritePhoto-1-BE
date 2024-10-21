@@ -1,3 +1,4 @@
+import card from "../constants/card.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import ownRepository from "../repositories/ownRepository.js";
 import prisma from "../repositories/prisma.js";
@@ -190,6 +191,7 @@ async function purchaseService(id, userId, purchaseData) {
     isSellOut,
     updatedShopQuantity,
     shopDetailData,
+    ownsCard,
   } = purchaseData;
 
   return await prisma.$transaction(async () => {
@@ -225,18 +227,33 @@ async function purchaseService(id, userId, purchaseData) {
     }
 
     // 구매 이력 추가
-    const createData = {
+    const createpurchaseData = {
       consumerId: sellerUserId,
       purchaserId: userId,
       cardId: shopDetailData.Card.id,
       purchaseVolumn: purchaseQuantity,
       cardPrice: shopDetailData.price,
     };
-    const purchase = await purchaseRepository.create(createData);
+    const purchase = await purchaseRepository.create(createpurchaseData);
     console.log({ purchase: purchase });
 
     // 구매자 해당 카드 보유 추가
-    
+    const updateOwnWhere = {
+      userId,
+      cardId: shopDetailData.Card.id,
+    };
+    if (ownsCard === null || ownsCard === undefined) {
+      const createOwnData = { ...updateOwnWhere, quantity: purchaseQuantity };
+      const purchaserOwn = await ownRepository.createData(createOwnData);
+      console.log({ purchaserOwn });
+    } else {
+      const updateOwnData = { quantity: { increment: purchaseQuantity } };
+      const purchaserOwn = await ownRepository.updateData(
+        updateOwnWhere,
+        updateOwnData
+      );
+      console.log({ purchaserOwn });
+    }
   });
 }
 

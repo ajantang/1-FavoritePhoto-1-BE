@@ -55,7 +55,6 @@ async function purchaseController(req, res, next) {
 
   const purchase = await shopService.purchaseService(id, userId, req.body);
   // 상점 잔여 수량이 0이 될 시 매진 표시
-  
   // 구매 관련 알림 추가(구매자, 판매자).
   // 교환 취소 알림 추가
   // 매진 됐을 시 알람

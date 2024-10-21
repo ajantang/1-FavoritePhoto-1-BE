@@ -4,6 +4,7 @@ import { createShopStruct, updateShopStruct } from "../structs/shopStruct.js";
 import { SignUpUser, SignInUser } from "../structs/user-struct.js";
 import shopService from "../services/shopService.js";
 import userService from "../services/user-service.js";
+import ownRepository from "../repositories/ownRepository.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -189,13 +190,16 @@ export async function validatePurchaseConditions(req, res, next) {
   }
 
   // 구매자가 해당 카드를 소유하는지 확인
-  
+  const ownsCardWhere = { userId, cardId: shop.Card.id };
+  const ownsCard = await ownRepository.findFirstData(ownsCardWhere);
+  console.log({ ownsCard });
 
   req.body.sellerUserId = shop.userId;
   req.body.tradePoints = totalPrice;
   req.body.isSellOut = isSellOut;
   req.body.updatedShopQuantity = updatedShopQuantity;
   req.body.shopDetailData = shop;
+  req.body.ownsCard = ownsCard;
 
   return next();
 }
