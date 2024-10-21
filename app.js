@@ -36,8 +36,8 @@ app.use(
     rolling: true,
     cookie: {
       httpOnly: true,
-      secure: false, // 개발용
-      sameSite: "lax", // 개발용
+      secure: true,
+      sameSite: "none",
       maxAge: EXPIRE_TIME,
     },
   })
