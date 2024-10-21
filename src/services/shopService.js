@@ -5,8 +5,8 @@ import prisma from "../repositories/prisma.js";
 import purchaseRepository from "../repositories/purchase-repository.js";
 import shopRepository from "../repositories/shopRepository.js";
 import userRepository from "../repositories/user-repository.js";
-import ownRepository from "../repositories/ownRepository.js";
 import { myCardMapper } from "../controllers/mappers/card-mapper.js";
+import { ownCardListSelect } from "../repositories/selects/own-select.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
@@ -242,18 +242,30 @@ async function purchaseService(id, userId, purchaseData) {
         userId,
         cardId: shopDetailData.Card.id,
       };
+      let purchaserOwn;
       if (ownsCard === null || ownsCard === undefined) {
         const createOwnData = { ...updateOwnWhere, quantity: purchaseQuantity };
-        const purchaserOwn = await ownRepository.createData({
+        purchaserOwn = await ownRepository.createData({
           data: createOwnData,
         });
       } else {
         const updateOwnData = { quantity: { increment: purchaseQuantity } };
-        const purchaserOwn = await ownRepository.updateData({
-          where: updateOwnWhere,
+        purchaserOwn = await ownRepository.updateData({
+          where: {
+            userId_cardId: {
+              ...updateOwnWhere,
+            },
+          },
           data: updateOwnData,
+          select: ownCardListSelect,
         });
       }
+
+      return {
+        grade: purchaserOwn.Card.grade,
+        name: purchaserOwn.Card.name,
+        purchaseQuantity,
+      };
     } catch (e) {
       throw e;
     }
