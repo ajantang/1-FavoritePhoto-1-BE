@@ -7,7 +7,6 @@ import { exchangeMapper } from "../controllers/mappers/exchange-mapper.js";
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shopRepository.js";
-import card from "../constants/card.js";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {
@@ -56,7 +55,7 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
     exchangeData,
     shopId,
     exchangeCardId,
-    sellerId,
+    buyerId,
     shopCardId,
     hasSellerExchangeCard,
     hasBuyershopCard,
@@ -73,7 +72,6 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
           },
         },
       });
-      console.log({ decreaseShopQuantity });
 
       // 판매자에게 제시된 카드 보유량 증가 혹은 생성
       if (
@@ -82,12 +80,11 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
       ) {
         const createSellerOwn = await ownRepository.createData({
           data: {
-            userId: sellerId,
+            userId,
             cardId: exchangeCardId,
             quantity: 1,
           },
         });
-        console.log({ createSellerOwn });
       } else {
         const increaseSellerCard = await ownRepository.updateData({
           where: {
@@ -97,19 +94,17 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
             quantity: { increment: 1 },
           },
         });
-        console.log({ increaseSellerCard });
       }
 
       // 구매자가 교환을 시도했던 상점 카드의 보유량 생성 혹은 증가
       if (hasBuyershopCard === null || hasBuyershopCard === undefined) {
         const createBuyerOwn = await ownRepository.createData({
           data: {
-            userId,
+            userId: buyerId,
             cardId: shopCardId,
             quantity: 1,
           },
         });
-        console.log({ createBuyerOwn });
       } else {
         const increaseBuyerCard = await ownRepository.updateData({
           where: {
@@ -119,16 +114,12 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
             quantity: { increment: 1 },
           },
         });
-        console.log({ increaseBuyerCard });
       }
 
       // 승인된 exchange 삭제
       const delteeExchange = await exchangeRepository.deleteData({
-        where: {
-          id: exchangeId,
-        },
+        id: exchangeId,
       });
-      console.log(delteeExchange);
 
       const responseMappeing = exchangeMapper(exchangeData);
 

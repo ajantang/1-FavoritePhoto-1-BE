@@ -7,7 +7,7 @@ import userService from "../services/user-service.js";
 import ownRepository from "../repositories/ownRepository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import shopRepository from "../repositories/shopRepository.js";
-import { exchangeCardInfo } from "../repositories/selects/exchange-select.js";
+import { exchangeCardShopAndUserSelect } from "../repositories/selects/exchange-select.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -209,16 +209,20 @@ export async function validatePurchaseConditions(req, res, next) {
 export async function validateExchangeConditions(req, res, next) {
   const { exchangeId } = req.params;
   const userId = req.session.userId;
+  console.log(exchangeId);
 
   // exchange 테이블이 존재하는지 확인
   const exchange = await exchangeRepository.findUniqueOrThrowtData({
     where: {
       id: exchangeId,
     },
+    select: exchangeCardShopAndUserSelect,
   });
 
-  const exchangeCardId = exchange.cardId;
+  const exchangeCardId = exchange.Card.id;
   const shopId = exchange.shopId;
+  const buyerId = exchange.userId
+  console.log(buyerId)
 
   // 상점 오너인지 확인
   const isOwner = await shopRepository.findFirstData({
@@ -226,7 +230,6 @@ export async function validateExchangeConditions(req, res, next) {
       userId,
       id: shopId,
     },
-    select: exchangeCardInfo,
   });
 
   if (isOwner === null || isOwner === undefined) {
@@ -246,14 +249,13 @@ export async function validateExchangeConditions(req, res, next) {
     return next(error);
   }
 
-  const sellerId = shop.userId;
   const shopCardId = shop.cardId;
 
   // 판매자가 제시된 카드를 보유히는지 확인하는 코드
   const hasSellerExchangeCard = await ownRepository.findFirstData({
     where: {
       cardId: exchangeCardId,
-      userId: sellerId,
+      userId,
     },
   });
 
@@ -261,14 +263,14 @@ export async function validateExchangeConditions(req, res, next) {
   const hasBuyershopCard = await ownRepository.findFirstData({
     where: {
       cardId: shopCardId,
-      userId,
+      userId: buyerId,
     },
   });
 
   req.body.exchangeData = exchange;
   req.body.shopId = shopId;
   req.body.exchangeCardId = exchangeCardId;
-  req.body.sellerId = sellerId;
+  req.body.buyerId = buyerId;
   req.body.shopCardId = shopCardId;
   req.body.hasSellerExchangeCard = hasSellerExchangeCard;
   req.body.hasBuyershopCard = hasBuyershopCard;
