@@ -1,10 +1,7 @@
-import card from "../constants/card.js";
-import exchangeRepository from "../repositories/exchange-repository.js";
 import ownRepository from "../repositories/ownRepository.js";
 import prisma from "../repositories/prisma.js";
 import purchaseRepository from "../repositories/purchase-repository.js";
 import shopRepository from "../repositories/shopRepository.js";
-import userRepository from "../repositories/user-repository.js";
 import ownService from "./ownService.js";
 
 async function createShop(createData) {
@@ -148,14 +145,14 @@ async function updateOrDeleteOwn(id, updateData) {
     return await prisma.$transaction(async () => {
       const shop = await shopRepository.updateShop(id, rest);
       const q = await ownRepository.deleteById(ownId);
-      console.log(q);
+
       return shop;
     });
   } else if (!isOutOfStock) {
     return await prisma.$transaction(async () => {
       const shop = await shopRepository.updateShop(id, rest);
       const q = await ownRepository.update(where, updateQuantity);
-      console.log(q);
+
       return shop;
     });
   }
@@ -175,88 +172,12 @@ async function updateShop(id, updateData) {
       };
       const shop = await shopRepository.updateShop(id, rest);
       const q = await ownRepository.createOwn(createOwnData);
-      console.log(q);
+
       return shop;
     });
   } else {
     return await shopRepository.updateShop(id, rest);
   }
-}
-
-async function purchaseService(id, userId, purchaseData) {
-  const {
-    purchaseQuantity,
-    sellerUserId,
-    tradePoints,
-    isSellOut,
-    updatedShopQuantity,
-    shopDetailData,
-    ownsCard,
-  } = purchaseData;
-
-  return await prisma.$transaction(async () => {
-    try {
-      // 구매자 포인트 차감
-      const decreasePoint = await userRepository.decreaseUserPoint({
-        id: userId,
-        lostPoint: tradePoints,
-      });
-
-      // 판매자 포인트 증가
-      const increasePoint = await userRepository.increaseUserPoint({
-        id: sellerUserId,
-        earnedPoint: tradePoints,
-      });
-
-      // 상점 잔여수량 차감
-      const quantityData = { remainingQuantity: updatedShopQuantity };
-      const decreaseQuantity = await shopRepository.updateShop(
-        id,
-        quantityData
-      );
-
-      // 매진 시 교환 신청 삭제
-      if (isSellOut) {
-        const exchangesCardInfo = shopDetailData.Exchanges;
-        const exchangeDelete = await Promise.all(
-          exchangesCardInfo.map(async (exchangeInfo) => {
-            const id = exchangeInfo.id;
-            await exchangeRepository.deleteByExchangeId(id);
-          })
-        );
-      }
-
-      // 구매 이력 추가
-      const createpurchaseData = {
-        consumerId: sellerUserId,
-        purchaserId: userId,
-        cardId: shopDetailData.Card.id,
-        purchaseVolumn: purchaseQuantity,
-        cardPrice: shopDetailData.price,
-      };
-      const purchase = await purchaseRepository.create(createpurchaseData);
-
-      // 구매자 해당 카드 보유 추가
-      const updateOwnWhere = {
-        userId,
-        cardId: shopDetailData.Card.id,
-      };
-      if (ownsCard === null || ownsCard === undefined) {
-        const createOwnData = { ...updateOwnWhere, quantity: purchaseQuantity };
-        const purchaserOwn = await ownRepository.createData({
-          data: createOwnData,
-        });
-      } else {
-        const updateOwnData = { quantity: { increment: purchaseQuantity } };
-        const purchaserOwn = await ownRepository.updateData({
-          where: updateOwnWhere,
-          data: updateOwnData,
-        });
-      }
-    } catch (e) {
-      throw e;
-    }
-  });
 }
 
 export default {
@@ -266,5 +187,4 @@ export default {
   getShopDetailById,
   checkUserShopOwner,
   updateShop,
-  purchaseService,
 };

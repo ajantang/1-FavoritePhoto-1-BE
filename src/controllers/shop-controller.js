@@ -21,7 +21,12 @@ async function getShopList(req, res, next) {
   const shops = await shopService.getShopListByQuery(req.query);
   const count = await shopService.countShopListByQuery(req.query);
   const [list, total] = await Promise.all([shops, count]);
+
+  console.log("shops : ", shops);
+  console.log("count : ", count);
+
   const responseData = getShopListMapper(list, total);
+
   res.send(responseData);
 }
 
@@ -34,7 +39,10 @@ async function getShopDetail(req, res, next) {
   const [data, isowner] = await Promise.all([shop, isUserShopOwner]);
   let responseData = {};
   if (!isowner) {
-    const isExchange = await exchangeService.checkExchangeByUser(userId, shopId);
+    const isExchange = await exchangeService.checkExchangeByUser(
+      userId,
+      shopId
+    );
     responseData = getShopDetailMapper(data, isExchange);
   } else {
     responseData = getShopDetailMapper(data);
@@ -61,10 +69,41 @@ async function purchaseController(req, res, next) {
   // 매진 됐을 시 알람
 }
 
+async function deleteShop(req, res, next) {
+  try {
+    const { shopId } = req.params;
+    const userId = req.session.userId;
+    const result = await shopService.deleteShop({ userId, shopId });
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
+
+async function createExchange(req, res, next) {
+  try {
+    const { shopId, cardId, description } = req.body;
+    const userId = req.session.userId;
+    const result = await exchangeService.createExchange({
+      userId,
+      shopId,
+      cardId,
+      description,
+    });
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
+
 export default {
   createShop,
   getShopList,
   getShopDetail,
   updateShop,
   purchaseController,
+  deleteShop,
+  createExchange,
 };

@@ -4,6 +4,7 @@ import {
   shopCreateSelect,
   shopDetailSelect,
   shopListSelect,
+  shopOwnerSelect,
 } from "./selects/shopSelect.js";
 
 async function createShop(createData) {
@@ -15,12 +16,13 @@ async function createShop(createData) {
 
 async function getShopListByQuery(filter) {
   const { orderBy, skip, take, where } = filter;
+
   return prisma.shop.findMany({
     orderBy,
     skip,
     take,
     where,
-    select: shopListSelect,
+    // select: shopListSelect,
   });
 }
 
@@ -96,6 +98,17 @@ async function getGroupCountByGrade({ userId, filter }) {
   return counts;
 }
 
+async function deleteShop(id) {
+  await prisma.shop.delete({ where: { id } });
+}
+
+async function findShopOwnerId(id) {
+  return await prisma.shop.findFirst({
+    where: { id },
+    select: shopOwnerSelect,
+  });
+}
+
 export default {
   createShop,
   getShopListByQuery,
@@ -105,4 +118,6 @@ export default {
   updateShop,
   findMyShopList,
   getGroupCountByGrade,
+  deleteShop,
+  findShopOwnerId,
 };

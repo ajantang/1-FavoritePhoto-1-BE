@@ -5,7 +5,11 @@ import {
   validatePurchaseConditions,
   validateUpdaeShopData,
 } from "../middlewares/validateData.js";
-import { authMiddleware } from "../middlewares/auth.js";
+import {
+  authMiddleware,
+  authMiddlewareByShopIdParam,
+  authMiddlewareByCardIdParam,
+} from "../middlewares/auth.js";
 
 const shopRouter = express.Router();
 
@@ -14,13 +18,29 @@ shopRouter
   .post(authMiddleware, validateCreateShopData, shopController.createShop)
   .get(shopController.getShopList);
 
+shopRouter.post(
+  "/exchange",
+  authMiddleware,
+  authMiddlewareByCardIdParam,
+  shopController.createExchange
+);
+
 shopRouter
   .route("/:shopId")
   .get(shopController.getShopDetail)
-  .patch(authMiddleware, validateUpdaeShopData, shopController.updateShop);
+  .patch(authMiddleware, validateUpdaeShopData, shopController.updateShop)
+  .delete(
+    authMiddleware,
+    authMiddlewareByShopIdParam,
+    shopController.deleteShop
+  );
 
 shopRouter
   .route("/:shopId/purchase")
-  .post(authMiddleware, validatePurchaseConditions, shopController.purchaseController);
+  .post(
+    authMiddleware,
+    validatePurchaseConditions,
+    shopController.purchaseController
+  );
 
 export default shopRouter;

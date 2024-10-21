@@ -44,8 +44,11 @@ export function myShopMapper(shopCardSelect) {
     sellout == true;
   }
 
+  const { id, ...rest } = basicSelect;
+
   return {
-    ...basicSelect,
+    id: shopCardSelect.id,
+    ...rest,
     remainingQuantity: shopCardSelect.remainingQuantity,
     totalQuantity: shopCardSelect.totalQuantity,
     sellout,

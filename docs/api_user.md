@@ -2,7 +2,7 @@
 
 ### req template
 
-- description : 구매한 포토 카드 조회 (정렬 / 필터 / 키워드 / 페이지네이션)
+- description : 구매한 포토 카드 목록 조회 (정렬 / 필터 / 키워드 / 페이지네이션)
 - path : /users/my-cards
 - method : GET
 - query
@@ -55,6 +55,48 @@
   "quantity": 8
   }
   ]
+  }
+
+## GET /users/my-cards/:cardId
+
+### req template
+
+- description : 보유한 포토 카드 조회 (정렬 / 필터 / 키워드 / 페이지네이션)
+- path : /users/my-cards
+- method : GET
+- param
+  - cardId : 카드 id
+
+### req example
+
+- param
+  c618558f-f82a-456e-bb98-62084afc7954
+
+### res template
+
+- data
+  - id : 카드 id
+  - image : 카드 이미지 url (max-length : 2048)
+  - name : 카드 이름 (max-length 50)
+  - grade : 카드 등급 (int로 전달)
+  - genre : 카드 장르 (int로 전달)
+  - price : 카드 가격(초기 포인트 : 판매 포인트와 별도. 교환 신청에서 사용됨)
+  - nickname : 카드 생성자 닉네임
+  - description : 카드 설명 (max-length 1024)
+  - quantity : 카드 생성 갯수
+
+### res example
+
+- data : {
+  "id": "c618558f-f82a-456e-bb98-62084afc7954",
+  "image": "https://cdn.pixabay.com/photo/2024/09/07/02/34/penguins-9028827_640.jpg",
+  "name": "낮 펭귄",
+  "grade": 3,
+  "genre": 2,
+  "price": 4,
+  "nickname": "코드잇05",
+  "description": "동물 펭귄01",
+  "quantity": 7
   }
 
 ## POST /users/my-cards
