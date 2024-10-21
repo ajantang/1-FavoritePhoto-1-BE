@@ -35,6 +35,7 @@ async function increaseUserPoint({ id, earnedPoint }) {
 }
 
 async function decreaseUserPoint({ id, lostPoint }) {
+  console.log(lostPoint);
   return prisma.user.update({
     where: { id },
     data: {

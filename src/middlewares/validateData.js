@@ -62,10 +62,10 @@ export function validateSignInUserData(req, res, next) {
 
 export async function validateUpdaeShopData(req, res, next) {
   const userId = req.session.userId;
-  const { id } = req.params;
+  const { shopId } = req.params;
   const { salesQuantity, ...rest } = req.body;
   // 등록한 사람인지 확인
-  const isOwner = await shopService.checkUserShopOwner(userId, id);
+  const isOwner = await shopService.checkUserShopOwner(userId, shopId);
 
   // 등록한 사람이 아닐 시
   if (isOwner === null || isOwner === undefined) {
@@ -144,22 +144,22 @@ export async function validateUpdaeShopData(req, res, next) {
 }
 
 export async function validatePurchaseConditions(req, res, next) {
-  const { id } = req.params;
+  const { shopId } = req.params;
   const userId = req.session.userId;
   const { purchaseQuantity } = req.body;
 
   // 상점 등록자인지 확인
-  const isOwner = await shopService.checkUserShopOwner(userId, id);
+  const isOwner = await shopService.checkUserShopOwner(userId, shopId);
   if (isOwner) {
     const error = new Error("You cannot purchase your own product.");
     error.code = 400;
     return next(error);
   }
 
-  const shop = await shopService.getShopDetailById(id);
+  const shop = await shopService.getShopDetailById(shopId);
   const { remainingQuantity } = shop;
   const updatedShopQuantity = remainingQuantity - purchaseQuantity;
-  let isSellOut = fasle;
+  let isSellOut = false;
 
   // 매진 여부 확인
   if (remainingQuantity === 0) {
@@ -191,8 +191,7 @@ export async function validatePurchaseConditions(req, res, next) {
 
   // 구매자가 해당 카드를 소유하는지 확인
   const ownsCardWhere = { userId, cardId: shop.Card.id };
-  const ownsCard = await ownRepository.findFirstData(ownsCardWhere);
-  console.log({ ownsCard });
+  const ownsCard = await ownRepository.findFirstData({ where: ownsCardWhere });
 
   req.body.sellerUserId = shop.userId;
   req.body.tradePoints = totalPrice;

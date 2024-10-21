@@ -27,14 +27,14 @@ async function getShopList(req, res, next) {
 
 async function getShopDetail(req, res, next) {
   // 보유량 + 총판매량
-  const { id } = req.params;
+  const { shopId } = req.params;
   const userId = req.session?.userId || "";
-  const shop = await shopService.getShopDetailById(id);
-  const isUserShopOwner = await shopService.checkUserShopOwner(userId, id);
+  const shop = await shopService.getShopDetailById(shopId);
+  const isUserShopOwner = await shopService.checkUserShopOwner(userId, shopId);
   const [data, isowner] = await Promise.all([shop, isUserShopOwner]);
   let responseData = {};
   if (!isowner) {
-    const isExchange = await exchangeService.checkExchangeByUser(userId, id);
+    const isExchange = await exchangeService.checkExchangeByUser(userId, shopId);
     responseData = getShopDetailMapper(data, isExchange);
   } else {
     responseData = getShopDetailMapper(data);
@@ -43,17 +43,18 @@ async function getShopDetail(req, res, next) {
 }
 
 async function updateShop(req, res, next) {
-  const { id } = req.params;
-  const shop = await shopService.updateShop(id, req.body);
+  const { shopId } = req.params;
+  const shop = await shopService.updateShop(shopId, req.body);
   const responseData = createShopMapper(shop);
   res.send(responseData);
 }
 
 async function purchaseController(req, res, next) {
-  const { id } = req.params;
+  const { shopId } = req.params;
   const userId = req.session.userId;
 
-  const purchase = await shopService.purchaseService(id, userId, req.body);
+  const purchase = await shopService.purchaseService(shopId, userId, req.body);
+  res.send(purchase);
   // 상점 잔여 수량이 0이 될 시 매진 표시
   // 구매 관련 알림 추가(구매자, 판매자).
   // 교환 취소 알림 추가

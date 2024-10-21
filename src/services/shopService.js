@@ -195,64 +195,66 @@ async function purchaseService(id, userId, purchaseData) {
   } = purchaseData;
 
   return await prisma.$transaction(async () => {
-    // 구매자 포인트 차감
-    const decreasePoint = await userRepository.decreaseUserPoint({
-      userId,
-      tradePoints,
-    });
-    console.log({ decreaseUserPoint: decreasePoint });
+    try {
+      // 구매자 포인트 차감
+      const decreasePoint = await userRepository.decreaseUserPoint({
+        id: userId,
+        lostPoint: tradePoints,
+      });
 
-    // 판매자 포인트 증가
-    const increasePoint = await userRepository.increaseUserPoint({
-      sellerUserId,
-      tradePoints,
-    });
-    console.log({ increaseUserPoint: increasePoint });
+      // 판매자 포인트 증가
+      const increasePoint = await userRepository.increaseUserPoint({
+        id: sellerUserId,
+        earnedPoint: tradePoints,
+      });
 
-    // 상점 잔여수량 차감
-    const quantityData = { remainingQuantity: updatedShopQuantity };
-    const decreaseQuantity = await shopRepository.updateShop(id, quantityData);
-    console.log({ decreaseQuantity: decreaseQuantity });
-
-    // 매진 시 교환 신청 삭제
-    if (isSellOut) {
-      const exchangesCardInfo = shopDetailData.Exchanges;
-      const exchangeDelete = await Promise.all(
-        exchangesCardInfo.map(async (exchangeInfo) => {
-          const id = exchangeInfo.id;
-          await exchangeRepository.deleteByExchangeId(id);
-        })
+      // 상점 잔여수량 차감
+      const quantityData = { remainingQuantity: updatedShopQuantity };
+      const decreaseQuantity = await shopRepository.updateShop(
+        id,
+        quantityData
       );
-      console.log({ exchangeDelete: exchangeDelete });
-    }
 
-    // 구매 이력 추가
-    const createpurchaseData = {
-      consumerId: sellerUserId,
-      purchaserId: userId,
-      cardId: shopDetailData.Card.id,
-      purchaseVolumn: purchaseQuantity,
-      cardPrice: shopDetailData.price,
-    };
-    const purchase = await purchaseRepository.create(createpurchaseData);
-    console.log({ purchase: purchase });
+      // 매진 시 교환 신청 삭제
+      if (isSellOut) {
+        const exchangesCardInfo = shopDetailData.Exchanges;
+        const exchangeDelete = await Promise.all(
+          exchangesCardInfo.map(async (exchangeInfo) => {
+            const id = exchangeInfo.id;
+            await exchangeRepository.deleteByExchangeId(id);
+          })
+        );
+      }
 
-    // 구매자 해당 카드 보유 추가
-    const updateOwnWhere = {
-      userId,
-      cardId: shopDetailData.Card.id,
-    };
-    if (ownsCard === null || ownsCard === undefined) {
-      const createOwnData = { ...updateOwnWhere, quantity: purchaseQuantity };
-      const purchaserOwn = await ownRepository.createData(createOwnData);
-      console.log({ purchaserOwn });
-    } else {
-      const updateOwnData = { quantity: { increment: purchaseQuantity } };
-      const purchaserOwn = await ownRepository.updateData(
-        updateOwnWhere,
-        updateOwnData
-      );
-      console.log({ purchaserOwn });
+      // 구매 이력 추가
+      const createpurchaseData = {
+        consumerId: sellerUserId,
+        purchaserId: userId,
+        cardId: shopDetailData.Card.id,
+        purchaseVolumn: purchaseQuantity,
+        cardPrice: shopDetailData.price,
+      };
+      const purchase = await purchaseRepository.create(createpurchaseData);
+
+      // 구매자 해당 카드 보유 추가
+      const updateOwnWhere = {
+        userId,
+        cardId: shopDetailData.Card.id,
+      };
+      if (ownsCard === null || ownsCard === undefined) {
+        const createOwnData = { ...updateOwnWhere, quantity: purchaseQuantity };
+        const purchaserOwn = await ownRepository.createData({
+          data: createOwnData,
+        });
+      } else {
+        const updateOwnData = { quantity: { increment: purchaseQuantity } };
+        const purchaserOwn = await ownRepository.updateData({
+          where: updateOwnWhere,
+          data: updateOwnData,
+        });
+      }
+    } catch (e) {
+      throw e;
     }
   });
 }
