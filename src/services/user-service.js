@@ -15,6 +15,7 @@ import {
   createShopListFilterByQuery,
   createGenreGradeKeywordWhere,
 } from "../utils/query-util.js";
+import userRepository from "../repositories/user-repository.js";
 import { exchangeCardShopSelect } from "../repositories/selects/exchange-select.js";
 
 async function getMyCardList({ userId, query }) {
@@ -97,10 +98,15 @@ async function getMyRequestList({ userId, query }) {
   return myExchangeListMapper({ counts, list });
 }
 
+async function getUserInfoByUserId(id) {
+  return await userRepository.getUserInfoByUserId(id);
+}
+
 export default {
   getMyCardList,
   getMyCard,
   createMyCard,
   getMyShopList,
   getMyRequestList,
+  getUserInfoByUserId,
 };

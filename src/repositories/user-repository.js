@@ -34,9 +34,23 @@ async function increaseUserPoint({ id, earnedPoint }) {
   });
 }
 
+async function decreaseUserPoint({ id, lostPoint }) {
+  console.log(lostPoint);
+  return prisma.user.update({
+    where: { id },
+    data: {
+      point: {
+        decrement: lostPoint,
+      },
+    },
+    select: userSelect,
+  });
+}
+
 export default {
   createUser,
   getUserInfoByUserId,
   getUserInfoPasswordByEmail,
   increaseUserPoint,
+  decreaseUserPoint,
 };

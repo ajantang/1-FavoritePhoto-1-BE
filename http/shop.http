@@ -31,3 +31,12 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
     "exchangeGenre": 4,
     "exchangeDescription": "테스트 진행중"
 }
+
+###
+POST http://localhost:3000/shop/cbb24524-6818-4b46-8afb-00dd26f379ba/purchase
+Content-Type: application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+{
+    "purchaseQuantity": 1
+}

@@ -3,6 +3,8 @@ import ownService from "../services/ownService.js";
 import { createShopStruct, updateShopStruct } from "../structs/shopStruct.js";
 import { SignUpUser, SignInUser } from "../structs/user-struct.js";
 import shopService from "../services/shopService.js";
+import userService from "../services/user-service.js";
+import ownRepository from "../repositories/ownRepository.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -60,10 +62,10 @@ export function validateSignInUserData(req, res, next) {
 
 export async function validateUpdaeShopData(req, res, next) {
   const userId = req.session.userId;
-  const { id } = req.params;
+  const { shopId } = req.params;
   const { salesQuantity, ...rest } = req.body;
   // 등록한 사람인지 확인
-  const isOwner = await shopService.checkUserShopOwner(userId, id);
+  const isOwner = await shopService.checkUserShopOwner(userId, shopId);
 
   // 등록한 사람이 아닐 시
   if (isOwner === null || isOwner === undefined) {
@@ -139,4 +141,57 @@ export async function validateUpdaeShopData(req, res, next) {
   req.body.userId = userId;
   req.body.cardId = isOwner.cardId;
   next();
+}
+
+export async function validatePurchaseConditions(req, res, next) {
+  const { shopId } = req.params;
+  const userId = req.session.userId;
+  const { purchaseQuantity } = req.body;
+
+  // 상점 등록자인지 확인
+  const isOwner = await shopService.checkUserShopOwner(userId, shopId);
+  if (isOwner) {
+    const error = new Error("You cannot purchase your own product.");
+    error.code = 400;
+    return next(error);
+  }
+
+  const shop = await shopService.getShopDetailById(shopId);
+  const { remainingQuantity } = shop;
+  const updatedShopQuantity = remainingQuantity - purchaseQuantity;
+
+  // 매진 여부 확인
+  if (remainingQuantity === 0) {
+    const error = new Error("This product is sold out.");
+    error.code = 400;
+    return next(error);
+
+    // 구매량과 잔여 수량 대조
+  } else if (remainingQuantity < purchaseQuantity) {
+    const error = new Error("Insufficient stock for this product.");
+    error.code = 400;
+    return next(error);
+  }
+
+  const user = await userService.getUserInfoByUserId(userId);
+  const totalPrice = purchaseQuantity * shop.price;
+
+  // 총 판매가와 보유 포인트 대조
+  if (totalPrice > user.point) {
+    const error = new Error("Insufficient points to complete the purchase.");
+    error.code = 402;
+    return next(error);
+  }
+
+  // 구매자가 해당 카드를 소유하는지 확인
+  const ownsCardWhere = { userId, cardId: shop.Card.id };
+  const ownsCard = await ownRepository.findFirstData({ where: ownsCardWhere });
+
+  req.body.sellerUserId = shop.userId;
+  req.body.tradePoints = totalPrice;
+  req.body.updatedShopQuantity = updatedShopQuantity;
+  req.body.shopDetailData = shop;
+  req.body.ownsCard = ownsCard;
+
+  return next();
 }

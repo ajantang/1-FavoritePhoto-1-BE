@@ -2,6 +2,7 @@ import express from "express";
 import shopController from "../controllers/shop-controller.js";
 import {
   validateCreateShopData,
+  validatePurchaseConditions,
   validateUpdaeShopData,
 } from "../middlewares/validateData.js";
 import {
@@ -32,6 +33,14 @@ shopRouter
     authMiddleware,
     authMiddlewareByShopIdParam,
     shopController.deleteShop
+  );
+
+shopRouter
+  .route("/:shopId/purchase")
+  .post(
+    authMiddleware,
+    validatePurchaseConditions,
+    shopController.purchaseController
   );
 
 export default shopRouter;
