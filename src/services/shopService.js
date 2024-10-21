@@ -1,7 +1,6 @@
 import prisma from "../repositories/prisma.js";
 import shopRepository from "../repositories/shopRepository.js";
 import ownRepository from "../repositories/ownRepository.js";
-
 import { myCardMapper } from "../controllers/mappers/card-mapper.js";
 
 async function createShop(createData) {
@@ -182,12 +181,12 @@ async function updateShop(id, updateData) {
 async function deleteShop({ userId, shopId }) {
   return prisma.$transaction(async () => {
     const shop = await shopRepository.getShopDetailById(shopId);
-
     const own = await ownRepository.addQuantity({
       userId,
       cardId: shop.Card.id,
       increment: shop.remainingQuantity,
     });
+
     await shopRepository.deleteShop(shopId);
 
     return myCardMapper(own);

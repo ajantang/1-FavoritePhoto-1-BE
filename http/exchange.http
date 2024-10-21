@@ -1,0 +1,65 @@
+POST http://localhost:3000/shop/exchange
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+{
+    "shopId" : "8d444419-89d6-46b7-987c-89fc12f231aa",
+    "cardId" : "fd3d66c0-b702-40b9-928a-371b68f0fd64",
+    "description" :"교환 신청 테스트2"
+}
+
+###
+POST http://localhost:3000/users/my-cards
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+{
+  "name" : "석양 여자아이",
+  "description" : "동화풍 이미지",
+  "image" : "https://cdn.pixabay.com/photo/2022/12/01/04/43/girl-7628308_640.jpg",
+  "grade" : 3,
+  "genre" : 4,
+  "price" : 4,
+  "quantity" : 10
+}
+
+###
+GET http://localhost:3000/shop
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET http://localhost:3000/users/my-cards
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET http://localhost:3000/users/my-cards/shop
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET http://localhost:3000/users/my-cards/exchange
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+POST http://localhost:3000/auth/sign-in
+Content-Type : application/json
+
+{
+    "email" : "codeit05@codeit.com",
+    "password" : "!codeit05"
+}
+
+###
+POST http://localhost:3000/auth/sign-in
+Content-Type : application/json
+
+{
+    "email" : "codeit04@codeit.com",
+    "password" : "!codeit04"
+}
+
+###
+POST http://localhost:3000/auth/sign-out

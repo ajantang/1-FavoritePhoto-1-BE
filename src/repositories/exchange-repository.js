@@ -52,8 +52,54 @@ async function getGroupCountByGrade({ userId, filter }) {
   return counts;
 }
 
+async function createData({ data, select }) {
+  return await prisma.exchange.create({ data, select });
+}
+
+async function findFirstData({ where, select }) {
+  return await prisma.exchange.findFirst({ where, select });
+}
+
+async function findUniqueOrThrowtData({ where, select }) {
+  return await prisma.exchange.findFirst({ where, select });
+}
+
+async function conutData(where) {
+  return await prisma.exchange.count({ where });
+}
+
+async function findManyData({ where, select }) {
+  return await prisma.exchange.findMany({ where, select });
+}
+
+async function findManyByPaginationData({
+  orderBy,
+  skip,
+  take,
+  where,
+  select,
+}) {
+  return await prisma.exchange.findMany({ orderBy, skip, take, where, select });
+}
+
+async function updateData({ where, data, select }) {
+  return await prisma.exchange.update({ where, data, select });
+}
+
+async function deleteData(where) {
+  await prisma.exchange.delete({ where });
+}
+
 export default {
   checkExchangeByUser,
   findMyExchangeList,
   getGroupCountByGrade,
+  createData,
+  findFirstData,
+  findUniqueOrThrowtData,
+  conutData,
+  findManyData,
+  findManyByPaginationData,
+  updateData,
+  deleteData,
 };

@@ -105,6 +105,65 @@ async function addQuantity({ userId, cardId, increment }) {
   });
 }
 
+async function decreaseQuantity({ userId, cardId, decrement }) {
+  decrement *= -1;
+
+  const ownData = await prisma.own.update({
+    where: {
+      userId_cardId: {
+        userId,
+        cardId,
+      },
+    },
+    data: {
+      quantity: { decrement },
+    },
+    select: ownCardSelect,
+  });
+
+  if (ownData.quantity === 0) {
+    await prisma.own.delete({ where: { id: ownData.id } });
+  }
+}
+
+async function createData({ data, select }) {
+  return await prisma.own.create({ data, select });
+}
+
+async function findFirstData({ where, select }) {
+  return await prisma.own.findFirst({ where, select });
+}
+
+async function findUniqueOrThrowtData({ where, select }) {
+  return await prisma.own.findFirst({ where, select });
+}
+
+async function conutData(where) {
+  return await prisma.own.count({ where });
+}
+
+async function findManyData({ where, select }) {
+  return await prisma.own.findMany({ where, select });
+}
+
+async function findManyByPaginationData({
+  orderBy,
+  skip,
+  take,
+  where,
+  select,
+}) {
+  return await prisma.own.findMany({ orderBy, skip, take, where, select });
+}
+
+async function updateData({ where, data, select }) {
+  return await prisma.own.update({ where, data, select });
+}
+
+async function deleteData(where) {
+  await prisma.own.delete({ where });
+}
+
 async function findShopOwnerId({ userId, cardId }) {
   return prisma.own.findFirst({
     where: { userId, cardId },
@@ -121,5 +180,14 @@ export default {
   getGroupCountByGrade,
   deleteById,
   addQuantity,
+  decreaseQuantity,
+  createData,
+  findFirstData,
+  findUniqueOrThrowtData,
+  conutData,
+  findManyData,
+  findManyByPaginationData,
+  updateData,
+  deleteData,
   findShopOwnerId,
 };

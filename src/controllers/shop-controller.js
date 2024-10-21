@@ -21,7 +21,12 @@ async function getShopList(req, res, next) {
   const shops = await shopService.getShopListByQuery(req.query);
   const count = await shopService.countShopListByQuery(req.query);
   const [list, total] = await Promise.all([shops, count]);
+
+  console.log("shops : ", shops);
+  console.log("count : ", count);
+
   const responseData = getShopListMapper(list, total);
+
   res.send(responseData);
 }
 
@@ -63,10 +68,28 @@ async function deleteShop(req, res, next) {
   }
 }
 
+async function createExchange(req, res, next) {
+  try {
+    const { shopId, cardId, description } = req.body;
+    const userId = req.session.userId;
+    const result = await exchangeService.createExchange({
+      userId,
+      shopId,
+      cardId,
+      description,
+    });
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
+
 export default {
   createShop,
   getShopList,
   getShopDetail,
   updateShop,
   deleteShop,
+  createExchange,
 };

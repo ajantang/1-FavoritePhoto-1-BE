@@ -1,10 +1,4 @@
-export function createCardListFilterByQuery(query) {
-  const { sort, genre, grade, pageNum, pageSize, keyword = "" } = query;
-
-  const page = pageNum || 1;
-  const pageSizeNum = pageSize || 15;
-  const offset = (page - 1) * pageSizeNum;
-
+function createOrderBy(sort) {
   let orderBy;
   switch (sort) {
     case "recent":
@@ -23,11 +17,20 @@ export function createCardListFilterByQuery(query) {
       orderBy = { createdAt: "desc" };
   }
 
+  return orderBy;
+}
+
+function includeKeywordInNameOrDescriptionWhere(keyword) {
+  if (keyword === "") {
+    return null;
+  }
+
   const whereOrBody = {
     contains: keyword,
     mode: "insensitive",
   };
-  const whereOr = {
+
+  return {
     OR: [
       {
         name: whereOrBody,
@@ -37,12 +40,24 @@ export function createCardListFilterByQuery(query) {
       },
     ],
   };
+}
+
+export function createCardListFilterByQuery(query) {
+  const { sort, genre, grade, pageNum, pageSize, keyword = "" } = query;
+
+  const page = pageNum || 1;
+  const pageSizeNum = pageSize || 15;
+  const offset = (page - 1) * pageSizeNum;
+
+  const orderBy = createOrderBy(sort);
+
+  const whereOr = includeKeywordInNameOrDescriptionWhere(keyword);
 
   const where = {
     Card: {
       ...(genre ? { genre: parseInt(genre) } : {}),
       ...(grade ? { grade: parseInt(grade) } : {}),
-      ...whereOr,
+      ...(whereOr && { whereOr }),
     },
   };
 

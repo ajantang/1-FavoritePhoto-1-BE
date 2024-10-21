@@ -16,12 +16,13 @@ async function createShop(createData) {
 
 async function getShopListByQuery(filter) {
   const { orderBy, skip, take, where } = filter;
+
   return prisma.shop.findMany({
     orderBy,
     skip,
     take,
     where,
-    select: shopListSelect,
+    // select: shopListSelect,
   });
 }
 
