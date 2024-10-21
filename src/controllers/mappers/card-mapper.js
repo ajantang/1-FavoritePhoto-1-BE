@@ -68,17 +68,3 @@ export function myShopListMapper({ counts, list }) {
 
   return mappedData;
 }
-
-export function myExchangeListMapper({ counts, list }) {
-  const totalCount = calculateTotalCountByObject(counts);
-  const mappedList = list.map((item) => {
-    return basicCardMapper(item);
-  });
-  const mappedData = {
-    totalCount,
-    countsGroupByGrade: counts,
-    exchanges: mappedList,
-  };
-
-  return mappedData;
-}

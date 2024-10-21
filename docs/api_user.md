@@ -154,12 +154,12 @@
   "quantity": 2
   }
 
-## GET /users/my-cards/shop
+## GET /users/shop
 
 ### req template
 
 - description : 내가 상점에 등록한 포토 카드 목록 조회 (필터 : 등급, 장르, 매진 / 페이지네이션)
-- path : /users/my-cards/shop
+- path : /users/shop
 - method : GET
 - query
   - sort : recent || oldest || cheapest || highest (최신순 OR 오래된 순 OR 가격 낮은 순 OR 가격 높은 순 정렬)
@@ -229,12 +229,12 @@
   ]
   }
 
-## GET /users/my-cards/exchange
+## GET /users/exchange
 
 ### req template
 
 - description : 내가 교환 제시한 포토 카드 목록 조회
-- path : /users/my-cards/exchange
+- path : /users/exchange
 - method : GET
 - query
   - sort : recent || oldest || cheapest || highest (최신순 OR 오래된 순 OR 가격 낮은 순 OR 가격 높은 순 정렬)

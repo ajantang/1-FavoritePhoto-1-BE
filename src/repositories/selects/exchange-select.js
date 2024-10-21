@@ -17,3 +17,11 @@ export const exchangeShopIdSelect = {
   ...exchangeSelect,
   shopId: true,
 };
+
+export const exchangeCardShopSelect = {
+  ...exchangeSelect,
+  Card: {
+    select: cardSelect,
+  },
+  shopId: true,
+};
