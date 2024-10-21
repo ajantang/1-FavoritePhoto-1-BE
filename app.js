@@ -36,7 +36,7 @@ app.use(
     rolling: true,
     cookie: {
       httpOnly: true,
-      secure: false,
+      secure: true,
       sameSite: "none",
       maxAge: EXPIRE_TIME,
     },
