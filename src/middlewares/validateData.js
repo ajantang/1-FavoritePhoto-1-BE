@@ -239,5 +239,7 @@ export async function validateExchangeConditions(req, res, next) {
     return next(error);
   }
 
-  next()
+  req.body.shopId = shopId;
+
+  next();
 }

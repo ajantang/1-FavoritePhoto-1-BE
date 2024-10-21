@@ -1,5 +1,5 @@
 import express from "express";
 
-const exchangeRouter = express.Router()
+const exchangeRouter = express.Router();
 
-exchangeRouter.ro
+exchangeRouter.route('/:exchangeId');
