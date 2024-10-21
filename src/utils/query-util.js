@@ -1,4 +1,4 @@
-function createOrderBy(sort) {
+export function createOrderBy(sort) {
   let orderBy;
   switch (sort) {
     case "recent":
@@ -20,7 +20,7 @@ function createOrderBy(sort) {
   return orderBy;
 }
 
-function includeKeywordInNameOrDescriptionWhere(keyword) {
+export function includeKeywordInNameOrDescriptionWhere(keyword) {
   if (keyword === "") {
     return null;
   }
@@ -39,6 +39,18 @@ function includeKeywordInNameOrDescriptionWhere(keyword) {
         description: whereOrBody,
       },
     ],
+  };
+}
+
+export function createGenreGradeKeywordWhere({ genre, grade, keyword }) {
+  const whereOr = includeKeywordInNameOrDescriptionWhere(keyword);
+
+  return {
+    Card: {
+      ...(genre ? { genre: parseInt(genre) } : {}),
+      ...(grade ? { grade: parseInt(grade) } : {}),
+      ...(whereOr && { whereOr }),
+    },
   };
 }
 
