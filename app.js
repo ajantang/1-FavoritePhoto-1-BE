@@ -24,10 +24,7 @@ export const app = express();
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://one-favoritephoto-1-be.onrender.com",
-    ],
+    origin: "http://localhost:3000",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -40,8 +37,10 @@ app.use(
     rolling: true,
     cookie: {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      // secure: true,
+      secure: false,
+      // sameSite: "none",
+      sameSite: "lax",
       maxAge: EXPIRE_TIME,
     },
   })
