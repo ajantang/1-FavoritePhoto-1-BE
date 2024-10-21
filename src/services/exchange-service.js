@@ -7,6 +7,7 @@ import { exchangeMapper } from "../controllers/mappers/exchange-mapper.js";
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shopRepository.js";
+import card from "../constants/card.js";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {
@@ -51,7 +52,7 @@ async function createExchange({ userId, shopId, cardId, description }) {
 }
 
 async function acceptByExchange(userId, exchangeId, reqBody) {
-  const { shopId, hasSellerExchangeCard } = reqBody;
+  const { shopId, exchangeCardId, sellerId, hasSellerCard } = reqBody;
 
   return await prisma.$transaction(async () => {
     try {
@@ -64,9 +65,28 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
           },
         },
       });
-      console.log(decreaseQuantity);
+      console.log({ decreaseQuantity });
 
       // 판매자에게 제시된 카드 보유량 증가 혹은 생성
+      if (hasSellerCard === null || hasSellerCard == undefined) {
+        const createSellerOwn = await ownRepository.createData({
+          data: {
+            userId: sellerId,
+            cardId: exchangeCardId,
+          },
+        });
+        console.log({ createSellerOwn });
+      } else {
+        const increaseSellerCard = await ownRepository.updateData({
+          where: {
+            id: hasSellerCard.id,
+          },
+          data: {
+            quantity: { increment: 1 },
+          },
+        });
+        console.log({ increaseSellerCard });
+      }
       // 구매자의 제시한 카드 보유량 감소
       // 구매자가 교환을 시도했던 상점 카드 보유 확인
       // 구매자가 교환을 시도했던 상점 카드의 보유량 생성 혹은 증가
