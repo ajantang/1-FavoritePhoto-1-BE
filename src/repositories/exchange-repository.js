@@ -67,7 +67,7 @@ async function findFirstData({ where, select }) {
 }
 
 async function findUniqueOrThrowtData({ where, select }) {
-  return await prisma.exchange.findFirst({ where, select });
+  return await prisma.exchange.findFirstOrThrow({ where, select });
 }
 
 async function conutData(where) {

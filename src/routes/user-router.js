@@ -19,9 +19,7 @@ userRouter
   .post("/my-cards", authMiddleware, userController.createMyCard)
   .get("/exchange", authMiddleware, userController.getMyRequestList)
   .get("/shop", authMiddleware, userController.getMyShopList)
-  .get("/profile", authMiddleware, (req, res, next) => {
-    // 내 프로필 조회
-  })
+  .get("/my-info", authMiddleware, userController.getMyInfo)
   .get("/check-email", (req, res, next) => {
     // 이메일 중복 확인 (리턴 방식/데이터 죠율 필요)
   })

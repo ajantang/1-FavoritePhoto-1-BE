@@ -16,6 +16,7 @@ import {
   createGenreGradeKeywordWhere,
 } from "../utils/query-util.js";
 import userRepository from "../repositories/user-repository.js";
+import { userSelect } from "../repositories/selects/user-select.js";
 import { exchangeCardShopSelect } from "../repositories/selects/exchange-select.js";
 
 async function getMyCardList({ userId, query }) {
@@ -102,6 +103,12 @@ async function getUserInfoByUserId(id) {
   return await userRepository.getUserInfoByUserId(id);
 }
 
+async function getMyInfo(id) {
+  const where = { id };
+
+  return await userRepository.findFirstData({ where, select: userSelect });
+}
+
 export default {
   getMyCardList,
   getMyCard,
@@ -109,4 +116,5 @@ export default {
   getMyShopList,
   getMyRequestList,
   getUserInfoByUserId,
+  getMyInfo,
 };

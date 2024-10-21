@@ -70,14 +70,16 @@ async function getMyRequestList(req, res, next) {
   }
 }
 
-// async function getMyProfile(req, res, next){
-//   try{
-//     const result = ;
-//     return res.status(200).send(result);
-//   }catch(err){
-//     return next(err);
-//   }
-// }
+async function getMyInfo(req, res, next) {
+  try {
+    const userId = req.session.userId;
+    const result = await userService.getMyInfo(userId);
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
 
 // async function checkValidateEmail(req, res, next){
 //   try{
@@ -103,4 +105,5 @@ export default {
   createMyCard,
   getMyShopList,
   getMyRequestList,
+  getMyInfo,
 };
