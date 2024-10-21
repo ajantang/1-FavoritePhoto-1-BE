@@ -37,7 +37,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false,
-      sameSite: "lax",
+      sameSite: "none",
       maxAge: EXPIRE_TIME,
     },
   })
