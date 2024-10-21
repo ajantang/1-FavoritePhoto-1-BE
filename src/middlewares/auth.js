@@ -40,7 +40,7 @@ export async function authMiddlewareByCardIdParam(req, res, next) {
   }
 
   try {
-    haveCard({ userId, cardId });
+    await haveCard({ userId, cardId });
 
     return next();
   } catch (err) {
@@ -57,7 +57,7 @@ export async function authMiddlewareByCardIdBody(req, res, next) {
   }
 
   try {
-    haveCard({ userId, cardId });
+    await haveCard({ userId, cardId });
 
     return next();
   } catch (err) {
