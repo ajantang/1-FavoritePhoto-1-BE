@@ -1,8 +1,10 @@
+import prisma from "../repositories/prisma.js";
 import ownRepository from "../repositories/ownRepository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import { ownCardSelect } from "../repositories/selects/own-select.js";
-import { exchangeShopIdSelect } from "../repositories/selects/exchange-select.js";
-import prisma from "../repositories/prisma.js";
+import { exchangeCardShopSelect } from "../repositories/selects/exchange-select.js";
+import { exchangeMapper } from "../controllers/mappers/exchange-mapper.js";
+
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 
 async function checkExchangeByUser(userId, shopId) {
@@ -40,10 +42,10 @@ async function createExchange({ userId, shopId, cardId, description }) {
 
     const exchange = await exchangeRepository.createData({
       data: exchangeData,
-      select: exchangeShopIdSelect,
+      select: exchangeCardShopSelect,
     });
 
-    return exchange;
+    return exchangeMapper(exchange);
   });
 }
 

@@ -7,15 +7,15 @@ import {
   myCardMapper,
   myCardListMapper,
   myShopListMapper,
-  myExchangeListMapper,
 } from "../controllers/mappers/card-mapper.js";
+import { myExchangeListMapper } from "../controllers/mappers/exchange-mapper.js";
 import {
   createCardListFilterByQuery,
   createOrderBy,
   createShopListFilterByQuery,
   createGenreGradeKeywordWhere,
 } from "../utils/query-util.js";
-import { exchangeCardInfo } from "../repositories/selects/exchange-select.js";
+import { exchangeCardShopSelect } from "../repositories/selects/exchange-select.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
@@ -87,7 +87,7 @@ async function getMyRequestList({ userId, query }) {
     skip,
     take,
     where,
-    select: exchangeCardInfo,
+    select: exchangeCardShopSelect,
   });
   const counts = await exchangeRepository.countGroupCountByGrade({
     userId,

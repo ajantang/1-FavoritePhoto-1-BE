@@ -5,7 +5,7 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 {
     "shopId" : "8d444419-89d6-46b7-987c-89fc12f231aa",
     "cardId" : "fd3d66c0-b702-40b9-928a-371b68f0fd64",
-    "description" :"교환 신청 테스트2"
+    "description" :"교환 신청 테스트8"
 }
 
 ###
@@ -35,6 +35,11 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
 GET http://localhost:3000/users/shop
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+GET http://localhost:3000/users/my-cards
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 

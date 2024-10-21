@@ -4,7 +4,6 @@ import userController from "../controllers/users-controller.js";
 import {
   authMiddleware,
   authMiddlewareByCardIdParam,
-  authMiddlewareByCardIdBody,
 } from "../middlewares/auth.js";
 
 const userRouter = express.Router();
