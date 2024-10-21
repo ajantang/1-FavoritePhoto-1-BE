@@ -189,7 +189,6 @@ async function purchaseService(id, userId, purchaseData) {
     purchaseQuantity,
     sellerUserId,
     tradePoints,
-    isSellOut,
     updatedShopQuantity,
     shopDetailData,
     ownsCard,
@@ -217,7 +216,7 @@ async function purchaseService(id, userId, purchaseData) {
       );
 
       // 매진 시 교환 신청 삭제
-      if (isSellOut) {
+      if (updatedShopQuantity === 0) {
         const exchangesCardInfo = shopDetailData.Exchanges;
         const exchangeDelete = await Promise.all(
           exchangesCardInfo.map(async (exchangeInfo) => {
