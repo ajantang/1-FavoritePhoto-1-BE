@@ -11,6 +11,10 @@ async function acceptByExchange(req, res, next) {
   res.send(acceptExchange);
 }
 
+async function refuseByExchange(req, res, next) {
+  
+}
+
 export default {
   acceptByExchange,
 };

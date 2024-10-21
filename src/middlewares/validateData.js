@@ -206,10 +206,9 @@ export async function validatePurchaseConditions(req, res, next) {
   return next();
 }
 
-export async function validateExchangeConditions(req, res, next) {
+export async function validateExchangeAndOwner(req, res, next) {
   const { exchangeId } = req.params;
   const userId = req.session.userId;
-  console.log(exchangeId);
 
   // exchange 테이블이 존재하는지 확인
   const exchange = await exchangeRepository.findUniqueOrThrowtData({
@@ -221,8 +220,8 @@ export async function validateExchangeConditions(req, res, next) {
 
   const exchangeCardId = exchange.Card.id;
   const shopId = exchange.shopId;
-  const buyerId = exchange.userId
-  console.log(buyerId)
+  const buyerId = exchange.userId;
+  console.log(buyerId);
 
   // 상점 오너인지 확인
   const isOwner = await shopRepository.findFirstData({
@@ -237,6 +236,18 @@ export async function validateExchangeConditions(req, res, next) {
     error.code = 400;
     next(error);
   }
+
+  req.body.exchangeData = exchange;
+  req.body.exchangeCardId = exchangeCardId;
+  req.body.shopId = shopId;
+  req.body.buyerId = buyerId;
+
+  next();
+}
+
+export async function validateExchangeConditions(req, res, next) {
+  const userId = req.session.userId;
+  const { exchangeCardId, shopId, buyerId } = req.body;
 
   // 품절인지 확인
   const shop = await shopRepository.findUniqueOrThrowtData({
@@ -267,10 +278,6 @@ export async function validateExchangeConditions(req, res, next) {
     },
   });
 
-  req.body.exchangeData = exchange;
-  req.body.shopId = shopId;
-  req.body.exchangeCardId = exchangeCardId;
-  req.body.buyerId = buyerId;
   req.body.shopCardId = shopCardId;
   req.body.hasSellerExchangeCard = hasSellerExchangeCard;
   req.body.hasBuyershopCard = hasBuyershopCard;

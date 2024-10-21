@@ -135,4 +135,12 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
   });
 }
 
+async function refuseByExchange(params) {
+  // exchange 존재 여부 확인
+  // 상점 오너인지 확인
+  // exchange 삭제
+  // 교환 희망자의 own에 +1
+  // 관련 알림 등록
+}
+
 export default { checkExchangeByUser, createExchange, acceptByExchange };
