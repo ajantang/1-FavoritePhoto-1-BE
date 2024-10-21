@@ -267,6 +267,7 @@ export async function validateExchangeConditions(req, res, next) {
   req.body.shopId = shopId;
   req.body.exchangeCardId = exchangeCardId;
   req.body.sellerId = sellerId;
+  req.body.shopCardId = shopCardId
   req.body.hasSellerExchangeCard = hasSellerExchangeCard;
   req.body.hasBuyershopCard = hasBuyershopCard;
 

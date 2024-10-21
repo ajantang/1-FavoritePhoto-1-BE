@@ -52,7 +52,14 @@ async function createExchange({ userId, shopId, cardId, description }) {
 }
 
 async function acceptByExchange(userId, exchangeId, reqBody) {
-  const { shopId, exchangeCardId, sellerId, hasSellerExchangeCard, hasBuyershopCard } = reqBody;
+  const {
+    shopId,
+    exchangeCardId,
+    sellerId,
+    shopCardId,
+    hasSellerExchangeCard,
+    hasBuyershopCard,
+  } = reqBody;
 
   return await prisma.$transaction(async () => {
     try {
@@ -76,13 +83,14 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
           data: {
             userId: sellerId,
             cardId: exchangeCardId,
+            quantity: 1,
           },
         });
         console.log({ createSellerOwn });
       } else {
         const increaseSellerCard = await ownRepository.updateData({
           where: {
-            id: hasSellerCard.id,
+            id: hasSellerExchangeCard.id,
           },
           data: {
             quantity: { increment: 1 },
@@ -91,8 +99,27 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
         console.log({ increaseSellerCard });
       }
 
-      // 구매자가 교환을 시도했던 상점 카드 보유 확인
       // 구매자가 교환을 시도했던 상점 카드의 보유량 생성 혹은 증가
+      if (hasBuyershopCard === null || hasBuyershopCard === undefined) {
+        const createBuyerOwn = await ownRepository.createData({
+          data: {
+            userId,
+            cardId: shopCardId,
+            quantity: 1,
+          },
+        });
+        console.log({ createBuyerOwn });
+      } else {
+        const increaseBuyerCard = await ownRepository.updateData({
+          where: {
+            id: hasBuyershopCard.id,
+          },
+          data: {
+            quantity: { increment: 1 },
+          },
+        });
+        console.log({ increaseBuyerCard });
+      }
       // 관련된 알림 추가
       // 승인된 exchange 삭제
     } catch (e) {
