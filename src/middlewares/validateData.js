@@ -221,7 +221,6 @@ export async function validateExchangeAndOwner(req, res, next) {
   const exchangeCardId = exchange.Card.id;
   const shopId = exchange.shopId;
   const buyerId = exchange.userId;
-  console.log(buyerId);
 
   // 상점 오너인지 확인
   const isOwner = await shopRepository.findFirstData({

@@ -5,7 +5,7 @@ export function exchangeMapper(basicSelect) {
   const mappedCard = basicCardMapper(basicSelect);
 
   return {
-    id: basicSelect.id,
+    exchangeId: basicSelect.id,
     shopId: basicSelect.shopId,
     description: basicSelect.description,
     ...mappedCard,

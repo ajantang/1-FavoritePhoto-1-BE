@@ -135,12 +135,47 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
   });
 }
 
-async function refuseByExchange(params) {
-  // exchange 존재 여부 확인
-  // 상점 오너인지 확인
-  // exchange 삭제
-  // 교환 희망자의 own에 +1
+async function refuseByExchange(userId, exchangeId, reqBody) {
+  const { exchangeData, exchangeCardId, buyerId } = reqBody;
+
+  return await prisma.$transaction(async () => {
+    try {
+      // exchange 삭제
+      const delteeExchange = await exchangeRepository.deleteData({
+        id: exchangeId,
+      });
+      console.log(delteeExchange);
+
+      // 교환 희망자의 own에 +1
+      const own = await ownRepository.updateData({
+        where: {
+          userId_cardId: {
+            userId: buyerId,
+            cardId: exchangeCardId,
+          },
+        },
+        data: {
+          quantity: { increment: 1 },
+        },
+      });
+      console.log(own)
+
+      const responseMappeing = exchangeMapper(exchangeData);
+
+      return {
+        successStatus: true,
+        ...responseMappeing,
+      };
+    } catch (e) {
+      throw e;
+    }
+  });
   // 관련 알림 등록
 }
 
-export default { checkExchangeByUser, createExchange, acceptByExchange };
+export default {
+  checkExchangeByUser,
+  createExchange,
+  acceptByExchange,
+  refuseByExchange,
+};
