@@ -231,7 +231,11 @@ export async function validateExchangeConditions(req, res, next) {
     const error = new Error("You cannot purchase your own product.");
     error.code = 400;
     next(error);
-  }
 
-  
+    // 품절인지 확인
+  } else if (shop.remainingQuantity === 0) {
+    const error = new Error("This product is sold out.");
+    error.code = 400;
+    return next(error);
+  }
 }
