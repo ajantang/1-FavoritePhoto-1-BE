@@ -49,17 +49,17 @@ Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-GET http://localhost:3000/users/my-cards/shop
+GET http://localhost:3000/users/shop
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-GET http://localhost:3000/users/my-cards/shop?genre=0&&grade=3&&pageSize=15&&pageNum=1&&sellout=false&&keyword=
+GET http://localhost:3000/users/shop?genre=0&&grade=3&&pageSize=15&&pageNum=1&&sellout=false&&keyword=
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-GET http://localhost:3000/users/my-cards/shop?genre=0&&grade=&&keyword=&&pageSize=15&&pageNum=1
+GET http://localhost:3000/users/shop?genre=0&&grade=&&keyword=&&pageSize=15&&pageNum=1
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 

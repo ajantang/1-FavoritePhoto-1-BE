@@ -17,8 +17,8 @@ userRouter
     userController.getMyCard
   )
   .post("/my-cards", authMiddleware, userController.createMyCard)
-  .get("/my-cards/shop", authMiddleware, userController.getMyShopList)
-  .get("/my-cards/exchange", authMiddleware, userController.getMyRequestList)
+  .get("/exchange", authMiddleware, userController.getMyRequestList)
+  .get("/shop", authMiddleware, userController.getMyShopList)
   .get("/profile", (req, res, next) => {
     // 내 프로필 조회
   })

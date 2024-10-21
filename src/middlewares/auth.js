@@ -32,6 +32,23 @@ export async function authMiddlewareByShopIdParam(req, res, next) {
 }
 
 export async function authMiddlewareByCardIdParam(req, res, next) {
+  const { cardId } = req.params;
+  const userId = req.session.userId;
+
+  if (!cardId) {
+    return next(createCustomError(400));
+  }
+
+  try {
+    await haveCard({ userId, cardId });
+
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
+
+export async function authMiddlewareByCardIdBody(req, res, next) {
   const { cardId } = req.body;
   const userId = req.session.userId;
 
@@ -40,13 +57,19 @@ export async function authMiddlewareByCardIdParam(req, res, next) {
   }
 
   try {
-    const where = { cardId, userId };
-    await ownRepository.findUniqueOrThrowtData({
-      where,
-    });
+    await haveCard({ userId, cardId });
 
     return next();
   } catch (err) {
     return next(err);
   }
+}
+
+// 임시. repo 함수는 layered 구조로 로직 변경 예정
+async function haveCard({ userId, cardId }) {
+  const where = { cardId, userId };
+
+  return await ownRepository.findUniqueOrThrowtData({
+    where,
+  });
 }
