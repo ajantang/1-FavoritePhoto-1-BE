@@ -6,6 +6,7 @@ import shopService from "../services/shopService.js";
 import userService from "../services/user-service.js";
 import ownRepository from "../repositories/ownRepository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
+import shopRepository from "../repositories/shopRepository.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -219,4 +220,18 @@ export async function validateExchangeConditions(req, res, next) {
   const shopId = exchange.shopId;
 
   // 상점 오너인지 확인
+  const shop = await shopRepository.findFirstData({
+    where: {
+      userId,
+      id: shopId,
+    },
+  });
+
+  if (shop === null || shop === undefined) {
+    const error = new Error("You cannot purchase your own product.");
+    error.code = 400;
+    next(error);
+  }
+
+  
 }
