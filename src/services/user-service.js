@@ -22,6 +22,12 @@ async function getMyCardList({ userId, query }) {
   return myCardListMapper({ counts, list });
 }
 
+async function getMyCard({ userId, cardId }) {
+  const result = await ownRepository.findOwnCard({ userId, cardId });
+
+  return myCardMapper(result);
+}
+
 async function createMyCard({
   name,
   description,
@@ -75,4 +81,10 @@ async function getMyRequestList({ userId, query }) {
   return myExchangeListMapper({ counts, list });
 }
 
-export default { getMyCardList, createMyCard, getMyShopList, getMyRequestList };
+export default {
+  getMyCardList,
+  getMyCard,
+  createMyCard,
+  getMyShopList,
+  getMyRequestList,
+};

@@ -33,16 +33,16 @@ export async function authMiddlewareByShopIdParam(req, res, next) {
 
 export async function authMiddlewareByCardIdParam(req, res, next) {
   const { cardId } = req.body;
+  const userId = req.session.userId;
 
   if (!cardId) {
     return next(createCustomError(400));
   }
 
   try {
-    const where = { cardId, userId: req.session.userId };
+    const where = { cardId, userId };
     await ownRepository.findUniqueOrThrowtData({
       where,
-      select: ownSelect,
     });
 
     return next();

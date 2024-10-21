@@ -1,12 +1,21 @@
 import express from "express";
 
 import userController from "../controllers/users-controller.js";
-import { authMiddleware } from "../middlewares/auth.js";
+import {
+  authMiddleware,
+  authMiddlewareByCardIdParam,
+} from "../middlewares/auth.js";
 
 const userRouter = express.Router();
 
 userRouter
   .get("/my-cards", authMiddleware, userController.getMyCardList)
+  .get(
+    "/my-cards/:cardId",
+    authMiddleware,
+    authMiddlewareByCardIdParam,
+    userController.getMyCard
+  )
   .post("/my-cards", authMiddleware, userController.createMyCard)
   .get("/my-cards/shop", authMiddleware, userController.getMyShopList)
   .get("/my-cards/exchange", authMiddleware, userController.getMyRequestList)

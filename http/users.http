@@ -83,8 +83,8 @@ POST http://localhost:3000/auth/sign-in
 Content-Type : application/json
 
 {
-    "email" : "codeit05@codeit.com",
-    "password" : "!codeit05"
+    "email" : "codeit04@codeit.com",
+    "password" : "!codeit04"
 }
 
 ###
