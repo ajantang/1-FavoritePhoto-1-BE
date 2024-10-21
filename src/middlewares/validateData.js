@@ -238,4 +238,6 @@ export async function validateExchangeConditions(req, res, next) {
     error.code = 400;
     return next(error);
   }
+
+  next()
 }
