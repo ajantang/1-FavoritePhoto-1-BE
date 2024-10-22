@@ -40,3 +40,16 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 {
     "purchaseQuantity": 1
 }
+
+###
+PATCH  https://one-favoritephoto-1-be.onrender.com/shop/8d444419-89d6-46b7-987c-89fc12f231aa
+Content-Type: application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+{
+    "salesQuantity": 1,
+    "price": 4,
+    "exchangeGrade": 0,
+    "exchangeGenre": 4,
+    "exchangeDescription": "테스트 진행중"
+}

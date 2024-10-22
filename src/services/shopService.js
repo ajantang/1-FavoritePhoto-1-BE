@@ -5,7 +5,10 @@ import prisma from "../repositories/prisma.js";
 import purchaseRepository from "../repositories/purchase-repository.js";
 import shopRepository from "../repositories/shopRepository.js";
 import userRepository from "../repositories/user-repository.js";
-import { myCardMapper } from "../controllers/mappers/card-mapper.js";
+import {
+  basicCardMapper,
+  myCardMapper,
+} from "../controllers/mappers/card-mapper.js";
 import { ownCardListSelect } from "../repositories/selects/own-select.js";
 
 async function createShop(createData) {
@@ -189,7 +192,6 @@ async function purchaseService(id, userId, purchaseData) {
     purchaseQuantity,
     sellerUserId,
     tradePoints,
-    isSellOut,
     updatedShopQuantity,
     shopDetailData,
     ownsCard,
@@ -224,6 +226,7 @@ async function purchaseService(id, userId, purchaseData) {
             const userId = exchangeInfo.userId;
             const cardId = exchangeInfo.Card.id;
             console.log(userId)
+
             const updateWhere = {
               userId_cardId: {
                 userId,
@@ -257,6 +260,7 @@ async function purchaseService(id, userId, purchaseData) {
               });
               console.log(q);
             }
+
           })
         );
         await exchangeRepository.deleteManyData({
@@ -298,9 +302,10 @@ async function purchaseService(id, userId, purchaseData) {
         });
       }
 
+      const responseMapping = basicCardMapper(purchaserOwn);
+
       return {
-        grade: purchaserOwn.Card.grade,
-        name: purchaserOwn.Card.name,
+        ...responseMapping,
         purchaseQuantity,
       };
     } catch (e) {
