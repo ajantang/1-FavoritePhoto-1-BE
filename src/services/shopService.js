@@ -10,6 +10,7 @@ import {
   myCardMapper,
 } from "../controllers/mappers/card-mapper.js";
 import { ownCardListSelect } from "../repositories/selects/own-select.js";
+import { exchangeDelete } from "../utils/sellout-util.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
@@ -220,52 +221,7 @@ async function purchaseService(id, userId, purchaseData) {
 
       // 매진 시 교환 신청 삭제
       if (updatedShopQuantity === 0) {
-        const exchangesCardInfo = shopDetailData.Exchanges;
-        const exchangeDelete = await Promise.all(
-          exchangesCardInfo.map(async (exchangeInfo) => {
-            const userId = exchangeInfo.userId;
-            const cardId = exchangeInfo.Card.id;
-            console.log(userId)
-
-            const updateWhere = {
-              userId_cardId: {
-                userId,
-                cardId,
-              },
-            };
-            const updateData = {
-              quantity: {
-                increment: 1,
-              },
-            };
-            const createData = {
-              userId,
-              cardId,
-              quantity: 1,
-            };
-            const own = await ownRepository.findFirstData({
-              where: {
-                userId,
-                cardId,
-              },
-            });
-
-            if (own === null || own === undefined) {
-              const w = await ownRepository.createData({ data: createData });
-              console.log(w);
-            } else {
-              const q = await ownRepository.updateData({
-                where: updateWhere,
-                data: updateData,
-              });
-              console.log(q);
-            }
-
-          })
-        );
-        await exchangeRepository.deleteManyData({
-          shopId: shopDetailData.id,
-        });
+        await exchangeDelete(shopDetailData);
       }
 
       // 구매 이력 추가
@@ -329,6 +285,18 @@ async function deleteShop({ userId, shopId }) {
   });
 }
 
+async function calculateTotalQuantity(userId, shopData) {
+  const own = await ownRepository.findFirstData({
+    where: {
+      userId,
+      cardId: shopData.cardId,
+    },
+  });
+  const userStock = own ? own.quantity : 0;
+  const totalQuantity = userStock + shopData.remainingQuantity;
+  return { totalQuantity };
+}
+
 export default {
   createShop,
   getShopListByQuery,
@@ -338,4 +306,5 @@ export default {
   updateShop,
   purchaseService,
   deleteShop,
+  calculateTotalQuantity,
 };

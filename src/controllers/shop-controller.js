@@ -98,6 +98,16 @@ async function createExchange(req, res, next) {
   }
 }
 
+async function calculateTotalQuantity(req, res, next) {
+  const userId = req.session.userId;
+  const shopData = req.body.shopData;
+  console.log(1)
+
+  const result = await shopService.calculateTotalQuantity(userId, shopData);
+
+  res.send(result);
+}
+
 export default {
   createShop,
   getShopList,
@@ -106,4 +116,5 @@ export default {
   purchaseController,
   deleteShop,
   createExchange,
+  calculateTotalQuantity
 };

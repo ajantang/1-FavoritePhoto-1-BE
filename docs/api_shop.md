@@ -5,8 +5,6 @@
 - description : 포토 카드 판매 등록
 - path : /shop
 - method : POST
-- headers
-  - Authorization : Bearer {accessToken}
 - body
   - cardId: 카드ID
   - salesQuantity: 판매수량
@@ -17,8 +15,6 @@
 
 ### req example
 
-- headers
-  - Authorization : Bearer {accessToken}
 - body : {
   cardId: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
   salesQuantity: 3,
@@ -149,15 +145,11 @@
 - description : 상점 상세 조회
 - path : /shop/:shopId
 - method : GET
-- header
-  - Authorization : Bearer {accessToken}
 - params
   - shopId : 상점ID
 
 ### req example
 
-- header
-  - Authorization : Bearer {accessToken}
 - params
   - adfc1706-a7f6-4c6e-a006-1733a854afbb
 
@@ -267,8 +259,6 @@
 - description : 내가 판매 등록한 포토 카드 수정
 - path : /shop/:shopId
 - method : PATCH
-- - header
-    - Authorization : Bearer {accessToken}
 - params
   - shopId: 상점 ID
 - body
@@ -280,8 +270,6 @@
 
 ### req example
 
-- header
-  - Authorization : Bearer {accessToken}
 - params
   - adfc1706-a7f6-4c6e-a006-1733a854afbb
 - body : {
@@ -384,8 +372,6 @@
 - description: 포토카드 구매
 - path: /shop/:shopId/purchase
 - method: POST
-- header
-    - Authorization : Bearer {accessToken}
 - params
     - shopId: 상점ID
 - body
@@ -413,4 +399,29 @@
 	grade: 5,
 	name: "우리집 앞마당",
 	purchaseQuantity: 2
+}
+
+## GET /shop/:shopId/quantity
+
+### req template
+- description: 상점 잔여량 + 보유 중인 카드 조회
+- path: /shop/:shopId/quantity
+- method: GET
+- params
+    - shopId: 상점ID
+
+### req example
+
+- params
+  - adfc1706-a7f6-4c6e-a006-1733a854afbb
+
+### res template
+
+- data
+    - totalQuantity: 상점 잔여량 + 보유 중인 카드
+
+### res example
+
+- data : {
+	totalQuantity: 10,
 }

@@ -8,6 +8,7 @@ import ownRepository from "../repositories/ownRepository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import shopRepository from "../repositories/shopRepository.js";
 import { exchangeCardShopAndUserSelect } from "../repositories/selects/exchange-select.js";
+import { shopDetailSelect } from "../repositories/selects/shopSelect.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -244,6 +245,7 @@ export async function validateExchangeConditions(req, res, next) {
   // 품절인지 확인
   const shop = await shopRepository.findUniqueOrThrowtData({
     where: { id: shopId },
+    select: shopDetailSelect,
   });
 
   if (shop.remainingQuantity === 0) {
@@ -270,6 +272,7 @@ export async function validateExchangeConditions(req, res, next) {
     },
   });
 
+  req.body.shopDetailData = shop;
   req.body.shopCardId = shopCardId;
   req.body.hasSellerExchangeCard = hasSellerExchangeCard;
   req.body.hasBuyershopCard = hasBuyershopCard;
@@ -277,7 +280,62 @@ export async function validateExchangeConditions(req, res, next) {
   next();
 }
 
+export async function validateExchangeCreator(req, res, next) {
+  const { exchangeId } = req.params;
+  const userId = req.session.userId;
 
-export async function name(params) {
-  
+  // exchange 테이블이 존재하는지 확인
+  const exchange = await exchangeRepository.findUniqueOrThrowtData({
+    where: {
+      id: exchangeId,
+    },
+    select: exchangeCardShopAndUserSelect,
+  });
+
+  const exchangeCardId = exchange.Card.id;
+  const shopId = exchange.shopId;
+  const buyerId = exchange.userId;
+
+  // 교환 희망자인지 확인
+  const exchangeCreator = await exchangeRepository.findFirstData({
+    where: {
+      userId,
+      id: exchangeId,
+    },
+  });
+
+  if (exchangeCreator === null || exchangeCreator === undefined) {
+    const error = new Error("You cannot exchange with a request you created.");
+    error.code = 400;
+    next(error);
+  }
+
+  req.body.exchangeData = exchange;
+  req.body.exchangeCardId = exchangeCardId;
+  req.body.shopId = shopId;
+  req.body.buyerId = buyerId;
+
+  next();
+}
+
+export async function checkShopCreator(req, res, next) {
+  const { shopId } = req.params;
+  const userId = req.session.userId;
+
+  const isOwner = await shopRepository.findFirstData({
+    where: {
+      userId,
+      id: shopId,
+    },
+  });
+
+  if (isOwner === null || isOwner === undefined) {
+    const error = new Error("You cannot purchase your own product.");
+    error.code = 400;
+    return next(error);
+  }
+
+  req.body.shopData = isOwner;
+
+  next()
 }

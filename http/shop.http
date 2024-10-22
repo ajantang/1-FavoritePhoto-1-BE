@@ -42,6 +42,9 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 }
 
 ###
+GET http://localhost:3000/shop/cbb24524-6818-4b46-8afb-00dd26f379ba/quantity
+
+###
 PATCH  https://one-favoritephoto-1-be.onrender.com/shop/8d444419-89d6-46b7-987c-89fc12f231aa
 Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
