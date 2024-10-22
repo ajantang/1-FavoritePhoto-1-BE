@@ -4,6 +4,16 @@ import shopRepository from "../repositories/shopRepository.js";
 import { ownSelect } from "../repositories/selects/own-select.js";
 
 export function authMiddleware(req, res, next) {
+  if (req.session) {
+    console.log("☆req.session");
+    console.log(req.session);
+  }
+
+  if (req.session?.userId) {
+    console.log("☆req.session.userId");
+    console.log(req.session.userId);
+  }
+
   if (req.session && req.session.userId) {
     return next();
   }

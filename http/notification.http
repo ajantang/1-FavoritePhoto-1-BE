@@ -3,11 +3,11 @@ GET http://localhost:3000/notifications
 Content-Type : application/json
 
 ###
-PATCH http://localhost:3000/notifications
+PATCH http://localhost:3000/notifications/0da8a896-f3fe-4bae-8da1-858c26e2d50a
 Content-Type : application/json
 
 ###
-delete http://localhost:3000/notifications
+delete http://localhost:3000/notifications/0da8a896-f3fe-4bae-8da1-858c26e2d50a
 Content-Type : application/json
 
 ###

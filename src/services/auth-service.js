@@ -13,12 +13,22 @@ async function createSession({ sessionId, userId, sessionData }) {
   const now = new Date();
   const expires = new Date(now.getTime() + EXPIRE_TIME);
 
-  await sessionRepository.createSession({
+  const session = await sessionRepository.createSession({
     sessionId,
     userId,
     expires,
     data: sessionData,
   });
+
+  if (session) {
+    console.log("☆session");
+    console.log(session);
+  }
+
+  if (session?.userId) {
+    console.log("☆session.userId");
+    console.log(session.userId);
+  }
 }
 
 async function deleteSession(sessionId) {
