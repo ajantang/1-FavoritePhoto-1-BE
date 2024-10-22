@@ -1,4 +1,4 @@
-import ownRepository from "../repositories/ownRepository.js";
+import ownRepository from "../repositories/own-repository.js";
 
 async function getByFilter(filter) {
   return await ownRepository.getByFilter(filter);

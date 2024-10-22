@@ -2,7 +2,7 @@ import prisma from "../repositories/prisma.js";
 import pointRepository from "../repositories/last-box-time-repository.js";
 import userRepository from "../repositories/user-repository.js";
 import { hasTimeElapsed } from "../utils/time-util.js";
-import { myPointMapper } from "../controllers/mappers/box-mapper.js";
+import { myPointMapper } from "./mappers/box-mapper.js";
 
 import { MIN_BOX_POINT, MAX_BOX_POINT } from "../constants/box.js";
 

@@ -1,12 +1,12 @@
 import prisma from "../repositories/prisma.js";
-import ownRepository from "../repositories/ownRepository.js";
+import ownRepository from "../repositories/own-repository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import { ownCardSelect } from "../repositories/selects/own-select.js";
 import { exchangeCardShopSelect } from "../repositories/selects/exchange-select.js";
 import { exchangeMapper } from "../controllers/mappers/exchange-mapper.js";
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
-import shopRepository from "../repositories/shopRepository.js";
+import shopRepository from "../repositories/shop-repository.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
 
 async function checkExchangeByUser(userId, shopId) {
