@@ -21,8 +21,7 @@ async function getUserNotification({ userId, query }) {
   });
   const count = await notificationRepository.countData(where);
 
-  //   return myNotificationMapper({ list, count });
-  return { totalCount: count, list };
+  return myNotificationMapper({ list, count });
 }
 
 async function checkNotification(id) {

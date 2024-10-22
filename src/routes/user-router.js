@@ -20,6 +20,7 @@ userRouter
   .get("/exchange", authMiddleware, userController.getMyRequestList)
   .get("/shop", authMiddleware, userController.getMyShopList)
   .get("/my-info", authMiddleware, userController.getMyInfo)
+  .get("/notifications", authMiddleware, userController.getMyNotificationList)
   .get("/check-email", (req, res, next) => {
     // 이메일 중복 확인 (리턴 방식/데이터 죠율 필요)
   })

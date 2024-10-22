@@ -1,13 +1,13 @@
 ###
-GET http://localhost:3000/notifications
+GET http://localhost:3000/users/notifications
 Content-Type : application/json
 
 ###
-PATCH http://localhost:3000/notifications
+PATCH http://localhost:3000/notifications/c6c33d96-9917-4a08-8800-7f3026eeb183
 Content-Type : application/json
 
 ###
-delete http://localhost:3000/notifications
+delete http://localhost:3000/notifications/c6c33d96-9917-4a08-8800-7f3026eeb183
 Content-Type : application/json
 
 ###
@@ -15,8 +15,8 @@ POST http://localhost:3000/auth/sign-in
 Content-Type : application/json
 
 {
-    "email" : "codeit05@codeit.com",
-    "password" : "!codeit05"
+    "email" : "codeit03@codeit.com",
+    "password" : "!codeit03"
 }
 
 ###

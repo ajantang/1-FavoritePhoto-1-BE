@@ -1,4 +1,5 @@
 import userService from "../services/user-service.js";
+import notificationService from "../services/notification-service.js";
 
 async function getMyCardList(req, res, next) {
   try {
@@ -81,6 +82,20 @@ async function getMyInfo(req, res, next) {
   }
 }
 
+async function getMyNotificationList(req, res, next) {
+  try {
+    const userId = req.session.userId;
+    const query = req.query;
+    const result = await notificationService.getUserNotification({
+      userId,
+      query,
+    });
+
+    return res.status(200).send(result);
+  } catch (err) {
+    return next(err);
+  }
+}
 // async function checkValidateEmail(req, res, next){
 //   try{
 //     const result = ;
@@ -106,4 +121,5 @@ export default {
   getMyShopList,
   getMyRequestList,
   getMyInfo,
+  getMyNotificationList,
 };
