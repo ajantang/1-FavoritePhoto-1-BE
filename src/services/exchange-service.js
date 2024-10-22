@@ -135,7 +135,7 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
   });
 }
 
-async function refuseByExchange(exchangeId, reqBody) {
+async function refuseOrCancelExchange(exchangeId, reqBody) {
   const { exchangeData, exchangeCardId, buyerId } = reqBody;
 
   return await prisma.$transaction(async () => {
@@ -176,5 +176,5 @@ export default {
   checkExchangeByUser,
   createExchange,
   acceptByExchange,
-  refuseByExchange,
+  refuseOrCancelExchange,
 };

@@ -11,9 +11,9 @@ async function acceptByExchange(req, res, next) {
   res.send(acceptExchange);
 }
 
-async function refuseByExchange(req, res, next) {
+async function refuseOrCancelExchange(req, res, next) {
   const { exchangeId } = req.params;
-  const refuseExchange = await exchangeService.refuseByExchange(
+  const refuseExchange = await exchangeService.refuseOrCancelExchange(
     exchangeId,
     req.body
   );
@@ -22,5 +22,5 @@ async function refuseByExchange(req, res, next) {
 
 export default {
   acceptByExchange,
-  refuseByExchange,
+  refuseOrCancelExchange,
 };

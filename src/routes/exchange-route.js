@@ -18,10 +18,10 @@ exchangeRouter
 
 exchangeRouter
   .route("/:exchangeId/refuse")
-  .post(validateExchangeAndOwner, exchangeController.refuseByExchange);
+  .post(validateExchangeAndOwner, exchangeController.refuseOrCancelExchange);
 
 exchangeRouter
   .route("/:exchangeId")
-  .delete(validateExchangeCreator, exchangeController.refuseByExchange);
-  
+  .delete(validateExchangeCreator, exchangeController.refuseOrCancelExchange);
+
 export default exchangeRouter;
