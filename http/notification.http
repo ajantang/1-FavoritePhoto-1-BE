@@ -1,13 +1,13 @@
 ###
-GET http://localhost:3000/users/notifications?pageNum=1&&pageSize=2
+GET http://localhost:3000/users/notifications
 Content-Type : application/json
 
 ###
-PATCH http://localhost:3000/notifications/f411e32a-5a6b-4200-98f0-c548f6f7a376
+PATCH http://localhost:3000/notifications/c6c33d96-9917-4a08-8800-7f3026eeb183
 Content-Type : application/json
 
 ###
-delete http://localhost:3000/notifications/f411e32a-5a6b-4200-98f0-c548f6f7a376
+delete http://localhost:3000/notifications/c6c33d96-9917-4a08-8800-7f3026eeb183
 Content-Type : application/json
 
 ###
@@ -15,8 +15,8 @@ POST http://localhost:3000/auth/sign-in
 Content-Type : application/json
 
 {
-    "email" : "codeit05@codeit.com",
-    "password" : "!codeit05"
+    "email" : "codeit03@codeit.com",
+    "password" : "!codeit03"
 }
 
 ###

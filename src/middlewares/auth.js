@@ -1,6 +1,7 @@
 import { createCustomError } from "../lib/custom-error.js";
 import ownRepository from "../repositories/ownRepository.js";
 import shopRepository from "../repositories/shopRepository.js";
+import notificationRepository from "../repositories/notification-repository.js";
 import { ownSelect } from "../repositories/selects/own-select.js";
 
 export function authMiddleware(req, res, next) {
@@ -39,13 +40,13 @@ export async function authMiddlewareByCardIdParam(req, res, next) {
     return next(createCustomError(400));
   }
 
-  try {
-    await haveCard({ userId, cardId });
+  const isOwner = await haveCard({ userId, cardId });
 
-    return next();
-  } catch (err) {
-    return next(err);
+  if (!isOwner) {
+    return next(createCustomError(401));
   }
+
+  return next();
 }
 
 export async function authMiddlewareByCardIdBody(req, res, next) {
@@ -56,20 +57,41 @@ export async function authMiddlewareByCardIdBody(req, res, next) {
     return next(createCustomError(400));
   }
 
-  try {
-    await haveCard({ userId, cardId });
+  const isOwner = await haveCard({ userId, cardId });
 
-    return next();
-  } catch (err) {
-    return next(err);
+  if (!isOwner) {
+    return next(createCustomError(401));
   }
+
+  return next();
+}
+
+export async function authMiddlewareByNotificationIdParam(req, res, next) {
+  const { notificationId } = req.params;
+  const userId = req.session.userId;
+
+  if (!notificationId) {
+    return next(createCustomError(400));
+  }
+
+  const isOwner = await isNotificationOwner({ userId, notificationId });
+
+  if (!isOwner) {
+    return next(createCustomError(401));
+  }
+
+  return next();
 }
 
 // 임시. repo 함수는 layered 구조로 로직 변경 예정
 async function haveCard({ userId, cardId }) {
   const where = { cardId, userId };
 
-  return await ownRepository.findUniqueOrThrowtData({
-    where,
-  });
+  return await ownRepository.findFirstData({ where });
+}
+
+async function isNotificationOwner({ userId, notificationId }) {
+  const where = { id: notificationId, userId };
+
+  return await notificationRepository.findFirstData({ where });
 }
