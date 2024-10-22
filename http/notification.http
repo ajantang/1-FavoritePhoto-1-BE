@@ -1,13 +1,13 @@
 ###
-GET http://localhost:3000/notifications
+GET http://localhost:3000/users/notifications?pageNum=1&&pageSize=2
 Content-Type : application/json
 
 ###
-PATCH http://localhost:3000/notifications
+PATCH http://localhost:3000/notifications/f411e32a-5a6b-4200-98f0-c548f6f7a376
 Content-Type : application/json
 
 ###
-delete http://localhost:3000/notifications
+delete http://localhost:3000/notifications/f411e32a-5a6b-4200-98f0-c548f6f7a376
 Content-Type : application/json
 
 ###

@@ -18,9 +18,7 @@ async function openBox(userId) {
         id: userId,
         earnedPoint,
       });
-      const test = await pointRepository.updateLastBoxTime(userId);
-
-      console.log(test);
+      await pointRepository.updateLastBoxTime(userId);
 
       return myPointMapper({
         id: userId,

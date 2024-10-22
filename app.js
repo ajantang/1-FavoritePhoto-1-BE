@@ -9,6 +9,7 @@ import notificationRouter from "./src/routes/notification-router.js";
 import shopRouter from "./src/routes/shop-router.js";
 import userRouter from "./src/routes/user-router.js";
 import imageRouter from "./src/routes/image-router.js";
+import pointRouter from "./src/routes/point-router.js";
 import {
   logErrors,
   clientErrorHandler,
@@ -56,6 +57,7 @@ app.use("/notifications", notificationRouter);
 app.use("/shop", shopRouter);
 app.use("/users", userRouter);
 app.use("/images", imageRouter);
+app.use("/points", pointRouter);
 app.use("/exchange", exchangeRouter);
 
 app.use(logErrors);
