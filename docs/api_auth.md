@@ -38,6 +38,13 @@
   "createdAt": "2024-10-17T01:19:58.198Z"
   }
 
+### error example
+
+- status : 409
+- data : {
+  "message": "중복된 불가능한 정보입니다: email"
+  }
+
 ## POST /auth/sign-in
 
 ### req template
