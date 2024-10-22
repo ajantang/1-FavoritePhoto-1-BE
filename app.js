@@ -17,6 +17,7 @@ import {
 } from "./src/middlewares/error.js";
 
 import { EXPIRE_TIME } from "./src/constants/session.js";
+import exchangeRouter from "./src/routes/exchange-route.js";
 import {
   SESSION_SECRET,
   SESSION_SECURE,
@@ -57,6 +58,7 @@ app.use("/shop", shopRouter);
 app.use("/users", userRouter);
 app.use("/images", imageRouter);
 app.use("/points", pointRouter);
+app.use("/exchange", exchangeRouter);
 
 app.use(logErrors);
 app.use(clientErrorHandler);

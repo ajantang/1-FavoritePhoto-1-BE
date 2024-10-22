@@ -223,9 +223,10 @@ async function purchaseService(id, userId, purchaseData) {
         const exchangesCardInfo = shopDetailData.Exchanges;
         const exchangeDelete = await Promise.all(
           exchangesCardInfo.map(async (exchangeInfo) => {
-            const id = exchangeInfo.id;
             const userId = exchangeInfo.userId;
             const cardId = exchangeInfo.Card.id;
+            console.log(userId)
+
             const updateWhere = {
               userId_cardId: {
                 userId,
@@ -237,13 +238,34 @@ async function purchaseService(id, userId, purchaseData) {
                 increment: 1,
               },
             };
-            await exchangeRepository.deleteByExchangeId(id);
-            await ownRepository.updateData({
-              where: { updateWhere },
-              data: { updateData },
+            const createData = {
+              userId,
+              cardId,
+              quantity: 1,
+            };
+            const own = await ownRepository.findFirstData({
+              where: {
+                userId,
+                cardId,
+              },
             });
+
+            if (own === null || own === undefined) {
+              const w = await ownRepository.createData({ data: createData });
+              console.log(w);
+            } else {
+              const q = await ownRepository.updateData({
+                where: updateWhere,
+                data: updateData,
+              });
+              console.log(q);
+            }
+
           })
         );
+        await exchangeRepository.deleteManyData({
+          shopId: shopDetailData.id,
+        });
       }
 
       // 구매 이력 추가

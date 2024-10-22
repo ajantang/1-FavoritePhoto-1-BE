@@ -376,3 +376,41 @@
   "description": "동물 펭귄01",
   "quantity": 7
   }
+
+
+## POST /shop/:shopId/purchase
+
+### req template
+- description: 포토카드 구매
+- path: /shop/:shopId/purchase
+- method: POST
+- header
+    - Authorization : Bearer {accessToken}
+- params
+    - shopId: 상점ID
+- body
+    - purchaseQuantity: 구매 수량
+
+### req example
+
+- params
+  - adfc1706-a7f6-4c6e-a006-1733a854afbb
+- body
+{
+	purchaseQuantity: 2
+}
+
+### res template
+
+- data
+    - grade: 구매한  포토카드 등급
+    - name: 구매한 포토카드 이름
+    - purchaseQuantity: 구매 수량
+
+### res example
+
+- data : {
+	grade: 5,
+	name: "우리집 앞마당",
+	purchaseQuantity: 2
+}

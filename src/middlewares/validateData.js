@@ -5,6 +5,9 @@ import { SignUpUser, SignInUser } from "../structs/user-struct.js";
 import shopService from "../services/shopService.js";
 import userService from "../services/user-service.js";
 import ownRepository from "../repositories/ownRepository.js";
+import exchangeRepository from "../repositories/exchange-repository.js";
+import shopRepository from "../repositories/shopRepository.js";
+import { exchangeCardShopAndUserSelect } from "../repositories/selects/exchange-select.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -194,4 +197,87 @@ export async function validatePurchaseConditions(req, res, next) {
   req.body.ownsCard = ownsCard;
 
   return next();
+}
+
+export async function validateExchangeAndOwner(req, res, next) {
+  const { exchangeId } = req.params;
+  const userId = req.session.userId;
+
+  // exchange 테이블이 존재하는지 확인
+  const exchange = await exchangeRepository.findUniqueOrThrowtData({
+    where: {
+      id: exchangeId,
+    },
+    select: exchangeCardShopAndUserSelect,
+  });
+
+  const exchangeCardId = exchange.Card.id;
+  const shopId = exchange.shopId;
+  const buyerId = exchange.userId;
+
+  // 상점 오너인지 확인
+  const isOwner = await shopRepository.findFirstData({
+    where: {
+      userId,
+      id: shopId,
+    },
+  });
+
+  if (isOwner === null || isOwner === undefined) {
+    const error = new Error("You cannot purchase your own product.");
+    error.code = 400;
+    next(error);
+  }
+
+  req.body.exchangeData = exchange;
+  req.body.exchangeCardId = exchangeCardId;
+  req.body.shopId = shopId;
+  req.body.buyerId = buyerId;
+
+  next();
+}
+
+export async function validateExchangeConditions(req, res, next) {
+  const userId = req.session.userId;
+  const { exchangeCardId, shopId, buyerId } = req.body;
+
+  // 품절인지 확인
+  const shop = await shopRepository.findUniqueOrThrowtData({
+    where: { id: shopId },
+  });
+
+  if (shop.remainingQuantity === 0) {
+    const error = new Error("This product is sold out.");
+    error.code = 400;
+    return next(error);
+  }
+
+  const shopCardId = shop.cardId;
+
+  // 판매자가 제시된 카드를 보유히는지 확인하는 코드
+  const hasSellerExchangeCard = await ownRepository.findFirstData({
+    where: {
+      cardId: exchangeCardId,
+      userId,
+    },
+  });
+
+  // 구매자가 교환을 시도했던 상점 카드 보유 확인
+  const hasBuyershopCard = await ownRepository.findFirstData({
+    where: {
+      cardId: shopCardId,
+      userId: buyerId,
+    },
+  });
+
+  req.body.shopCardId = shopCardId;
+  req.body.hasSellerExchangeCard = hasSellerExchangeCard;
+  req.body.hasBuyershopCard = hasBuyershopCard;
+
+  next();
+}
+
+
+export async function name(params) {
+  
 }
