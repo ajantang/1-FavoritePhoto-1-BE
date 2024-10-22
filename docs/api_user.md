@@ -284,31 +284,33 @@
   ]
   }
 
-## GET /users/profile
+## GET /users/my-info
 
 ### req template
 
-- description : 사용자 프로필(닉네임) 조회
-- path : /users/profile
+- description : 사용자 정보 조회 : point 확인용
+- path : /users/my-info
 - method : GET
-- headers :
-  - Authorization : Bearer {accessToken}
 
 ### req example
 
-- headers :
-  - Authorization : Bearer {accessToken}
-
 ### res template
 
-- data : {
-  nickname : 닉네임
-  }
+- data
+  - id : 사용자 아이디(FE에서 필요없다면 삭제 예정)
+  - email : 사용자 이메일
+  - nickname : 사용자 닉네임
+  - point : 사용자 포인트
+  - createdAt : 아이디 생성 시간
 
 ### res example
 
 - data : {
-  nickname : 코드잇16
+  "id": "fe192f26-7afa-4b85-a6f8-5dc8469a8aee",
+  "email": "codeit06@codeit.com",
+  "nickname": "코드잇06",
+  "point": 0,
+  "createdAt": "2024-10-17T01:19:58.198Z"
   }
 
 ## GET /users/check-email

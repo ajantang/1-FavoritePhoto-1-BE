@@ -64,7 +64,7 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-GET http://localhost:3000/users/my-cards/exchange
+GET http://localhost:3000/users/exchange
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
@@ -117,9 +117,11 @@ POST https://one-favoritephoto-1-be.onrender.com/auth/sign-in
 Content-Type : application/json
 
 {
-  "email" : "codeit05@codeit.com",
-  "password" : "!codeit05"
+  "email" : "codeit04@codeit.com",
+  "password" : "!codeit04"
 }
 
 ###
-POST http://localhost:3000/auth/sign-out
+POST https://one-favoritephoto-1-be.onrender.com/auth/sign-out
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE

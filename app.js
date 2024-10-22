@@ -1,6 +1,5 @@
 import cors from "cors";
 import express from "express";
-import dotenv from "dotenv";
 import session from "express-session";
 
 import adminRouter from "./src/controllers/admin-controller.js";
@@ -18,8 +17,13 @@ import {
 } from "./src/middlewares/error.js";
 
 import { EXPIRE_TIME } from "./src/constants/session.js";
+import {
+  SESSION_SECRET,
+  SESSION_SECURE,
+  SESSION_SAMESITE,
+  PORT,
+} from "./config.js";
 
-dotenv.config();
 export const app = express();
 
 app.use(
@@ -28,16 +32,17 @@ app.use(
     credentials: true,
   })
 );
+app.set("trust proxy", 1);
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     rolling: true,
     cookie: {
       httpOnly: true,
-      secure: false, // 개발용
-      sameSite: "lax", // 개발용
+      secure: SESSION_SECURE,
+      sameSite: SESSION_SAMESITE,
       maxAge: EXPIRE_TIME,
     },
   })
@@ -57,4 +62,4 @@ app.use(logErrors);
 app.use(clientErrorHandler);
 app.use(serverErrorHandler);
 
-app.listen(3000, () => console.log("Server is listening"));
+app.listen(PORT, () => console.log(`Server is listening port : ${PORT}`));
