@@ -22,7 +22,7 @@ async function getShopListByQuery(filter) {
     skip,
     take,
     where,
-    // select: shopListSelect,
+    select: shopListSelect,
   });
 }
 
