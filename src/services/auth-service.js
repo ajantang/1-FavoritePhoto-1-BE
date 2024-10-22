@@ -19,16 +19,6 @@ async function createSession({ sessionId, userId, sessionData }) {
     expires,
     data: sessionData,
   });
-
-  if (session) {
-    console.log("☆session");
-    console.log(session);
-  }
-
-  if (session?.userId) {
-    console.log("☆session.userId");
-    console.log(session.userId);
-  }
 }
 
 async function deleteSession(sessionId) {

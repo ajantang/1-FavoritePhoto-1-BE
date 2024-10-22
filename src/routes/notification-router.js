@@ -6,7 +6,6 @@ import { authMiddleware } from "../middlewares/auth.js";
 const notificationRouter = express.Router();
 
 notificationRouter
-  .get("/", authMiddleware, notificationController.getUserNotification)
   .patch(
     "/:notificationId",
     authMiddleware,

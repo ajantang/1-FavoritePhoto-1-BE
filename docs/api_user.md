@@ -366,3 +366,53 @@
 - data : {
   isPossible : true
   }
+
+## GET /notifications
+
+### req template
+
+- description : 포토 카드 판매 내역/판매 매진/교환 요청/교환 성사 등의 알림 목록 조회
+- path : /users/notifications
+- method : GET
+- query
+  - pageNum : 페이지 넘버(페이지네이션)
+  - pageSize : 페이지 사이즈(페이지네이션)
+
+### req example
+
+- query
+  pageNum=1&&pageSize=2
+
+### res template
+
+- data
+  - totalCount : 15,
+  - notifications
+    - {알림 배열}
+      - id : 알림 id
+      - shopId : 관련 상점 id(null 허용. 상점에 관련된 알림이 많아서, 혹시 FE에서 상점 id가 필요할 수 있어서 추가)
+      - message : 알림 메세지
+      - check : 알림 확인 여부
+      - timeDifference : 알림 목록 조회 호출 시간 - 알림 생성 시간 (millisec)
+
+### res example
+
+- data : {
+  "totalCount": 3,
+  "notifications": [
+  {
+  "id": "e479a557-fc3a-46d9-b775-8c3d1711258e",
+  "shopId": "8d444419-89d6-46b7-987c-89fc12f231aa",
+  "message": "알림 테스트1",
+  "check": false,
+  "timeDifference": 2961749
+  },
+  {
+  "id": "f411e32a-5a6b-4200-98f0-c548f6f7a376",
+  "shopId": "8d444419-89d6-46b7-987c-89fc12f231aa",
+  "message": "알림 테스트2",
+  "check": false,
+  "timeDifference": 2961749
+  }
+  ]
+  }

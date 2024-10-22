@@ -1,20 +1,5 @@
 import notificationService from "../services/notification-service.js";
 
-async function getUserNotification(req, res, next) {
-  try {
-    const userId = req.session.userId;
-    const query = req.query;
-    const result = await notificationService.getUserNotification({
-      userId,
-      query,
-    });
-
-    return res.status(200).send(result);
-  } catch (err) {
-    return next(err);
-  }
-}
-
 async function checkNotification(req, res, next) {
   try {
     const { notificationId } = req.params;
@@ -38,7 +23,6 @@ async function deleteNotification(req, res, next) {
 }
 
 export default {
-  getUserNotification,
   checkNotification,
   deleteNotification,
 };
