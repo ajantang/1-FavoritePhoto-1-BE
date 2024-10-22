@@ -7,6 +7,7 @@ import { exchangeMapper } from "../controllers/mappers/exchange-mapper.js";
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shopRepository.js";
+import { exchangeDelete } from "../utils/sellout-util.js";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {
@@ -56,6 +57,7 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
     shopId,
     exchangeCardId,
     buyerId,
+    shopDetailData,
     shopCardId,
     hasSellerExchangeCard,
     hasBuyershopCard,
@@ -121,6 +123,11 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
         id: exchangeId,
       });
 
+      // 매진 시 관련 exchange 삭제
+      if (shopDetailData.remainingQuantity === 1) {
+        await exchangeDelete(shopDetailData);
+      }
+
       const responseMappeing = exchangeMapper(exchangeData);
 
       return {
@@ -135,7 +142,7 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
   });
 }
 
-async function refuseByExchange(userId, exchangeId, reqBody) {
+async function refuseOrCancelExchange(exchangeId, reqBody) {
   const { exchangeData, exchangeCardId, buyerId } = reqBody;
 
   return await prisma.$transaction(async () => {
@@ -176,5 +183,5 @@ export default {
   checkExchangeByUser,
   createExchange,
   acceptByExchange,
-  refuseByExchange,
+  refuseOrCancelExchange,
 };

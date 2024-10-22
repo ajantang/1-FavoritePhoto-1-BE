@@ -71,7 +71,13 @@ POST http://localhost:3000/auth/sign-out
 
 
 ###
-POST http://localhost:3000/exchange/87065494-38be-48b6-8efd-1d7b695e9cd9/accept
+POST http://localhost:3000/exchange/d4ba8021-fb6c-4862-a53e-0bb01ab12003/accept
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-POST http://localhost:3000/exchange/d3291be5-2080-4b6c-82c8-dc101dbd9175/refuse
+POST http://localhost:3000/exchange/d4ba8021-fb6c-4862-a53e-0bb01ab12003/refuse
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
+DELETE http://localhost:3000/exchange/d4ba8021-fb6c-4862-a53e-0bb01ab12003
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE

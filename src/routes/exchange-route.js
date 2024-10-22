@@ -2,6 +2,7 @@ import express from "express";
 import {
   validateExchangeAndOwner,
   validateExchangeConditions,
+  validateExchangeCreator,
 } from "../middlewares/validateData.js";
 import exchangeController from "../controllers/exchange-controller.js";
 
@@ -17,6 +18,10 @@ exchangeRouter
 
 exchangeRouter
   .route("/:exchangeId/refuse")
-  .post(validateExchangeAndOwner, exchangeController.refuseByExchange);
+  .post(validateExchangeAndOwner, exchangeController.refuseOrCancelExchange);
+
+exchangeRouter
+  .route("/:exchangeId")
+  .delete(validateExchangeCreator, exchangeController.refuseOrCancelExchange);
 
 export default exchangeRouter;
