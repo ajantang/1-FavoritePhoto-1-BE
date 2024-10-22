@@ -158,7 +158,6 @@ async function refuseByExchange(userId, exchangeId, reqBody) {
           quantity: { increment: 1 },
         },
       });
-      console.log(own)
 
       const responseMappeing = exchangeMapper(exchangeData);
 
