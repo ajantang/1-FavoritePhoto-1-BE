@@ -45,23 +45,23 @@ export async function validateCreateShopData(req, res, next) {
 }
 
 export function validateSignUpUserData(req, res, next) {
-  try {
-    assert(req.body, SignUpUser);
+  // try {
+  assert(req.body, SignUpUser);
 
-    return next();
-  } catch (err) {
-    return next(err);
-  }
+  return next();
+  // } catch (err) {
+  //   return next(err);
+  // }
 }
 
 export function validateSignInUserData(req, res, next) {
-  try {
-    assert(req.body, SignInUser);
+  // try {
+  assert(req.body, SignInUser);
 
-    return next();
-  } catch (err) {
-    return next(err);
-  }
+  return next();
+  // } catch (err) {
+  //   return next(err);
+  // }
 }
 
 export async function validateUpdaeShopData(req, res, next) {
@@ -279,6 +279,7 @@ export async function validateExchangeConditions(req, res, next) {
 
   next();
 }
+
 
 export async function validateExchangeCreator(req, res, next) {
   const { exchangeId } = req.params;

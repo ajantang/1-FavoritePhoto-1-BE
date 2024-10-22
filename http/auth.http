@@ -3,9 +3,9 @@ POST http://localhost:3000/auth/sign-up
 Content-Type : application/json
 
 {
-    "email" : "songyoungsub@codeit.com",
-    "password" : "!codeit01",
-    "nickname" : "코드잇02"
+    "email" : "codeit05@codeit.com",
+    "password" : "!codeit05",
+    "nickname" : "코드잇99"
 }
 
 ###

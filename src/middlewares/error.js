@@ -1,4 +1,5 @@
 import { Prisma } from "@prisma/client";
+import { CUSTOM_ERROR_INFO } from "../constants/error.js";
 
 export function logErrors(err, req, res, next) {
   console.error(err);
@@ -12,10 +13,10 @@ export function clientErrorHandler(err, req, res, next) {
     // 유니크 키 제약 위반
     if (err.code === "P2002") {
       res.status(409).send({
-        message: "Unique constraint failed on the field: " + err.meta.target,
+        message: CUSTOM_ERROR_INFO[40900] + ": " + err.meta.target,
       });
     } else if (err.code === "P2025") {
-      res.status(404).send({ message: "Not Found" });
+      res.status(404).send({ message: CUSTOM_ERROR_INFO[40400] });
     } else {
       res.status(400).send({ message: err.message });
     }
@@ -23,7 +24,9 @@ export function clientErrorHandler(err, req, res, next) {
     err instanceof Prisma.PrismaClientValidationError ||
     err.name === "StructError"
   ) {
-    res.status(400).send({ message: "Validation error: " + err.message });
+    res
+      .status(400)
+      .send({ message: CUSTOM_ERROR_INFO[40099] + ": " + err.message });
   } else {
     next(err);
   }

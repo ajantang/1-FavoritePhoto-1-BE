@@ -1,5 +1,5 @@
 import authService from "../services/auth-service.js";
-import { createCustomError } from "../lib/custom-error.js";
+import { createCustomError, CustomError } from "../lib/custom-error.js";
 
 async function signUp(req, res, next) {
   try {
@@ -18,7 +18,7 @@ async function signIn(req, res, next) {
     const userInfo = await authService.signIn({ email, password });
 
     if (!userInfo) {
-      return next(new createCustomError(400));
+      return next(CustomError(40098));
     }
 
     req.session.userId = userInfo.id;
