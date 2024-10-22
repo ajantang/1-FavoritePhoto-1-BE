@@ -12,10 +12,8 @@ async function acceptByExchange(req, res, next) {
 }
 
 async function refuseByExchange(req, res, next) {
-  const userId = req.session.userId;
   const { exchangeId } = req.params;
   const refuseExchange = await exchangeService.refuseByExchange(
-    userId,
     exchangeId,
     req.body
   );

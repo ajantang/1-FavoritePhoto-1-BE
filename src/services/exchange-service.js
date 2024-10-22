@@ -135,7 +135,7 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
   });
 }
 
-async function refuseByExchange(userId, exchangeId, reqBody) {
+async function refuseByExchange(exchangeId, reqBody) {
   const { exchangeData, exchangeCardId, buyerId } = reqBody;
 
   return await prisma.$transaction(async () => {

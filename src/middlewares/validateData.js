@@ -277,7 +277,40 @@ export async function validateExchangeConditions(req, res, next) {
   next();
 }
 
+export async function validateExchangeCreator(req, res, next) {
+  const { exchangeId } = req.params;
+  const userId = req.session.userId;
 
-export async function name(params) {
-  
+  // exchange 테이블이 존재하는지 확인
+  const exchange = await exchangeRepository.findUniqueOrThrowtData({
+    where: {
+      id: exchangeId,
+    },
+    select: exchangeCardShopAndUserSelect,
+  });
+
+  const exchangeCardId = exchange.Card.id;
+  const shopId = exchange.shopId;
+  const buyerId = exchange.userId;
+
+  // 교환 희망자인지 확인
+  const exchangeCreator = await exchangeRepository.findFirstData({
+    where: {
+      userId,
+      id: exchangeId,
+    },
+  });
+
+  if (exchangeCreator === null || exchangeCreator === undefined) {
+    const error = new Error("You cannot exchange with a request you created.");
+    error.code = 400;
+    next(error);
+  }
+
+  req.body.exchangeData = exchange;
+  req.body.exchangeCardId = exchangeCardId;
+  req.body.shopId = shopId;
+  req.body.buyerId = buyerId;
+
+  next();
 }
