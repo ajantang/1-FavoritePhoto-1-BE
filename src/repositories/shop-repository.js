@@ -5,7 +5,7 @@ import {
   shopDetailSelect,
   shopListSelect,
   shopOwnerSelect,
-} from "../services/selects/shopSelect.js";
+} from "../services/selects/shop-select.js";
 
 async function createShop(createData) {
   return await prisma.shop.create({

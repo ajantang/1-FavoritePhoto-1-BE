@@ -5,7 +5,7 @@ import {
   createShopMapper,
   getShopDetailMapper,
   getShopListMapper,
-} from "../services/mappers/shopMapper.js";
+} from "../services/mappers/shop-mapper.js";
 
 async function createShop(req, res, next) {
   const shop = await shopService.createShop(req.body);
