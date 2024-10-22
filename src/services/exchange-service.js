@@ -3,7 +3,7 @@ import ownRepository from "../repositories/own-repository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import { ownCardSelect } from "../services/selects/own-select.js";
 import { exchangeCardShopSelect } from "../services/selects/exchange-select.js";
-import { exchangeMapper } from "../controllers/mappers/exchange-mapper.js";
+import { exchangeMapper } from "./mappers/exchange-mapper.js";
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shop-repository.js";

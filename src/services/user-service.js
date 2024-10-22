@@ -8,7 +8,7 @@ import {
   myCardListMapper,
   myShopListMapper,
 } from "./mappers/card-mapper.js";
-import { myExchangeListMapper } from "../controllers/mappers/exchange-mapper.js";
+import { myExchangeListMapper } from "./mappers/exchange-mapper.js";
 import {
   createCardListFilterByQuery,
   createOrderBy,
