@@ -1,5 +1,5 @@
 import { cardDetailSelect, cardSelect } from "./card-select.js";
-import { exchangeCardInfo } from "./exchange-select.js";
+import { exchangeCardInfo, exchangeCardShopAndUserSelect } from "./exchange-select.js";
 
 export const shopSelect = {
   id: true,
@@ -35,7 +35,7 @@ export const shopListSelect = {
 export const shopDetailSelect = {
   ...shopCreateSelect,
   Exchanges: {
-    select: exchangeCardInfo,
+    select: exchangeCardShopAndUserSelect,
   },
 };
 

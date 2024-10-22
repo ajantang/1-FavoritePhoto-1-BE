@@ -67,7 +67,8 @@ async function findFirstData({ where, select }) {
 }
 
 async function findUniqueOrThrowtData({ where, select }) {
-  return await prisma.exchange.findFirstOrThrow({ where, select });
+  return await prisma.exchange.findUniqueOrThrow({ where, select });
+
 }
 
 async function countData(where) {
@@ -126,6 +127,10 @@ async function countGroupCountByGrade({ userId, where }) {
   return counts;
 }
 
+async function deleteManyData(where) {
+  await prisma.exchange.deleteMany({ where });
+}
+
 export default {
   checkExchangeByUser,
   findMyExchangeList,
@@ -140,4 +145,5 @@ export default {
   updateData,
   deleteData,
   countGroupCountByGrade,
+  deleteManyData,
 };

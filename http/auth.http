@@ -28,9 +28,9 @@ POST https://one-favoritephoto-1-be.onrender.com/auth/sign-up
 Content-Type : application/json
 
 {
-    "email" : "codeit06@codeit.com",
+    "email" : "songyoungsub@codeit.com",
     "password" : "!codeit06",
-    "nickname" : "코드잇06"
+    "nickname" : "코드잇11"
 }
 
 ###
@@ -38,8 +38,8 @@ POST https://one-favoritephoto-1-be.onrender.com/auth/sign-in
 Content-Type : application/json
 
 {
-    "email" : "codeit04@codeit.com",
-    "password" : "!codeit04"
+    "email" : "songyoungsub@codeit.com",
+    "password" : "!codeit06"
 }
 
 ###
