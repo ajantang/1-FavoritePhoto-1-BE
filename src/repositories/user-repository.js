@@ -1,5 +1,8 @@
 import prisma from "./prisma.js";
-import { userSelect, userPasswordSelect } from "./selects/user-select.js";
+import {
+  userSelect,
+  userPasswordSelect,
+} from "../services/selects/user-select.js";
 
 async function createUser({ email, encryptedPassword, nickname }) {
   return await prisma.user.create({

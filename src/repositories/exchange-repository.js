@@ -1,5 +1,5 @@
 import prisma from "./prisma.js";
-import { exchangeCardInfo } from "./selects/exchange-select.js";
+import { exchangeCardInfo } from "../services/selects/exchange-select.js";
 
 async function checkExchangeByUser(filter) {
   return await prisma.exchange.findMany({
@@ -68,7 +68,6 @@ async function findFirstData({ where, select }) {
 
 async function findUniqueOrThrowtData({ where, select }) {
   return await prisma.exchange.findUniqueOrThrow({ where, select });
-
 }
 
 async function countData(where) {

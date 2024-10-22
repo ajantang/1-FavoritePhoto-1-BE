@@ -1,6 +1,6 @@
 import prisma from "./prisma.js";
 import { createCardListFilterByQuery } from "../utils/query-util.js";
-import { ownSelect, ownCardSelect } from "./selects/own-select.js";
+import { ownSelect, ownCardSelect } from "../services/selects/own-select.js";
 
 async function getByFilter(filter) {
   return await prisma.own.findFirst({
@@ -137,7 +137,6 @@ async function findFirstData({ where, select }) {
 
 async function findUniqueOrThrowtData({ where, select }) {
   return await prisma.own.findUniqueOrThrow({ where, select });
-
 }
 
 async function countData(where) {
