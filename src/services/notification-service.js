@@ -1,6 +1,6 @@
 import notificationRepository from "../repositories/notification-repository.js";
 import { createOrderBy } from "../utils/query-util.js";
-import { notificationSelect } from "../repositories/selects/notification-select.js";
+import { notificationSelect } from "./selects/notification-select.js";
 import { myNotificationMapper } from "./mappers/notification-mapper.js";
 
 async function getUserNotification({ userId, query }) {

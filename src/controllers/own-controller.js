@@ -1,4 +1,4 @@
-import ownRepository from "../repositories/ownRepository.js";
+import ownRepository from "../repositories/own-repository.js";
 import { ownSelect } from "../repositories/selects/own-select";
 
 async function isValidateQuantity({ userId, cardId, quantity }) {

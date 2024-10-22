@@ -1,5 +1,8 @@
 import prisma from "./prisma.js";
-import { cardSelect, cardDetailSelect } from "./selects/card-select.js";
+import {
+  cardSelect,
+  cardDetailSelect,
+} from "../services/selects/card-select.js";
 
 async function createCard({
   name,

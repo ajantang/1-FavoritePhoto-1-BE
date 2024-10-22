@@ -1,4 +1,7 @@
-import { cardSelect, cardDetailSelect } from "./card-select.js";
+import {
+  cardSelect,
+  cardDetailSelect,
+} from "../../services/selects/card-select.js";
 
 export const ownSelect = {
   id: true,

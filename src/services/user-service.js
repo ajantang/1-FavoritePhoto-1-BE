@@ -1,13 +1,13 @@
 import cardRepository from "../repositories/card-repository.js";
-import ownRepository from "../repositories/ownRepository.js";
-import shopRepository from "../repositories/shopRepository.js";
+import ownRepository from "../repositories/own-repository.js";
+import shopRepository from "../repositories/shop-repository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import prisma from "../repositories/prisma.js";
 import {
   myCardMapper,
   myCardListMapper,
   myShopListMapper,
-} from "../controllers/mappers/card-mapper.js";
+} from "./mappers/card-mapper.js";
 import { myExchangeListMapper } from "../controllers/mappers/exchange-mapper.js";
 import {
   createCardListFilterByQuery,

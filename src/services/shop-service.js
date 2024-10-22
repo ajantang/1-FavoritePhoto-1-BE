@@ -1,14 +1,11 @@
 import card from "../constants/card.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
-import ownRepository from "../repositories/ownRepository.js";
+import ownRepository from "../repositories/own-repository.js";
 import prisma from "../repositories/prisma.js";
 import purchaseRepository from "../repositories/purchase-repository.js";
-import shopRepository from "../repositories/shopRepository.js";
+import shopRepository from "../repositories/shop-repository.js";
 import userRepository from "../repositories/user-repository.js";
-import {
-  basicCardMapper,
-  myCardMapper,
-} from "../controllers/mappers/card-mapper.js";
+import { basicCardMapper, myCardMapper } from "./mappers/card-mapper.js";
 import { ownCardListSelect } from "../repositories/selects/own-select.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
 

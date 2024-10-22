@@ -1,11 +1,11 @@
 import exchangeService from "../services/exchange-service.js";
-import ownService from "../services/ownService.js";
-import shopService from "../services/shopService.js";
+import ownService from "../services/own-service.js";
+import shopService from "../services/shop-service.js";
 import {
   createShopMapper,
   getShopDetailMapper,
   getShopListMapper,
-} from "./mappers/shopMapper.js";
+} from "../services/mappers/shopMapper.js";
 
 async function createShop(req, res, next) {
   const shop = await shopService.createShop(req.body);
@@ -101,7 +101,7 @@ async function createExchange(req, res, next) {
 async function calculateTotalQuantity(req, res, next) {
   const userId = req.session.userId;
   const shopData = req.body.shopData;
-  console.log(1)
+  console.log(1);
 
   const result = await shopService.calculateTotalQuantity(userId, shopData);
 
@@ -116,5 +116,5 @@ export default {
   purchaseController,
   deleteShop,
   createExchange,
-  calculateTotalQuantity
+  calculateTotalQuantity,
 };

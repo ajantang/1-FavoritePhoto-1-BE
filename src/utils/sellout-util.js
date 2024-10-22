@@ -1,3 +1,7 @@
+import exchangeRepository from "../repositories/exchange-repository.js";
+import ownRepository from "../repositories/own-repository.js";
+
+
 export async function exchangeDelete(shopDetailDataWithExchange) {
 
   const exchangesCardInfo = shopDetailDataWithExchange.Exchanges;
