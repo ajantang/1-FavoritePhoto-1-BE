@@ -16,8 +16,8 @@ import {
   createGenreGradeKeywordWhere,
 } from "../utils/query-util.js";
 import userRepository from "../repositories/user-repository.js";
-import { userSelect } from "../repositories/selects/user-select.js";
-import { exchangeCardShopSelect } from "../repositories/selects/exchange-select.js";
+import { userSelect } from "../services/selects/user-select.js";
+import { exchangeCardShopSelect } from "../services/selects/exchange-select.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
