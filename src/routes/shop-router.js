@@ -1,6 +1,7 @@
 import express from "express";
 import shopController from "../controllers/shop-controller.js";
 import {
+  checkShopCreator,
   validateCreateShopData,
   validatePurchaseConditions,
   validateUpdaeShopData,
@@ -41,6 +42,14 @@ shopRouter
     authMiddleware,
     validatePurchaseConditions,
     shopController.purchaseController
+  );
+
+shopRouter
+  .route("/:shopId/quantity")
+  .get(
+    authMiddleware,
+    checkShopCreator,
+    shopController.calculateTotalQuantity
   );
 
 export default shopRouter;

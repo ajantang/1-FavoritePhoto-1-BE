@@ -317,3 +317,25 @@ export async function validateExchangeCreator(req, res, next) {
 
   next();
 }
+
+export async function checkShopCreator(req, res, next) {
+  const { shopId } = req.params;
+  const userId = req.session.userId;
+
+  const isOwner = await shopRepository.findFirstData({
+    where: {
+      userId,
+      id: shopId,
+    },
+  });
+
+  if (isOwner === null || isOwner === undefined) {
+    const error = new Error("You cannot purchase your own product.");
+    error.code = 400;
+    return next(error);
+  }
+
+  req.body.shopData = isOwner;
+
+  next()
+}

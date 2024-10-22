@@ -1,6 +1,6 @@
-export async function exchangeDelete(shopDetailData) {
+export async function exchangeDelete(shopDetailDataWithExchange) {
 
-  const exchangesCardInfo = shopDetailData.Exchanges;
+  const exchangesCardInfo = shopDetailDataWithExchange.Exchanges;
   const exchangeDeleteData = await Promise.all(
     exchangesCardInfo.map(async (exchangeInfo) => {
       const userId = exchangeInfo.userId;
@@ -40,6 +40,6 @@ export async function exchangeDelete(shopDetailData) {
     })
   );
   await exchangeRepository.deleteManyData({
-    shopId: shopDetailData.id,
+    shopId: shopDetailDataWithExchange.id,
   });
 }

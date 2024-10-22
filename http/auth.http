@@ -13,7 +13,7 @@ POST http://localhost:3000/auth/sign-in
 Content-Type : application/json
 
 {
-    "email" : "songyoungsub@codeit.com",
+    "email" : "codeit01@codeit.com",
     "password" : "!codeit01"
 }
 
@@ -39,7 +39,7 @@ Content-Type : application/json
 
 {
     "email" : "songyoungsub@codeit.com",
-    "password" : "!codeit06"
+    "password" : "!codeit0"
 }
 
 ###

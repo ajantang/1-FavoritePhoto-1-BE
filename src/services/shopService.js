@@ -285,6 +285,18 @@ async function deleteShop({ userId, shopId }) {
   });
 }
 
+async function calculateTotalQuantity(userId, shopData) {
+  const own = await ownRepository.findFirstData({
+    where: {
+      userId,
+      cardId: shopData.cardId,
+    },
+  });
+  const userStock = own ? own.quantity : 0;
+  const totalQuantity = userStock + shopData.remainingQuantity;
+  return { totalQuantity };
+}
+
 export default {
   createShop,
   getShopListByQuery,
@@ -294,4 +306,5 @@ export default {
   updateShop,
   purchaseService,
   deleteShop,
+  calculateTotalQuantity,
 };
