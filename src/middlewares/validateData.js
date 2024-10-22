@@ -9,6 +9,7 @@ import exchangeRepository from "../repositories/exchange-repository.js";
 import shopRepository from "../repositories/shop-repository.js";
 import { exchangeCardShopAndUserSelect } from "../repositories/selects/exchange-select.js";
 import { shopDetailSelect } from "../services/selects/shop-select.js";
+import { CustomError } from "../lib/custom-error.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -21,12 +22,7 @@ export async function validateCreateShopData(req, res, next) {
   const own = await ownService.getByFilter(filter);
 
   if (own.quantity < salesQuantity) {
-    const error = new Error(
-      "The quantity requested for sale exceeds the available stock."
-    );
-    error.code = 400;
-
-    return next(error);
+    return next(CustomError(40001));
   }
 
   const newReqBody = {
@@ -45,23 +41,15 @@ export async function validateCreateShopData(req, res, next) {
 }
 
 export function validateSignUpUserData(req, res, next) {
-  // try {
   assert(req.body, SignUpUser);
 
   return next();
-  // } catch (err) {
-  //   return next(err);
-  // }
 }
 
 export function validateSignInUserData(req, res, next) {
-  // try {
   assert(req.body, SignInUser);
 
   return next();
-  // } catch (err) {
-  //   return next(err);
-  // }
 }
 
 export async function validateUpdaeShopData(req, res, next) {
@@ -73,12 +61,9 @@ export async function validateUpdaeShopData(req, res, next) {
 
   // 등록한 사람이 아닐 시
   if (isOwner === null || isOwner === undefined) {
-    const error = new Error(
-      "You do not have permission to access this product."
-    );
-    error.code = 403;
-    return next(error);
+    return next(CustomError(40302));
   }
+
   const newReqBody = { ...rest };
   let ownId;
   let ownUpdateQuantity;
@@ -109,9 +94,7 @@ export async function validateUpdaeShopData(req, res, next) {
 
     // 총 보유량 보다 수정할 수량이 많을 경우
     if (salesQuantity > userTotalStock) {
-      const error = new Error("Sale quantity exceeds available stock.");
-      error.code = 400;
-      return next(error);
+      return next(CustomError(40002));
 
       // 총 보유량과 수정할 수량이 같을 경우 own 삭제
     } else if (salesQuantity === userTotalStock) {
@@ -125,9 +108,7 @@ export async function validateUpdaeShopData(req, res, next) {
     newReqBody.remainingQuantity = salesQuantity;
     newReqBody.totalQuantity = isOwner.totalQuantity + addQuantity;
   } else if (salesQuantity === 0) {
-    const error = new Error("Action unsuccessful: No records were updated.");
-    error.code = 400;
-    return next(error);
+    return next(CustomError(40002));
   }
 
   req.body = newReqBody;
@@ -155,9 +136,7 @@ export async function validatePurchaseConditions(req, res, next) {
   // 상점 등록자인지 확인
   const isOwner = await shopService.checkUserShopOwner(userId, shopId);
   if (isOwner) {
-    const error = new Error("You cannot purchase your own product.");
-    error.code = 400;
-    return next(error);
+    return next(CustomError(40398));
   }
 
   const shop = await shopService.getShopDetailById(shopId);
@@ -166,15 +145,11 @@ export async function validatePurchaseConditions(req, res, next) {
 
   // 매진 여부 확인
   if (remainingQuantity === 0) {
-    const error = new Error("This product is sold out.");
-    error.code = 400;
-    return next(error);
+    return next(CustomError(40003));
 
     // 구매량과 잔여 수량 대조
   } else if (remainingQuantity < purchaseQuantity) {
-    const error = new Error("Insufficient stock for this product.");
-    error.code = 400;
-    return next(error);
+    return next(CustomError(40002));
   }
 
   const user = await userService.getUserInfoByUserId(userId);
@@ -182,9 +157,7 @@ export async function validatePurchaseConditions(req, res, next) {
 
   // 총 판매가와 보유 포인트 대조
   if (totalPrice > user.point) {
-    const error = new Error("Insufficient points to complete the purchase.");
-    error.code = 402;
-    return next(error);
+    return next(CustomError(40399));
   }
 
   // 구매자가 해당 카드를 소유하는지 확인
@@ -225,9 +198,7 @@ export async function validateExchangeAndOwner(req, res, next) {
   });
 
   if (isOwner === null || isOwner === undefined) {
-    const error = new Error("You cannot purchase your own product.");
-    error.code = 400;
-    next(error);
+    next(CustomError(40398));
   }
 
   req.body.exchangeData = exchange;
@@ -249,9 +220,7 @@ export async function validateExchangeConditions(req, res, next) {
   });
 
   if (shop.remainingQuantity === 0) {
-    const error = new Error("This product is sold out.");
-    error.code = 400;
-    return next(error);
+    return next(CustomError(40003));
   }
 
   const shopCardId = shop.cardId;
@@ -305,9 +274,7 @@ export async function validateExchangeCreator(req, res, next) {
   });
 
   if (exchangeCreator === null || exchangeCreator === undefined) {
-    const error = new Error("You cannot exchange with a request you created.");
-    error.code = 400;
-    next(error);
+    next(CustomError(40397));
   }
 
   req.body.exchangeData = exchange;
@@ -330,9 +297,7 @@ export async function checkShopCreator(req, res, next) {
   });
 
   if (isOwner === null || isOwner === undefined) {
-    const error = new Error("You cannot purchase your own product.");
-    error.code = 400;
-    return next(error);
+    return next(CustomError(40398));
   }
 
   req.body.shopData = isOwner;
