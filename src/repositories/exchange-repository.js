@@ -126,6 +126,10 @@ async function countGroupCountByGrade({ userId, where }) {
   return counts;
 }
 
+async function deleteManyData(where) {
+  await prisma.exchange.deleteMany({ where });
+}
+
 export default {
   checkExchangeByUser,
   findMyExchangeList,
@@ -140,4 +144,5 @@ export default {
   updateData,
   deleteData,
   countGroupCountByGrade,
+  deleteManyData,
 };
