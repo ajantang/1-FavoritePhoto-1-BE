@@ -162,7 +162,6 @@ export async function validatePurchaseConditions(req, res, next) {
   const shop = await shopService.getShopDetailById(shopId);
   const { remainingQuantity } = shop;
   const updatedShopQuantity = remainingQuantity - purchaseQuantity;
-  let isSellOut = false;
 
   // 매진 여부 확인
   if (remainingQuantity === 0) {
@@ -175,11 +174,6 @@ export async function validatePurchaseConditions(req, res, next) {
     const error = new Error("Insufficient stock for this product.");
     error.code = 400;
     return next(error);
-  }
-
-  // 구매 성공 시 매진 여부
-  if (remainingQuantity === purchaseQuantity) {
-    isSellOut = true;
   }
 
   const user = await userService.getUserInfoByUserId(userId);
@@ -198,7 +192,6 @@ export async function validatePurchaseConditions(req, res, next) {
 
   req.body.sellerUserId = shop.userId;
   req.body.tradePoints = totalPrice;
-  req.body.isSellOut = isSellOut;
   req.body.updatedShopQuantity = updatedShopQuantity;
   req.body.shopDetailData = shop;
   req.body.ownsCard = ownsCard;

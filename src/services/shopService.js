@@ -5,7 +5,10 @@ import prisma from "../repositories/prisma.js";
 import purchaseRepository from "../repositories/purchase-repository.js";
 import shopRepository from "../repositories/shopRepository.js";
 import userRepository from "../repositories/user-repository.js";
-import { myCardMapper } from "../controllers/mappers/card-mapper.js";
+import {
+  basicCardMapper,
+  myCardMapper,
+} from "../controllers/mappers/card-mapper.js";
 import { ownCardListSelect } from "../repositories/selects/own-select.js";
 
 async function createShop(createData) {
@@ -189,7 +192,6 @@ async function purchaseService(id, userId, purchaseData) {
     purchaseQuantity,
     sellerUserId,
     tradePoints,
-    isSellOut,
     updatedShopQuantity,
     shopDetailData,
     ownsCard,
@@ -217,12 +219,29 @@ async function purchaseService(id, userId, purchaseData) {
       );
 
       // 매진 시 교환 신청 삭제
-      if (isSellOut) {
+      if (updatedShopQuantity === 0) {
         const exchangesCardInfo = shopDetailData.Exchanges;
         const exchangeDelete = await Promise.all(
           exchangesCardInfo.map(async (exchangeInfo) => {
             const id = exchangeInfo.id;
+            const userId = exchangeInfo.userId;
+            const cardId = exchangeInfo.Card.id;
+            const updateWhere = {
+              userId_cardId: {
+                userId,
+                cardId,
+              },
+            };
+            const updateData = {
+              quantity: {
+                increment: 1,
+              },
+            };
             await exchangeRepository.deleteByExchangeId(id);
+            await ownRepository.updateData({
+              where: { updateWhere },
+              data: { updateData },
+            });
           })
         );
       }
@@ -261,9 +280,10 @@ async function purchaseService(id, userId, purchaseData) {
         });
       }
 
+      const responseMapping = basicCardMapper(purchaserOwn);
+
       return {
-        grade: purchaserOwn.Card.grade,
-        name: purchaserOwn.Card.name,
+        ...responseMapping,
         purchaseQuantity,
       };
     } catch (e) {
