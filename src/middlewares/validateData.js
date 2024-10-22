@@ -8,6 +8,7 @@ import ownRepository from "../repositories/ownRepository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import shopRepository from "../repositories/shopRepository.js";
 import { exchangeCardShopAndUserSelect } from "../repositories/selects/exchange-select.js";
+import { shopDetailSelect } from "../repositories/selects/shopSelect.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -244,6 +245,7 @@ export async function validateExchangeConditions(req, res, next) {
   // 품절인지 확인
   const shop = await shopRepository.findUniqueOrThrowtData({
     where: { id: shopId },
+    select: shopDetailSelect,
   });
 
   if (shop.remainingQuantity === 0) {
@@ -270,6 +272,7 @@ export async function validateExchangeConditions(req, res, next) {
     },
   });
 
+  req.body.shopDetailData = shop;
   req.body.shopCardId = shopCardId;
   req.body.hasSellerExchangeCard = hasSellerExchangeCard;
   req.body.hasBuyershopCard = hasBuyershopCard;
