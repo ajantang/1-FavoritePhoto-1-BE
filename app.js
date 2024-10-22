@@ -45,6 +45,7 @@ app.use(
       secure: SESSION_SECURE,
       sameSite: SESSION_SAMESITE,
       maxAge: EXPIRE_TIME,
+      partitioned: true,
     },
   })
 );
