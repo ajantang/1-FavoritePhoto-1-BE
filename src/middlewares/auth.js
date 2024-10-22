@@ -2,7 +2,6 @@ import { createCustomError } from "../lib/custom-error.js";
 import ownRepository from "../repositories/own-repository.js";
 import shopRepository from "../repositories/shop-repository.js";
 import notificationRepository from "../repositories/notification-repository.js";
-import { ownSelect } from "../repositories/selects/own-select.js";
 
 export function authMiddleware(req, res, next) {
   if (req.session && req.session.userId) {
