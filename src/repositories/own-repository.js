@@ -25,28 +25,6 @@ async function createOwn({ cardId, userId, quantity }) {
   });
 }
 
-async function findOwnCardList({ userId, filter }) {
-  const { orderBy, skip, take, where } = filter;
-
-  return await prisma.own.findMany({
-    orderBy,
-    skip,
-    take,
-    where: { userId, ...where },
-    select: ownCardSelect,
-  });
-}
-
-async function findOwnCard({ userId, cardId }) {
-  return await prisma.own.findFirst({
-    where: {
-      userId,
-      cardId,
-    },
-    select: ownCardSelect,
-  });
-}
-
 async function getGroupCountByGrade({ userId, filter }) {
   const { where } = filter;
 
@@ -176,8 +154,6 @@ export default {
   getByFilter,
   update,
   createOwn,
-  findOwnCardList,
-  findOwnCard,
   getGroupCountByGrade,
   deleteById,
   addQuantity,

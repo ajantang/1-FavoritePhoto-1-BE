@@ -31,14 +31,41 @@ async function createCard({
   });
 }
 
-async function findMyShopCardList({}) {}
+async function createData({ data, select }) {
+  return await prisma.card.create({ data, select });
+}
 
-async function findMyRequestCardList({}) {}
+async function findFirstData({ where, select }) {
+  return await prisma.card.findFirst({ where, select });
+}
 
-async function findCard({}) {}
+async function findUniqueOrThrowtData({ where, select }) {
+  return await prisma.card.findUniqueOrThrow({ where, select });
+}
 
-async function updateCard({}) {}
+async function countData(where) {
+  return await prisma.card.count({ where });
+}
 
-async function deleteCard({}) {}
+async function findManyData({ where, select }) {
+  return await prisma.card.findMany({ where, select });
+}
 
-export default { createCard };
+async function updateData({ where, data, select }) {
+  return await prisma.card.update({ where, data, select });
+}
+
+async function deleteData(where) {
+  await prisma.card.delete({ where });
+}
+
+export default {
+  createCard,
+  createData,
+  findFirstData,
+  findUniqueOrThrowtData,
+  countData,
+  findManyData,
+  updateData,
+  deleteData,
+};
