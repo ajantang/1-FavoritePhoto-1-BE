@@ -56,10 +56,20 @@ async function getShopList(query) {
       });
       console.log(shopList);
 
-      const count = await shopRepository.conutData(filterOptions.where,);
+      const count = await shopRepository.conutData(filterOptions.where);
       console.log(count);
 
       return getShopListMapper(shopList, count);
+    } catch (e) {
+      throw e;
+    }
+  });
+}
+
+async function getShopDetail(params) {
+  return await prisma.$transaction(async () => {
+    try {
+      // 
     } catch (e) {
       throw e;
     }

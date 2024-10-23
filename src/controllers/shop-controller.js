@@ -18,7 +18,6 @@ async function getShopList(req, res, next) {
 }
 
 async function getShopDetail(req, res, next) {
-  // 보유량 + 총판매량
   const { shopId } = req.params;
   const userId = req.session?.userId || "";
   const shop = await shopService.getShopDetailById(shopId);
