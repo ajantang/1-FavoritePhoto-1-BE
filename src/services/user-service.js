@@ -18,6 +18,7 @@ import {
 import userRepository from "../repositories/user-repository.js";
 import { userSelect } from "./selects/user-select.js";
 import { exchangeCardShopSelect } from "./selects/exchange-select.js";
+import { ownCardSelect } from "./selects/own-select.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);

@@ -4,6 +4,11 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
+GET http://localhost:3000/users/my-cards
+Content-Type : application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+###
 GET http://localhost:3000/users/my-cards?genre=1&&grade=0&&pageSize=15&&pageNum=1
 Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
@@ -35,12 +40,12 @@ Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-    "cardId": "c618558f-f82a-456e-bb98-62084afc7954",
-    "salesQuantity": 2,
+    "cardId": "01f452fa-a451-4fb7-a838-188d0adfaa6a",
+    "salesQuantity": 3,
     "price": 4,
     "exchangeGrade": 1,
     "exchangeGenre": 3,
-    "exchangeDescription": "테스트 진행중2"
+    "exchangeDescription": "테스트 진행중3"
 }
 
 ###
