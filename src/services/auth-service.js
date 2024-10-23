@@ -9,18 +9,6 @@ import {
 
 import { EXPIRE_TIME } from "../constants/session.js";
 
-async function createSession({ sessionId, userId, sessionData }) {
-  const now = new Date();
-  const expires = new Date(now.getTime() + EXPIRE_TIME);
-
-  const sessionInfo = await sessionRepository.createSession({
-    sessionId,
-    userId,
-    expires,
-    data: sessionData,
-  });
-}
-
 async function deleteSession(sessionId) {
   await sessionRepository.deleteSession(sessionId);
 }
@@ -81,4 +69,4 @@ async function signIn({ email, password, session }) {
 
 async function signOut() {}
 
-export default { createSession, deleteSession, signUp, signIn, signOut };
+export default { deleteSession, signUp, signIn, signOut };
