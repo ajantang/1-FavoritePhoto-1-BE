@@ -8,10 +8,41 @@ import userRepository from "../repositories/user-repository.js";
 import { basicCardMapper, myCardMapper } from "./mappers/card-mapper.js";
 import { ownCardListSelect } from "../services/selects/own-select.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
+import { shopCreateSelect } from "./selects/shop-select.js";
+import { createShopMapper } from "./mappers/shop-mapper.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
-  return await shopRepository.createShop(rest);
+  return await prisma.$transaction(async () => {
+    try {
+      // 상점 등록
+      const shop = await shopRepository.createData({
+        data: rest,
+        select: shopCreateSelect,
+      });
+      console.log(shop);
+
+      // 보유량 감소 혹은 삭제
+      if (rest.remainingQuantity === own.quantity) {
+        const deleteOwn = await ownRepository.deleteData({ id: own.id });
+        console.log(deleteOwn);
+      } else {
+        const updateOwn = await ownRepository.updateData({
+          where: {
+            id: own.id,
+          },
+          data: {
+            quantity: { decrement: rest.remainingQuantity },
+          },
+        });
+        console.log(updateOwn);
+      }
+
+      return createShopMapper(shop);
+    } catch (e) {
+      throw e;
+    }
+  });
 }
 
 async function getShopListByQuery(query) {

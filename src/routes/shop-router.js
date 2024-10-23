@@ -46,10 +46,6 @@ shopRouter
 
 shopRouter
   .route("/:shopId/quantity")
-  .get(
-    authMiddleware,
-    checkShopCreator,
-    shopController.calculateTotalQuantity
-  );
+  .get(authMiddleware, checkShopCreator, shopController.calculateTotalQuantity);
 
 export default shopRouter;

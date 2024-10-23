@@ -4,11 +4,11 @@ Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-    "cardId": "a4055bc7-93dd-4211-ab16-0a092e1b575b",
+    "cardId": "f1058fd0-b9a0-46d0-afeb-4af59a0bf6f7",
     "salesQuantity": 1,
     "price": 4,
-    "exchangeGrade": 0,
-    "exchangeGenre": 3,
+    "exchangeGrade": 1,
+    "exchangeGenre": 2,
     "exchangeDescription": "테스트 진행중"
 }
 
