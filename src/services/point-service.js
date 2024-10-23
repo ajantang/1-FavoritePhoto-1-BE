@@ -29,7 +29,7 @@ async function openBox(userId) {
     });
   }
 
-  const userInfo = await userRepository.getUserInfoByUserId(userId);
+  const userInfo = await userRepository.getUserInfoById(userId);
 
   return myPointMapper({
     id: userId,

@@ -159,7 +159,7 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(CustomError(40002));
   }
 
-  const user = await userService.getUserInfoByUserId(userId);
+  const user = await userService.getUserInfoById(userId);
   const totalPrice = purchaseQuantity * shop.price;
 
   // 총 판매가와 보유 포인트 대조

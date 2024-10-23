@@ -177,11 +177,7 @@ async function getMyExchangeList({ userId, query }) {
   return myExchangeListMapper({ counts, list });
 }
 
-async function getUserInfoByUserId(id) {
-  return await userRepository.getUserInfoByUserId(id);
-}
-
-async function getMyInfo(id) {
+async function getUserInfoById(id) {
   const where = { id };
 
   return await userRepository.findFirstData({ where, select: userSelect });
@@ -193,6 +189,5 @@ export default {
   createMyCard,
   getMyShopList,
   getMyExchangeList,
-  getUserInfoByUserId,
-  getMyInfo,
+  getUserInfoById,
 };

@@ -74,7 +74,7 @@ async function getMyExchangeList(req, res, next) {
 async function getMyInfo(req, res, next) {
   try {
     const userId = req.session.userId;
-    const result = await userService.getMyInfo(userId);
+    const result = await userService.getUserInfoById(userId);
 
     return res.status(200).send(result);
   } catch (err) {
