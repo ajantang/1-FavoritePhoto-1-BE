@@ -94,36 +94,6 @@ async function deleteData(where) {
   await prisma.exchange.delete({ where });
 }
 
-async function countGroupCountByGrade({ userId, where }) {
-  const exchanges = await prisma.exchange.findMany({
-    where: {
-      userId,
-      ...where,
-    },
-    select: {
-      Card: {
-        select: {
-          grade: true,
-        },
-      },
-    },
-  });
-
-  const counts = exchanges.reduce((acc, exchange) => {
-    const grade = exchange.Card.grade;
-
-    if (!acc[grade]) {
-      acc[grade] = 0;
-    }
-
-    acc[grade]++;
-
-    return acc;
-  }, {});
-
-  return counts;
-}
-
 async function deleteManyData(where) {
   await prisma.exchange.deleteMany({ where });
 }
@@ -141,6 +111,5 @@ export default {
   findManyByPaginationData,
   updateData,
   deleteData,
-  countGroupCountByGrade,
   deleteManyData,
 };
