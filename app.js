@@ -25,15 +25,16 @@ import {
   SESSION_SECURE,
   SESSION_SAMESITE,
   PORT,
+  REDIS_URL,
 } from "./config.js";
 
 export const app = express();
 
 const redisClient = createClient({
   legacyMode: true,
-  url: process.env.REDIS_URL,
+  url: REDIS_URL,
 });
-redisClient.connect().catch(console.error);
+redisClient.connect().then(console.log("redis connected")).catch(console.error);
 
 app.use(
   cors({
