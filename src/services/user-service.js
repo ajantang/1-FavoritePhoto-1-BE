@@ -16,19 +16,32 @@ import {
   createGenreGradeKeywordWhere,
 } from "../utils/query-util.js";
 import userRepository from "../repositories/user-repository.js";
-import { userSelect } from "../services/selects/user-select.js";
-import { exchangeCardShopSelect } from "../services/selects/exchange-select.js";
+import { userSelect } from "./selects/user-select.js";
+import { exchangeCardShopSelect } from "./selects/exchange-select.js";
+import { ownCardSelect } from "./selects/own-select.js";
+import { cardDetailSelect } from "./selects/card-select.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
-  const list = await ownRepository.findOwnCardList({ userId, filter });
+  const where = { userId, ...filter.where };
+  const list = await ownRepository.findManyByPaginationData({
+    orderBy: filter.orderBy,
+    skip: filter.skip,
+    take: filter.take,
+    where,
+    select: ownCardSelect,
+  });
   const counts = await ownRepository.getGroupCountByGrade({ userId, filter });
 
   return myCardListMapper({ counts, list });
 }
 
 async function getMyCard({ userId, cardId }) {
-  const result = await ownRepository.findOwnCard({ userId, cardId });
+  const where = { userId, cardId };
+  const result = await ownRepository.findFirstData({
+    where,
+    select: ownCardSelect,
+  });
 
   return myCardMapper(result);
 }
@@ -44,7 +57,7 @@ async function createMyCard({
   quantity,
 }) {
   const result = await prisma.$transaction(async () => {
-    const cardInfo = await cardRepository.createCard({
+    const newCardData = {
       name,
       description,
       image,
@@ -52,13 +65,16 @@ async function createMyCard({
       genre,
       price,
       userId,
-      quantity,
+      totalQuantity: quantity,
+    };
+    const cardInfo = await cardRepository.createData({
+      data: newCardData,
+      select: cardDetailSelect,
     });
-
-    const ownCardInfo = await ownRepository.createOwn({
-      cardId: cardInfo.id,
-      userId,
-      quantity,
+    const newOwnData = { userId, cardId: cardInfo.id, quantity };
+    const ownCardInfo = await ownRepository.createData({
+      data: newOwnData,
+      select: ownCardSelect,
     });
 
     return ownCardInfo;

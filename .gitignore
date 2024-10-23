@@ -25,4 +25,7 @@ node_modules
 .history
 .ionide
 
+# Test code
+http/*
+
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,dotenv
