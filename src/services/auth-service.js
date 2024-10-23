@@ -9,22 +9,6 @@ import {
 
 import { EXPIRE_TIME } from "../constants/session.js";
 
-async function createSession({ sessionId, userId, sessionData }) {
-  const now = new Date();
-  const expires = new Date(now.getTime() + EXPIRE_TIME);
-
-  const session = await sessionRepository.createSession({
-    sessionId,
-    userId,
-    expires,
-    data: sessionData,
-  });
-}
-
-async function deleteSession(sessionId) {
-  await sessionRepository.deleteSession(sessionId);
-}
-
 async function signUp({ email, password, nickname }) {
   const encryptedPassword = await createHashedPassword(password);
 
@@ -41,26 +25,48 @@ async function signUp({ email, password, nickname }) {
   });
 }
 
-async function signIn({ email, password }) {
-  const { encryptedPassword, ...rest } =
-    await userRepository.getUserInfoPasswordByEmail(email);
+async function signIn({ email, password, session }) {
+  return prisma.$transaction(async () => {
+    const { encryptedPassword, ...rest } =
+      await userRepository.getUserInfoPasswordByEmail(email);
 
-  if (!encryptedPassword) {
-    return null;
-  }
+    if (!encryptedPassword) {
+      return null;
+    }
 
-  const isCorrect = await comparePassword({
-    passwordInput: password,
-    encryptedPassword,
+    const isCorrect = await comparePassword({
+      passwordInput: password,
+      encryptedPassword,
+    });
+
+    if (!isCorrect) {
+      return null;
+    }
+
+    const userId = rest.id;
+    session.userId = userId;
+    const now = new Date();
+    const expires = new Date(now.getTime() + EXPIRE_TIME);
+    const data = JSON.stringify(session);
+
+    const upsertWhere = { id: session.id };
+    const upsertCreate = { id: session.id, userId, expires, data };
+    const upsertUpdate = { userId, expires, data };
+
+    await sessionRepository.upsertData({
+      where: upsertWhere,
+      create: upsertCreate,
+      update: upsertUpdate,
+    });
+
+    return { userInfo: rest, session };
   });
-
-  if (!isCorrect) {
-    return null;
-  }
-
-  return rest;
 }
 
-async function signOut() {}
+async function signOut(sessionId) {
+  const where = { id: sessionId };
 
-export default { createSession, deleteSession, signUp, signIn, signOut };
+  await sessionRepository.deleteData(where);
+}
+
+export default { signUp, signIn, signOut };
