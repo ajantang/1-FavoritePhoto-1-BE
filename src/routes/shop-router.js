@@ -5,7 +5,7 @@ import {
   validateCreateShopData,
   validatePurchaseConditions,
   validateUpdaeShopData,
-} from "../middlewares/validateData.js";
+} from "../middlewares/validate-data.js";
 import {
   authMiddleware,
   authMiddlewareByShopIdParam,
@@ -46,10 +46,6 @@ shopRouter
 
 shopRouter
   .route("/:shopId/quantity")
-  .get(
-    authMiddleware,
-    checkShopCreator,
-    shopController.calculateTotalQuantity
-  );
+  .get(authMiddleware, checkShopCreator, shopController.calculateTotalQuantity);
 
 export default shopRouter;

@@ -8,121 +8,72 @@ import userRepository from "../repositories/user-repository.js";
 import { basicCardMapper, myCardMapper } from "./mappers/card-mapper.js";
 import { ownCardListSelect } from "../services/selects/own-select.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
+import { shopCreateSelect, shopListSelect } from "./selects/shop-select.js";
+import { createShopMapper, getShopListMapper } from "./mappers/shop-mapper.js";
+import { createShopListFilterByQuery } from "../utils/query-util.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
-  return await shopRepository.createShop(rest);
+  return await prisma.$transaction(async () => {
+    try {
+      // 상점 등록
+      const shop = await shopRepository.createData({
+        data: rest,
+        select: shopCreateSelect,
+      });
+      console.log(shop);
+
+      // 보유량 감소 혹은 삭제
+      if (rest.remainingQuantity === own.quantity) {
+        const deleteOwn = await ownRepository.deleteData({ id: own.id });
+        console.log(deleteOwn);
+      } else {
+        const updateOwn = await ownRepository.updateData({
+          where: {
+            id: own.id,
+          },
+          data: {
+            quantity: { decrement: rest.remainingQuantity },
+          },
+        });
+        console.log(updateOwn);
+      }
+
+      return createShopMapper(shop);
+    } catch (e) {
+      throw e;
+    }
+  });
 }
 
-async function getShopListByQuery(query) {
-  const {
-    sort,
-    genre,
-    grade,
-    sellout,
-    pageNum,
-    pageSize,
-    keyword = "",
-  } = query;
+async function getShopList(query) {
+  return await prisma.$transaction(async () => {
+    try {
+      const filterOptions = createShopListFilterByQuery(query);
+      const shopList = await shopRepository.findManyByPaginationData({
+        ...filterOptions,
+        select: shopListSelect,
+      });
+      console.log(shopList);
 
-  const page = pageNum || 1;
-  const pageSizeNum = pageSize || 15;
-  const offset = (page - 1) * pageSizeNum;
+      const count = await shopRepository.conutData(filterOptions.where);
+      console.log(count);
 
-  let orderBy;
-  switch (sort) {
-    case "recent":
-      orderBy = { createdAt: "desc" }; // 최신순
-      break;
-    case "oldest":
-      orderBy = { createdAt: "asc" }; // 오래된 순
-      break;
-    case "cheapest":
-      orderBy = { price: "asc" }; // 가격이 낮은 순
-      break;
-    case "highest":
-      orderBy = { price: "desc" }; // 가격이 높은 순
-      break;
-    default:
-      orderBy = { createdAt: "desc" }; // 기본값: 최신순
-  }
-
-  const whereOrBody = {
-    contains: keyword,
-    mode: "insensitive",
-  };
-  const whereOr = {
-    OR: [
-      {
-        name: whereOrBody,
-      },
-      {
-        description: whereOrBody,
-      },
-    ],
-  };
-
-  let selloutWhere = null;
-  if (sellout === "true") {
-    selloutWhere = { remainingQuantity: 0 };
-  } else if (sellout === "false") {
-    selloutWhere = { remainingQuantity: { gt: 0 } };
-  }
-
-  const where = {
-    Card: {
-      ...(genre ? { genre: parseInt(genre) } : {}),
-      ...(grade ? { grade: parseInt(grade) } : {}),
-      ...whereOr,
-    },
-    ...(selloutWhere && selloutWhere),
-  };
-
-  const filterOptions = {
-    orderBy,
-    skip: parseInt(offset),
-    take: parseInt(pageSizeNum),
-    where,
-  };
-
-  return await shopRepository.getShopListByQuery(filterOptions);
+      return getShopListMapper(shopList, count);
+    } catch (e) {
+      throw e;
+    }
+  });
 }
 
-async function countShopListByQuery(query) {
-  const { genre, grade, sellout, keyword = "" } = query;
-
-  const whereOrBody = {
-    contains: keyword,
-    mode: "insensitive",
-  };
-  const whereOr = {
-    OR: [
-      {
-        name: whereOrBody,
-      },
-      {
-        description: whereOrBody,
-      },
-    ],
-  };
-
-  let selloutWhere = null;
-  if (sellout === "true") {
-    selloutWhere = { remainingQuantity: 0 };
-  } else if (sellout === "false") {
-    selloutWhere = { remainingQuantity: { gt: 0 } };
-  }
-
-  const filter = {
-    Card: {
-      ...(genre ? { genre: parseInt(genre) } : {}),
-      ...(grade ? { grade: parseInt(grade) } : {}),
-      ...whereOr,
-    },
-    ...(selloutWhere && selloutWhere),
-  };
-
-  return await shopRepository.countShopListByQuery(filter);
+async function getShopDetail(params) {
+  return await prisma.$transaction(async () => {
+    try {
+      // 
+    } catch (e) {
+      throw e;
+    }
+  });
 }
 
 async function getShopDetailById(id) {
@@ -296,8 +247,7 @@ async function calculateTotalQuantity(userId, shopData) {
 
 export default {
   createShop,
-  getShopListByQuery,
-  countShopListByQuery,
+  getShopList,
   getShopDetailById,
   checkUserShopOwner,
   updateShop,
