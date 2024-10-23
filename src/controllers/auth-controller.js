@@ -27,6 +27,7 @@ async function signIn(req, res, next) {
     }
 
     req.session = session;
+    await req.session.save();
 
     return res.status(200).send(userInfo);
   } catch (err) {
