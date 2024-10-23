@@ -16,12 +16,19 @@ import {
   createGenreGradeKeywordWhere,
 } from "../utils/query-util.js";
 import userRepository from "../repositories/user-repository.js";
-import { userSelect } from "../services/selects/user-select.js";
-import { exchangeCardShopSelect } from "../services/selects/exchange-select.js";
+import { userSelect } from "./selects/user-select.js";
+import { exchangeCardShopSelect } from "./selects/exchange-select.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
-  const list = await ownRepository.findOwnCardList({ userId, filter });
+  const where = { userId, ...filter.where };
+  const list = await ownRepository.findManyByPaginationData({
+    orderBy: filter.orderBy,
+    skip: filter.skip,
+    take: filter.take,
+    where,
+    select: ownCardSelect,
+  });
   const counts = await ownRepository.getGroupCountByGrade({ userId, filter });
 
   return myCardListMapper({ counts, list });
