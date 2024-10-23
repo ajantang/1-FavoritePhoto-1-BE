@@ -6,7 +6,10 @@ import purchaseRepository from "../repositories/purchase-repository.js";
 import shopRepository from "../repositories/shop-repository.js";
 import userRepository from "../repositories/user-repository.js";
 import { basicCardMapper, myCardMapper } from "./mappers/card-mapper.js";
-import { ownCardListSelect } from "../services/selects/own-select.js";
+import {
+  ownCardListSelect,
+  ownCardSelect,
+} from "../services/selects/own-select.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
 import {
   shopCreateSelect,
@@ -158,18 +161,24 @@ async function deleteShop({ userId, shopId }) {
     const shop = await shopRepository.findUniqueOrThrowtData({
       where: { id: shopId },
     });
-    const own = await ownRepository.updateData({
+    const own = await ownRepository.upsertData({
       where: {
         userId_cardId: {
           userId,
           cardId: shop.cardId,
         },
       },
-      data: {
+      update: {
         quantity: {
           increment: shop.remainingQuantity,
         },
       },
+      create: {
+        userId,
+        cardId: shop.cardId,
+        quantity: shop.remainingQuantity,
+      },
+      select: ownCardSelect,
     });
 
     await shopRepository.deleteData({ id: shopId });
