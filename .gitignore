@@ -26,6 +26,6 @@ node_modules
 .ionide
 
 # Test code
-http/*
+http/
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,dotenv
