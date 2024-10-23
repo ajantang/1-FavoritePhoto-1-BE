@@ -4,6 +4,7 @@ node_modules
 
 ### dotenv ###
 .env
+.env.*
 
 ### VisualStudioCode ###
 .vscode/*
