@@ -154,15 +154,25 @@ async function updateShop(shopId, updateData) {
 }
 
 async function deleteShop({ userId, shopId }) {
-  return prisma.$transaction(async () => {
-    const shop = await shopRepository.getShopDetailById(shopId);
-    const own = await ownRepository.addQuantity({
-      userId,
-      cardId: shop.Card.id,
-      increment: shop.remainingQuantity,
+  return await prisma.$transaction(async () => {
+    const shop = await shopRepository.findUniqueOrThrowtData({
+      where: { id: shopId },
+    });
+    const own = await ownRepository.updateData({
+      where: {
+        userId_cardId: {
+          userId,
+          cardId: shop.cardId,
+        },
+      },
+      data: {
+        quantity: {
+          increment: shop.remainingQuantity,
+        },
+      },
     });
 
-    await shopRepository.deleteShop(shopId);
+    await shopRepository.deleteData({ id: shopId });
 
     return myCardMapper(own);
   });
