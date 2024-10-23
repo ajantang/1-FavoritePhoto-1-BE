@@ -20,20 +20,8 @@ async function getShopList(req, res, next) {
 async function getShopDetail(req, res, next) {
   const { shopId } = req.params;
   const userId = req.session?.userId || "";
-  const shop = await shopService.getShopDetailById(shopId);
-  const isUserShopOwner = await shopService.checkUserShopOwner(userId, shopId);
-  const [data, isowner] = await Promise.all([shop, isUserShopOwner]);
-  let responseData = {};
-  if (!isowner) {
-    const isExchange = await exchangeService.checkExchangeByUser(
-      userId,
-      shopId
-    );
-    responseData = getShopDetailMapper(data, isExchange);
-  } else {
-    responseData = getShopDetailMapper(data);
-  }
-  res.send(responseData);
+  const shop = await shopService.getShopDetail(userId, shopId);
+  res.send(shop);
 }
 
 async function updateShop(req, res, next) {

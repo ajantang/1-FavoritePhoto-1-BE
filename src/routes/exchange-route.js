@@ -3,7 +3,7 @@ import {
   validateExchangeAndOwner,
   validateExchangeConditions,
   validateExchangeCreator,
-} from "../middlewares/validate-data.js.js";
+} from "../middlewares/validate-data.js";
 import exchangeController from "../controllers/exchange-controller.js";
 
 const exchangeRouter = express.Router();
