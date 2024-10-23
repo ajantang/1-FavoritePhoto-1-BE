@@ -19,6 +19,7 @@ import userRepository from "../repositories/user-repository.js";
 import { userSelect } from "./selects/user-select.js";
 import { exchangeCardShopSelect } from "./selects/exchange-select.js";
 import { ownCardSelect } from "./selects/own-select.js";
+import { cardDetailSelect } from "./selects/card-select.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
@@ -56,7 +57,7 @@ async function createMyCard({
   quantity,
 }) {
   const result = await prisma.$transaction(async () => {
-    const cardInfo = await cardRepository.createCard({
+    const newCardData = {
       name,
       description,
       image,
@@ -64,13 +65,16 @@ async function createMyCard({
       genre,
       price,
       userId,
-      quantity,
+      totalQuantity: quantity,
+    };
+    const cardInfo = await cardRepository.createData({
+      data: newCardData,
+      select: cardDetailSelect,
     });
-
-    const ownCardInfo = await ownRepository.createOwn({
-      cardId: cardInfo.id,
-      userId,
-      quantity,
+    const newOwnData = { userId, cardId: cardInfo.id, quantity };
+    const ownCardInfo = await ownRepository.createData({
+      data: newOwnData,
+      select: ownCardSelect,
     });
 
     return ownCardInfo;

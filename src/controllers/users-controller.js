@@ -37,8 +37,8 @@ async function createMyCard(req, res, next) {
       grade,
       genre,
       price,
-      userId: req.session.userId,
       quantity,
+      userId: req.session.userId,
     });
 
     return res.status(200).send(result);
