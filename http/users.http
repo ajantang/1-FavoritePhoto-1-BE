@@ -25,13 +25,13 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-  "name" : "낮 펭귄",
-  "description" : "동물 펭귄01",
-  "image" : "https://cdn.pixabay.com/photo/2024/09/07/02/34/penguins-9028827_640.jpg",
+  "name" : "모델 흑인",
+  "description" : "아프리카 남성 초상화",
+  "image" : "https://cdn.pixabay.com/photo/2020/10/28/14/01/man-5693573_640.jpg",
   "grade" : 3,
-  "genre" : 2,
-  "price" : 4,
-  "quantity" : 7
+  "genre" : 4,
+  "price" : 3,
+  "quantity" : 5
 }
 
 ###
@@ -93,8 +93,8 @@ POST http://localhost:3000/auth/sign-in
 Content-Type : application/json
 
 {
-    "email" : "codeit05@codeit.com",
-    "password" : "!codeit05"
+    "email" : "codeit04@codeit.com",
+    "password" : "!codeit04"
 }
 
 ###

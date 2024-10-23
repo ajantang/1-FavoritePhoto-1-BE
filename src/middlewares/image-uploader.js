@@ -2,7 +2,7 @@ import { S3Client } from "@aws-sdk/client-s3"; // S3Client를 가져옵니다
 import multer from "multer";
 import { Upload } from "@aws-sdk/lib-storage"; // Upload을 가져옵니다
 import path from "path";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -40,7 +40,7 @@ const imageUploader = async (req, res, next) => {
 
   // 업로드 설정
   const uploadParams = {
-    Bucket: "favoritphoto",
+    Bucket: "favoritephoto",
     Key: fileName,
     Body: req.file.buffer, //파일의 데이터가 메모리 버퍼에 저장된 것을 나타
   };
