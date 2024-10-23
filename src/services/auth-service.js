@@ -9,10 +9,6 @@ import {
 
 import { EXPIRE_TIME } from "../constants/session.js";
 
-async function deleteSession(sessionId) {
-  await sessionRepository.deleteSession(sessionId);
-}
-
 async function signUp({ email, password, nickname }) {
   const encryptedPassword = await createHashedPassword(password);
 
@@ -67,6 +63,10 @@ async function signIn({ email, password, session }) {
   });
 }
 
-async function signOut() {}
+async function signOut(sessionId) {
+  const where = { id: sessionId };
 
-export default { deleteSession, signUp, signIn, signOut };
+  await sessionRepository.deleteData(where);
+}
+
+export default { signUp, signIn, signOut };

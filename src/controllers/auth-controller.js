@@ -38,10 +38,8 @@ async function signOut(req, res, next) {
   try {
     const sessionId = req.session.id;
 
-    await authService.deleteSession(sessionId);
+    await authService.signOut(sessionId);
     req.session.destroy();
-
-    await authService.signOut();
 
     return res.status(200).send();
   } catch (err) {
