@@ -94,7 +94,7 @@
 ### res template
 
 - - data
-    - total: 총 갯수
+    - totalCount: 총 갯수
     - shops: 상점 정보
       - id: 상점 아이디
       - cardId: 카드ID (필요없을 시 삭제 예정)
@@ -111,7 +111,7 @@
 ### res example
 
 - data : {
-  total: 10,
+  totalCount: 10,
   shops: [
   {
   id: "adfc1706-a7f6-4c6e-a006-1733a854afbb",
