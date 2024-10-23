@@ -20,6 +20,10 @@ async function getShopList(req, res, next) {
 async function getShopDetail(req, res, next) {
   const { shopId } = req.params;
   const userId = req.session?.userId || "";
+
+  console.log("getShopDetail req.session : ", req.session);
+  console.log("getShopDetail req.session?.userId : ", req.session?.userId);
+
   const shop = await shopService.getShopDetail(userId, shopId);
   res.send(shop);
 }

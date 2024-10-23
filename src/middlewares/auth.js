@@ -4,6 +4,9 @@ import shopRepository from "../repositories/shop-repository.js";
 import notificationRepository from "../repositories/notification-repository.js";
 
 export function authMiddleware(req, res, next) {
+  console.log("authMiddleware req.session : ", req.session);
+  console.log("authMiddleware req.session?.userId : ", req.session?.userId);
+
   if (req.session && req.session.userId) {
     return next();
   }
