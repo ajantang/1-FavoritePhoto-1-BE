@@ -20,7 +20,7 @@ import { userSelect } from "./selects/user-select.js";
 import { exchangeCardShopSelect } from "./selects/exchange-select.js";
 import { ownCardSelect, ownGradeSelect } from "./selects/own-select.js";
 import { cardDetailSelect } from "./selects/card-select.js";
-import { shopListSelect } from "./selects/shop-select.js";
+import { shopListSelect, shopGradeSelect } from "./selects/shop-select.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
@@ -109,7 +109,22 @@ async function getMyShopList({ userId, query }) {
     where,
     select: shopListSelect,
   });
-  const counts = await shopRepository.getGroupCountByGrade({ userId, where });
+
+  const shopGradeList = await shopRepository.findManyData({
+    where,
+    select: shopGradeSelect,
+  });
+  const counts = shopGradeList.reduce((acc, shop) => {
+    const grade = shop.Card.grade;
+
+    if (!acc[grade]) {
+      acc[grade] = 0;
+    }
+
+    acc[grade] += shop.remainingQuantity;
+
+    return acc;
+  }, {});
 
   return myShopListMapper({ counts, list });
 }

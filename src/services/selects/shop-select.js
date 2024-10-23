@@ -49,3 +49,12 @@ export const shopOwnerSelect = {
     },
   },
 };
+
+export const shopGradeSelect = {
+  remainingQuantity: true,
+  Card: {
+    select: {
+      grade: true,
+    },
+  },
+};
