@@ -111,60 +111,46 @@ async function getShopDetail(userId, shopId) {
   });
 }
 
-async function checkUserShopOwner(userId, shopId) {
-  const filter = {
-    userId,
-    id: shopId,
-  };
-
-  return await shopRepository.checkUserShopOwner(filter);
-}
-
-// service 파일 내에서 사용
-async function updateOrDeleteOwn(id, updateData) {
+async function updateShop(shopId, updateData) {
   const { ownData, userId, cardId, ...rest } = updateData;
-  const { ownId, ownUpdateQuantity, isOutOfStock } = ownData;
+  const {
+    ownId,
+    ownIncrementQuantity,
+    isOutOfStock,
+    creatOwnQuantity,
+    isQuantityChanged,
+  } = ownData;
 
-  const where = { id: ownId };
-  const updateQuantity = { quantity: ownUpdateQuantity };
-
-  if (isOutOfStock) {
-    return await prisma.$transaction(async () => {
-      const shop = await shopRepository.updateShop(id, rest);
-      const q = await ownRepository.deleteById(ownId);
-
-      return shop;
+  return await prisma.$transaction(async () => {
+    const shop = await shopRepository.updateData({
+      where: { id: shopId },
+      data: rest,
+      select: shopCreateSelect,
     });
-  } else if (!isOutOfStock) {
-    return await prisma.$transaction(async () => {
-      const shop = await shopRepository.updateShop(id, rest);
-      const q = await ownRepository.update(where, updateQuantity);
+    console.log(shop);
 
-      return shop;
-    });
-  }
-}
+    // 판매 수량을 최대치로 변경 시
+    if (isOutOfStock) {
+      await ownRepository.deleteData({ id: ownId });
 
-async function updateShop(id, updateData) {
-  const { ownData, userId, cardId, ...rest } = updateData;
-  const { ownId, isOwn, creatOwnQuantity } = ownData;
-  if (ownId) {
-    return await updateOrDeleteOwn(id, updateData);
-  } else if (!isOwn) {
-    return await prisma.$transaction(async () => {
-      const createOwnData = {
-        userId,
-        cardId,
-        quantity: creatOwnQuantity,
-      };
-      const shop = await shopRepository.updateShop(id, rest);
-      const q = await ownRepository.createOwn(createOwnData);
+      // 판매 수량이 수정됐을 때
+    } else if (isQuantityChanged) {
+      const own = await ownRepository.upsertData({
+        where: { id: ownId },
+        update: {
+          quantity: { increment: ownIncrementQuantity },
+        },
+        create: {
+          userId,
+          cardId,
+          quantity: creatOwnQuantity,
+        },
+      });
+      console.log(own);
+    }
 
-      return shop;
-    });
-  } else {
-    return await shopRepository.updateShop(id, rest);
-  }
+    return createShopMapper(shop);
+  });
 }
 
 async function purchaseService(id, userId, purchaseData) {
@@ -280,7 +266,6 @@ export default {
   createShop,
   getShopList,
   getShopDetail,
-  checkUserShopOwner,
   updateShop,
   purchaseService,
   deleteShop,

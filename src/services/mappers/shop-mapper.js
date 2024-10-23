@@ -7,7 +7,7 @@ export function createShopMapper(data) {
     salesInfo: {
       id: data.id,
       image: card.image,
-      name: card.anme,
+      name: card.name,
       grade: card.grade,
       genre: card.genre,
       creatorNickname: creator.nickname,

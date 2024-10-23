@@ -27,14 +27,8 @@ async function getShopDetail(req, res, next) {
 async function updateShop(req, res, next) {
   const { shopId } = req.params;
   const shop = await shopService.updateShop(shopId, req.body);
-  const responseData = createShopMapper(shop);
-  res.send(responseData);
+  res.send(shop);
 }
-// 상품 업데이트
-// 수량변경 시 own 업데이트
-// 내가 보유한 양의 최대치로 변경 시 own 삭제
-// 반대로 최대치에서 줄일때 own 생성
-// upsert 사용
 
 async function purchaseController(req, res, next) {
   const { shopId } = req.params;
