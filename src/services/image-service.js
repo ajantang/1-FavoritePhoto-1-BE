@@ -1,7 +1,7 @@
 import { Storage } from "@google-cloud/storage";
 import path from "path";
 
-import { createCustomError } from "../lib/custom-error.js";
+import { CustomError } from "../lib/custom-error.js";
 
 const bucketName = "image-unload-codeit-test";
 const storage = new Storage();
@@ -22,7 +22,7 @@ async function authenticateImplicitWithAdc() {
 
 async function UploadGoogelCloud(file) {
   if (!file) {
-    return next(createCustomError(500));
+    return next(CustomError(40097));
   }
 
   authenticateImplicitWithAdc();

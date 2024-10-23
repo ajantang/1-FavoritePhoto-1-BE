@@ -1,4 +1,4 @@
-import { createCustomError } from "../lib/custom-error.js";
+import { CustomError } from "../lib/custom-error.js";
 import ownRepository from "../repositories/own-repository.js";
 import shopRepository from "../repositories/shop-repository.js";
 import notificationRepository from "../repositories/notification-repository.js";
@@ -9,14 +9,14 @@ export function authMiddleware(req, res, next) {
     return next();
   }
 
-  return next(createCustomError(401));
+  return next(CustomError(40100));
 }
 
 export async function authMiddlewareByShopIdParam(req, res, next) {
   const { shopId } = req.params;
 
   if (!shopId) {
-    return next(createCustomError(400));
+    return next(CustomError(40010));
   }
 
   try {
@@ -26,7 +26,7 @@ export async function authMiddlewareByShopIdParam(req, res, next) {
       return next();
     }
 
-    return next(createCustomError(401));
+    return next(CustomError(40302));
   } catch (err) {
     return next(err);
   }
@@ -37,13 +37,13 @@ export async function authMiddlewareByCardIdParam(req, res, next) {
   const userId = req.session.userId;
 
   if (!cardId) {
-    return next(createCustomError(400));
+    return next(CustomError(40011));
   }
 
   const isOwner = await haveCard({ userId, cardId });
 
   if (!isOwner) {
-    return next(createCustomError(401));
+    return next(CustomError(40301));
   }
 
   return next();
@@ -54,13 +54,13 @@ export async function authMiddlewareByCardIdBody(req, res, next) {
   const userId = req.session.userId;
 
   if (!cardId) {
-    return next(createCustomError(400));
+    return next(CustomError(40011));
   }
 
   const isOwner = await haveCard({ userId, cardId });
 
   if (!isOwner) {
-    return next(createCustomError(401));
+    return next(CustomError(40301));
   }
 
   return next();
@@ -71,13 +71,13 @@ export async function authMiddlewareByNotificationIdParam(req, res, next) {
   const userId = req.session.userId;
 
   if (!notificationId) {
-    return next(createCustomError(400));
+    return next(CustomError(40009));
   }
 
   const isOwner = await isNotificationOwner({ userId, notificationId });
 
   if (!isOwner) {
-    return next(createCustomError(401));
+    return next(CustomError(40109));
   }
 
   return next();
