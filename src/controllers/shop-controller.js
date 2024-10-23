@@ -20,20 +20,8 @@ async function getShopList(req, res, next) {
 async function getShopDetail(req, res, next) {
   const { shopId } = req.params;
   const userId = req.session?.userId || "";
-  const shop = await shopService.getShopDetailById(shopId);
-  const isUserShopOwner = await shopService.checkUserShopOwner(userId, shopId);
-  const [data, isowner] = await Promise.all([shop, isUserShopOwner]);
-  let responseData = {};
-  if (!isowner) {
-    const isExchange = await exchangeService.checkExchangeByUser(
-      userId,
-      shopId
-    );
-    responseData = getShopDetailMapper(data, isExchange);
-  } else {
-    responseData = getShopDetailMapper(data);
-  }
-  res.send(responseData);
+  const shop = await shopService.getShopDetail(userId, shopId);
+  res.send(shop);
 }
 
 async function updateShop(req, res, next) {
@@ -42,6 +30,11 @@ async function updateShop(req, res, next) {
   const responseData = createShopMapper(shop);
   res.send(responseData);
 }
+// 상품 업데이트
+// 수량변경 시 own 업데이트
+// 내가 보유한 양의 최대치로 변경 시 own 삭제
+// 반대로 최대치에서 줄일때 own 생성
+// upsert 사용
 
 async function purchaseController(req, res, next) {
   const { shopId } = req.params;
@@ -49,7 +42,6 @@ async function purchaseController(req, res, next) {
 
   const purchase = await shopService.purchaseService(shopId, userId, req.body);
   res.send(purchase);
-  // 상점 잔여 수량이 0이 될 시 매진 표시
   // 구매 관련 알림 추가(구매자, 판매자).
   // 교환 취소 알림 추가
   // 매진 됐을 시 알람

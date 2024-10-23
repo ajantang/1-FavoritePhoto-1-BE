@@ -8,9 +8,19 @@ import userRepository from "../repositories/user-repository.js";
 import { basicCardMapper, myCardMapper } from "./mappers/card-mapper.js";
 import { ownCardListSelect } from "../services/selects/own-select.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
-import { shopCreateSelect, shopListSelect } from "./selects/shop-select.js";
-import { createShopMapper, getShopListMapper } from "./mappers/shop-mapper.js";
+import {
+  shopCreateSelect,
+  shopDetailSelect,
+  shopListSelect,
+} from "./selects/shop-select.js";
+import {
+  createShopMapper,
+  getShopDetailMapper,
+  getShopListMapper,
+} from "./mappers/shop-mapper.js";
 import { createShopListFilterByQuery } from "../utils/query-util.js";
+import shop from "../constants/shop.js";
+import { exchangeCardInfo } from "./selects/exchange-select.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
@@ -66,18 +76,39 @@ async function getShopList(query) {
   });
 }
 
-async function getShopDetail(params) {
+async function getShopDetail(userId, shopId) {
   return await prisma.$transaction(async () => {
     try {
-      // 
+      const shop = await shopRepository.findUniqueOrThrowtData({
+        where: { id: shopId },
+        select: shopDetailSelect,
+      });
+      console.log(shop);
+      const isOwner = await shopRepository.findFirstData({
+        where: {
+          id: shopId,
+          userId,
+        },
+      });
+      console.log(isOwner);
+
+      let isExchanges = null;
+      if (isOwner === null || isOwner === undefined) {
+        isExchanges = await exchangeRepository.findManyData({
+          where: {
+            userId,
+            shopId,
+          },
+          select: exchangeCardInfo,
+        });
+        console.log(isExchanges);
+      }
+
+      return getShopDetailMapper(shop, isExchanges);
     } catch (e) {
       throw e;
     }
   });
-}
-
-async function getShopDetailById(id) {
-  return await shopRepository.getShopDetailById(id);
 }
 
 async function checkUserShopOwner(userId, shopId) {
@@ -248,7 +279,7 @@ async function calculateTotalQuantity(userId, shopData) {
 export default {
   createShop,
   getShopList,
-  getShopDetailById,
+  getShopDetail,
   checkUserShopOwner,
   updateShop,
   purchaseService,
