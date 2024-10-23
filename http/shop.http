@@ -4,16 +4,16 @@ Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-    "cardId": "a4055bc7-93dd-4211-ab16-0a092e1b575b",
+    "cardId": "f1058fd0-b9a0-46d0-afeb-4af59a0bf6f7",
     "salesQuantity": 1,
     "price": 4,
-    "exchangeGrade": 0,
-    "exchangeGenre": 3,
+    "exchangeGrade": 1,
+    "exchangeGenre": 2,
     "exchangeDescription": "테스트 진행중"
 }
 
 ###
-GET http://localhost:3000/shop?genre=0&&grade=&&keyword=&&pageSize=1&&pageNum=1&&sellout=
+GET http://localhost:3000/shop?genre=0&&grade=0&&keyword=i&&pageSize=&&pageNum=&&sellout=false
 
 ###
 GET http://localhost:3000/shop/601cb12a-2ab9-49d4-a75e-b64295c3939b

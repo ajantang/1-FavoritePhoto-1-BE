@@ -14,15 +14,21 @@ import { CustomError } from "../lib/custom-error.js";
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
   const { cardId, salesQuantity, ...rest } = req.body;
-  const filter = {
-    userId,
-    cardId,
-  };
 
-  const own = await ownService.getByFilter(filter);
+  // 등록자가 해당 카드를 보유중인지 확인
+  const own = await ownRepository.findFirstData({
+    where: {
+      userId,
+      cardId,
+    },
+  });
+  console.log(own);
 
-  if (own.quantity < salesQuantity) {
-    return next(CustomError(40001));
+  const stock = own ? own.quantity : 0;
+
+  // 등록하는 양이 보유량보다 적은 지 확인
+  if (stock < salesQuantity) {
+    next(CustomError(40001));
   }
 
   const newReqBody = {
@@ -32,6 +38,7 @@ export async function validateCreateShopData(req, res, next) {
     remainingQuantity: salesQuantity,
     totalQuantity: salesQuantity,
   };
+
   req.body = newReqBody;
   assert(req.body, createShopStruct);
 

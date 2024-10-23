@@ -49,7 +49,7 @@ export function createGenreGradeKeywordWhere({ genre, grade, keyword }) {
     Card: {
       ...(genre ? { genre: parseInt(genre) } : {}),
       ...(grade ? { grade: parseInt(grade) } : {}),
-      ...(whereOr && { whereOr }),
+      ...(whereOr && whereOr),
     },
   };
 }
@@ -69,7 +69,7 @@ export function createCardListFilterByQuery(query) {
     Card: {
       ...(genre ? { genre: parseInt(genre) } : {}),
       ...(grade ? { grade: parseInt(grade) } : {}),
-      ...(whereOr && { whereOr }),
+      ...(whereOr && whereOr),
     },
   };
 

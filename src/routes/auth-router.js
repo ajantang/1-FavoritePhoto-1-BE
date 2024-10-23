@@ -4,7 +4,7 @@ import { authMiddleware } from "../middlewares/auth.js";
 import {
   validateSignUpUserData,
   validateSignInUserData,
-} from "../middlewares/validateData.js";
+} from "../middlewares/validate-data.js.js";
 
 const authRouter = express.Router();
 

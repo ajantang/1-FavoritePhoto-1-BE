@@ -9,29 +9,15 @@ import {
 
 async function createShop(req, res, next) {
   const shop = await shopService.createShop(req.body);
-  const own = await ownService.update(req.body);
-  const [shopResult, ownResult] = await Promise.all([shop, own]);
-  // 보유량에서 0이되면 delete
-  // 카드를 보유하고 있는지 확인하는 코드 추가
-  const responseData = createShopMapper(shopResult);
-  res.status(201).send(responseData);
+  res.status(201).send(shop);
 }
 
 async function getShopList(req, res, next) {
-  const shops = await shopService.getShopListByQuery(req.query);
-  const count = await shopService.countShopListByQuery(req.query);
-  const [list, total] = await Promise.all([shops, count]);
-
-  console.log("shops : ", shops);
-  console.log("count : ", count);
-
-  const responseData = getShopListMapper(list, total);
-
-  res.send(responseData);
+  const shops = await shopService.getShopList(req.query);
+  res.send(shops);
 }
 
 async function getShopDetail(req, res, next) {
-  // 보유량 + 총판매량
   const { shopId } = req.params;
   const userId = req.session?.userId || "";
   const shop = await shopService.getShopDetailById(shopId);
