@@ -1,6 +1,8 @@
 import cors from "cors";
 import express from "express";
 import session from "express-session";
+import RedisStore from "connect-redis";
+import { createClient } from "redis";
 
 import adminRouter from "./src/controllers/admin-controller.js";
 import authRouter from "./src/routes/auth-router.js";
@@ -27,6 +29,12 @@ import {
 
 export const app = express();
 
+const redisClient = createClient({
+  legacyMode: true,
+  url: process.env.REDIS_URL,
+});
+redisClient.connect().catch(console.error);
+
 app.use(
   cors({
     origin: "http://localhost:3000",
@@ -36,6 +44,7 @@ app.use(
 app.set("trust proxy", 1);
 app.use(
   session({
+    store: new RedisStore({ client: redisClient }),
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
