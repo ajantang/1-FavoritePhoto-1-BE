@@ -30,17 +30,6 @@ async function updateShop(req, res, next) {
   res.send(shop);
 }
 
-async function purchaseController(req, res, next) {
-  const { shopId } = req.params;
-  const userId = req.session.userId;
-
-  const purchase = await shopService.purchaseService(shopId, userId, req.body);
-  res.send(purchase);
-  // 구매 관련 알림 추가(구매자, 판매자).
-  // 교환 취소 알림 추가
-  // 매진 됐을 시 알람
-}
-
 async function deleteShop(req, res, next) {
   try {
     const { shopId } = req.params;
@@ -51,6 +40,17 @@ async function deleteShop(req, res, next) {
   } catch (err) {
     return next(err);
   }
+}
+
+async function purchaseController(req, res, next) {
+  const { shopId } = req.params;
+  const userId = req.session.userId;
+
+  const purchase = await shopService.purchaseService(shopId, userId, req.body);
+  res.send(purchase);
+  // 구매 관련 알림 추가(구매자, 판매자).
+  // 교환 취소 알림 추가
+  // 매진 됐을 시 알람
 }
 
 async function createExchange(req, res, next) {

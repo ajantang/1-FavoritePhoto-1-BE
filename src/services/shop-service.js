@@ -153,6 +153,21 @@ async function updateShop(shopId, updateData) {
   });
 }
 
+async function deleteShop({ userId, shopId }) {
+  return prisma.$transaction(async () => {
+    const shop = await shopRepository.getShopDetailById(shopId);
+    const own = await ownRepository.addQuantity({
+      userId,
+      cardId: shop.Card.id,
+      increment: shop.remainingQuantity,
+    });
+
+    await shopRepository.deleteShop(shopId);
+
+    return myCardMapper(own);
+  });
+}
+
 async function purchaseService(id, userId, purchaseData) {
   const {
     purchaseQuantity,
@@ -232,21 +247,6 @@ async function purchaseService(id, userId, purchaseData) {
     } catch (e) {
       throw e;
     }
-  });
-}
-
-async function deleteShop({ userId, shopId }) {
-  return prisma.$transaction(async () => {
-    const shop = await shopRepository.getShopDetailById(shopId);
-    const own = await ownRepository.addQuantity({
-      userId,
-      cardId: shop.Card.id,
-      increment: shop.remainingQuantity,
-    });
-
-    await shopRepository.deleteShop(shopId);
-
-    return myCardMapper(own);
   });
 }
 
