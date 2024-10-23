@@ -5,7 +5,7 @@ import {
   validateCreateShopData,
   validatePurchaseConditions,
   validateUpdaeShopData,
-} from "../middlewares/validateData.js";
+} from "../middlewares/validate-data.js";
 import {
   authMiddleware,
   authMiddlewareByShopIdParam,
