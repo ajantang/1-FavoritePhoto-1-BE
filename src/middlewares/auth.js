@@ -19,9 +19,11 @@ export async function authMiddlewareByShopIdParam(req, res, next) {
   }
 
   try {
-    const shop = await shopRepository.findShopOwnerId(shopId);
+    const shop = await shopRepository.findUniqueOrThrowtData({
+      where: { id: shopId },
+    });
 
-    if (shop.User.id === req.session.userId) {
+    if (shop.userId === req.session.userId) {
       return next();
     }
 

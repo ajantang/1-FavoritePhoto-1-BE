@@ -110,6 +110,10 @@ async function deleteData(where) {
   await prisma.own.delete({ where });
 }
 
+async function upsertData({ where, update, create, select }) {
+  return await prisma.own.upsert({ where, update, create, select });
+}
+
 async function findShopOwnerId({ userId, cardId }) {
   return prisma.own.findFirst({
     where: { userId, cardId },
@@ -132,5 +136,6 @@ export default {
   findManyByPaginationData,
   updateData,
   deleteData,
+  upsertData,
   findShopOwnerId,
 };
