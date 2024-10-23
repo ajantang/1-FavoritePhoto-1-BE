@@ -63,41 +63,41 @@ export async function validateUpdaeShopData(req, res, next) {
   const userId = req.session.userId;
   const { shopId } = req.params;
   const { salesQuantity, ...rest } = req.body;
+
   // 등록한 사람인지 확인
-  const isOwner = await shopService.checkUserShopOwner(userId, shopId);
+  const isOwner = await shopRepository.findFirstData({
+    where: {
+      userId,
+      shopId,
+    },
+  });
 
   // 등록한 사람이 아닐 시
   if (isOwner === null || isOwner === undefined) {
     return next(CustomError(40302));
   }
 
+  const { remainingQuantity } = isOwner;
   const newReqBody = { ...rest };
+
   let ownId;
-  let ownUpdateQuantity;
+  let ownIncrementQuantity;
   let isOutOfStock = false;
-  let isOwn = true;
   let creatOwnQuantity;
 
   // req.body에 salesQuantity가 있을 시
   if (salesQuantity) {
-    const ownFilter = {
-      cardId: isOwner.cardId,
-      userId,
-    };
     // own이 있는 지 확인
-    const own = await ownService.getByFilter(ownFilter);
+    const own = await ownRepository.findFirstData({
+      where: {
+        userId,
+        cardId: isOwner.cardId,
+      },
+    });
 
     const ownQuantity = own ? own.quantity : 0;
-    const userTotalStock = isOwner.remainingQuantity + ownQuantity;
+    const userTotalStock = remainingQuantity + ownQuantity;
     ownId = own ? own.id : "";
-
-    // 수량에 변화가 있으며 own이 없을 시 own 생성
-    if (
-      (salesQuantity !== userTotalStock && own === null) ||
-      (salesQuantity !== userTotalStock && own === undefined)
-    ) {
-      isOwn = false;
-    }
 
     // 총 보유량 보다 수정할 수량이 많을 경우
     if (salesQuantity > userTotalStock) {
@@ -108,9 +108,9 @@ export async function validateUpdaeShopData(req, res, next) {
       isOutOfStock = true;
     }
 
-    const addQuantity = salesQuantity - isOwner.remainingQuantity;
-    creatOwnQuantity = isOwner.remainingQuantity - salesQuantity;
-    ownUpdateQuantity = ownQuantity - addQuantity;
+    const addQuantity = salesQuantity - remainingQuantity;
+    creatOwnQuantity = remainingQuantity - salesQuantity;
+    ownIncrementQuantity = -addQuantity;
 
     newReqBody.remainingQuantity = salesQuantity;
     newReqBody.totalQuantity = isOwner.totalQuantity + addQuantity;
@@ -123,9 +123,8 @@ export async function validateUpdaeShopData(req, res, next) {
 
   const ownData = {
     ownId,
-    ownUpdateQuantity,
+    ownIncrementQuantity,
     isOutOfStock,
-    isOwn,
     creatOwnQuantity,
   };
 
