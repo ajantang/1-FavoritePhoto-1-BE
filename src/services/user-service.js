@@ -36,7 +36,11 @@ async function getMyCardList({ userId, query }) {
 }
 
 async function getMyCard({ userId, cardId }) {
-  const result = await ownRepository.findOwnCard({ userId, cardId });
+  const where = { userId, cardId };
+  const result = await ownRepository.findFirstData({
+    where,
+    select: ownCardSelect,
+  });
 
   return myCardMapper(result);
 }
