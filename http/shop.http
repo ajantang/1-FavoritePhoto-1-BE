@@ -33,7 +33,7 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 }
 
 ###
-DELETE http://localhost:3000/shop/cbb24524-6818-4b46-8afb-00dd26f379ba
+DELETE http://localhost:3000/shop/fb2a7655-e9a1-4f48-8669-60cd8ca130d7
 
 ###
 POST http://localhost:3000/shop/cbb24524-6818-4b46-8afb-00dd26f379ba/purchase
