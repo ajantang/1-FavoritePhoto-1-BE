@@ -365,50 +365,61 @@
   "quantity": 7
   }
 
-
 ## POST /shop/:shopId/purchase
 
 ### req template
+
 - description: 포토카드 구매
 - path: /shop/:shopId/purchase
 - method: POST
 - params
-    - shopId: 상점ID
+  - shopId: 상점ID
 - body
-    - purchaseQuantity: 구매 수량
+  - purchaseQuantity: 구매 수량
 
 ### req example
 
 - params
   - adfc1706-a7f6-4c6e-a006-1733a854afbb
 - body
-{
-	purchaseQuantity: 2
-}
+  {
+  purchaseQuantity: 2
+  }
 
 ### res template
 
 - data
-    - grade: 구매한  포토카드 등급
-    - name: 구매한 포토카드 이름
-    - purchaseQuantity: 구매 수량
+  - id: 구매한 카드 아이디
+  - image: 구매한 카드 이미지
+  - name: 구매한 카드 이름
+  - grade: 구매한 카드 등급
+  - genre: 구매한 카드 장르
+  - price: 구매한 카드 원가
+  - nickname: 구매한 카드 원작자
+  - purchaseQuantity: 구매 수량
 
 ### res example
 
 - data : {
-	grade: 5,
-	name: "우리집 앞마당",
-	purchaseQuantity: 2
-}
+  id: "2dfc4706-a7f6-4c6e-a006-1733a854afbb",
+  image: "이미지 URL",
+  name: "우리집 앞마당",
+  grade: 3,
+  genre: 5,
+  price: 4,
+  nickname: "유디",
+  purchaseQuantity: 2
+  }
 
 ## GET /shop/:shopId/quantity
 
 ### req template
+
 - description: 상점 잔여량 + 보유 중인 카드 조회
 - path: /shop/:shopId/quantity
 - method: GET
 - params
-    - shopId: 상점ID
+  - shopId: 상점ID
 
 ### req example
 
@@ -418,10 +429,10 @@
 ### res template
 
 - data
-    - totalQuantity: 상점 잔여량 + 보유 중인 카드
+  - totalQuantity: 상점 잔여량 + 보유 중인 카드
 
 ### res example
 
 - data : {
-	totalQuantity: 10,
-}
+  totalQuantity: 10,
+  }
