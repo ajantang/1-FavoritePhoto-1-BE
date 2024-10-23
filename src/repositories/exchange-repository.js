@@ -20,9 +20,7 @@ async function findMyExchangeList({ userId, filter }) {
   });
 }
 
-async function getGroupCountByGrade({ userId, filter }) {
-  const { where } = filter;
-
+async function getGroupCountByGrade({ userId, where }) {
   const exchanges = await prisma.exchange.findMany({
     where: {
       userId,

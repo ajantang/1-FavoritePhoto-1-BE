@@ -65,9 +65,7 @@ async function findMyShopList({ userId, filter }) {
   });
 }
 
-async function getGroupCountByGrade({ userId, filter }) {
-  const { where } = filter;
-
+async function getGroupCountByGrade({ userId, where }) {
   const shops = await prisma.shop.findMany({
     where: {
       userId,

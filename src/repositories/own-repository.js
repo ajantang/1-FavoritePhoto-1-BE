@@ -25,9 +25,7 @@ async function createOwn({ cardId, userId, quantity }) {
   });
 }
 
-async function getGroupCountByGrade({ userId, filter }) {
-  const { where } = filter;
-
+async function getGroupCountByGrade({ userId, where }) {
   const owns = await prisma.own.findMany({
     where: {
       userId,

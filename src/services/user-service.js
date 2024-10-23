@@ -18,8 +18,9 @@ import {
 import userRepository from "../repositories/user-repository.js";
 import { userSelect } from "./selects/user-select.js";
 import { exchangeCardShopSelect } from "./selects/exchange-select.js";
-import { ownCardSelect } from "./selects/own-select.js";
+import { ownCardSelect, ownGradeSelect } from "./selects/own-select.js";
 import { cardDetailSelect } from "./selects/card-select.js";
+import { shopListSelect } from "./selects/shop-select.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
@@ -31,7 +32,22 @@ async function getMyCardList({ userId, query }) {
     where,
     select: ownCardSelect,
   });
-  const counts = await ownRepository.getGroupCountByGrade({ userId, filter });
+
+  const ownGradeList = await ownRepository.findManyData({
+    where,
+    select: ownGradeSelect,
+  });
+  const counts = ownGradeList.reduce((acc, own) => {
+    const grade = own.Card.grade;
+
+    if (!acc[grade]) {
+      acc[grade] = 0;
+    }
+
+    acc[grade] += own.quantity;
+
+    return acc;
+  }, {});
 
   return myCardListMapper({ counts, list });
 }
@@ -85,8 +101,15 @@ async function createMyCard({
 
 async function getMyShopList({ userId, query }) {
   const filter = createShopListFilterByQuery(query);
-  const list = await shopRepository.findMyShopList({ userId, filter });
-  const counts = await shopRepository.getGroupCountByGrade({ userId, filter });
+  const where = { userId, ...filter.where };
+  const list = await shopRepository.findManyByPaginationData({
+    orderBy: filter.orderBy,
+    skip: filter.skip,
+    take: filter.take,
+    where,
+    select: shopListSelect,
+  });
+  const counts = await shopRepository.getGroupCountByGrade({ userId, where });
 
   return myShopListMapper({ counts, list });
 }
