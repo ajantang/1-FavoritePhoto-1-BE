@@ -65,37 +65,6 @@ async function findMyShopList({ userId, filter }) {
   });
 }
 
-async function getGroupCountByGrade({ userId, where }) {
-  const shops = await prisma.shop.findMany({
-    where: {
-      userId,
-      ...where,
-    },
-    select: {
-      remainingQuantity: true,
-      Card: {
-        select: {
-          grade: true,
-        },
-      },
-    },
-  });
-
-  const counts = shops.reduce((acc, shop) => {
-    const grade = shop.Card.grade;
-
-    if (!acc[grade]) {
-      acc[grade] = 0;
-    }
-
-    acc[grade] += shop.remainingQuantity;
-
-    return acc;
-  }, {});
-
-  return counts;
-}
-
 async function deleteShop(id) {
   await prisma.shop.delete({ where: { id } });
 }
@@ -153,7 +122,6 @@ export default {
   checkUserShopOwner,
   updateShop,
   findMyShopList,
-  getGroupCountByGrade,
   deleteShop,
   findShopOwnerId,
   createData,

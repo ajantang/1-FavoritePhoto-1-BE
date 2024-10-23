@@ -25,37 +25,6 @@ async function createOwn({ cardId, userId, quantity }) {
   });
 }
 
-async function getGroupCountByGrade({ userId, where }) {
-  const owns = await prisma.own.findMany({
-    where: {
-      userId,
-      ...where,
-    },
-    select: {
-      quantity: true,
-      Card: {
-        select: {
-          grade: true,
-        },
-      },
-    },
-  });
-
-  const counts = owns.reduce((acc, own) => {
-    const grade = own.Card.grade;
-
-    if (!acc[grade]) {
-      acc[grade] = 0;
-    }
-
-    acc[grade] += own.quantity;
-
-    return acc;
-  }, {});
-
-  return counts;
-}
-
 async function deleteById(id) {
   return await prisma.own.delete({
     where: { id },
@@ -152,7 +121,6 @@ export default {
   getByFilter,
   update,
   createOwn,
-  getGroupCountByGrade,
   deleteById,
   addQuantity,
   decreaseQuantity,

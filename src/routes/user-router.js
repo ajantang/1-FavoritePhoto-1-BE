@@ -17,7 +17,7 @@ userRouter
     userController.getMyCard
   )
   .post("/my-cards", authMiddleware, userController.createMyCard)
-  .get("/exchange", authMiddleware, userController.getMyRequestList)
+  .get("/exchange", authMiddleware, userController.getMyExchangeList)
   .get("/shop", authMiddleware, userController.getMyShopList)
   .get("/my-info", authMiddleware, userController.getMyInfo)
   .get("/notifications", authMiddleware, userController.getMyNotificationList)

@@ -129,7 +129,7 @@ async function getMyShopList({ userId, query }) {
   return myShopListMapper({ counts, list });
 }
 
-async function getMyRequestList({ userId, query }) {
+async function getMyExchangeList({ userId, query }) {
   const { sort, genre, grade, pageNum, pageSize, keyword = "" } = query;
   const orderBy = createOrderBy(sort);
   const page = pageNum || 1;
@@ -168,7 +168,7 @@ export default {
   getMyCard,
   createMyCard,
   getMyShopList,
-  getMyRequestList,
+  getMyExchangeList,
   getUserInfoByUserId,
   getMyInfo,
 };
