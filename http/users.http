@@ -25,13 +25,13 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-  "name" : "모델 흑인",
-  "description" : "아프리카 남성 초상화",
-  "image" : "https://cdn.pixabay.com/photo/2020/10/28/14/01/man-5693573_640.jpg",
-  "grade" : 3,
-  "genre" : 4,
+  "name" : "모델 백인",
+  "description" : "흑백 여성 초상화",
+  "image" : "https://cdn.pixabay.com/photo/2017/05/28/09/44/woman-2350565_640.jpg",
+  "grade" : 2,
+  "genre" : 2,
   "price" : 3,
-  "quantity" : 5
+  "quantity" : 7
 }
 
 ###
@@ -93,8 +93,8 @@ POST http://localhost:3000/auth/sign-in
 Content-Type : application/json
 
 {
-    "email" : "codeit05@codeit.com",
-    "password" : "!codeit05"
+    "email" : "codeit03@codeit.com",
+    "password" : "!codeit03"
 }
 
 ###

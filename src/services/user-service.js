@@ -22,6 +22,8 @@ import { ownCardSelect, ownGradeSelect } from "./selects/own-select.js";
 import { cardDetailSelect } from "./selects/card-select.js";
 import { shopListSelect, shopGradeSelect } from "./selects/shop-select.js";
 
+import { EXCHANGE_VOLUME } from "../constants/exchange.js";
+
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
   const where = { userId, ...filter.where };
@@ -137,7 +139,12 @@ async function getMyExchangeList({ userId, query }) {
   const offset = (page - 1) * pageSizeNum;
   const skip = parseInt(offset);
   const take = parseInt(pageSizeNum);
-  const where = createGenreGradeKeywordWhere({ genre, grade, keyword });
+  const genreGradeKwywordWhere = createGenreGradeKeywordWhere({
+    genre,
+    grade,
+    keyword,
+  });
+  const where = { userId, ...genreGradeKwywordWhere };
   const list = await exchangeRepository.findManyByPaginationData({
     orderBy,
     skip,
@@ -145,10 +152,27 @@ async function getMyExchangeList({ userId, query }) {
     where,
     select: exchangeCardShopSelect,
   });
-  const counts = await exchangeRepository.countGroupCountByGrade({
-    userId,
+  const ownGradeList = await exchangeRepository.findManyData({
     where,
+    select: {
+      Card: {
+        select: {
+          grade: true,
+        },
+      },
+    },
   });
+  const counts = ownGradeList.reduce((acc, own) => {
+    const grade = own.Card.grade;
+
+    if (!acc[grade]) {
+      acc[grade] = 0;
+    }
+
+    acc[grade] += EXCHANGE_VOLUME;
+
+    return acc;
+  }, {});
 
   return myExchangeListMapper({ counts, list });
 }
