@@ -6,7 +6,7 @@ import purchaseRepository from "../repositories/purchase-repository.js";
 import shopRepository from "../repositories/shop-repository.js";
 import userRepository from "../repositories/user-repository.js";
 import { basicCardMapper, myCardMapper } from "./mappers/card-mapper.js";
-import { ownCardListSelect } from "../repositories/selects/own-select.js";
+import { ownCardListSelect } from "../services/selects/own-select.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
 
 async function createShop(createData) {

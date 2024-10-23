@@ -7,7 +7,7 @@ import userService from "../services/user-service.js";
 import ownRepository from "../repositories/own-repository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import shopRepository from "../repositories/shop-repository.js";
-import { exchangeCardShopAndUserSelect } from "../repositories/selects/exchange-select.js";
+import { exchangeCardShopAndUserSelect } from "../services/selects/exchange-select.js";
 import { shopDetailSelect } from "../services/selects/shop-select.js";
 import { CustomError } from "../lib/custom-error.js";
 
