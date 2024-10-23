@@ -25,14 +25,14 @@ export function createShopMapper(data) {
   };
 }
 
-export function getShopListMapper(list, total) {
+export function getShopListMapper(list, totalCount) {
   const shops = list.map((shop) => {
     const card = shop.Card;
     const creator = card.User;
     let sellout;
 
     if (shop.remainingQuantity === 0) {
-      sellout == true;
+      sellout = true;
     } else {
       sellout = false;
     }
@@ -53,7 +53,7 @@ export function getShopListMapper(list, total) {
   });
 
   return {
-    total,
+    totalCount,
     shops,
   };
 }

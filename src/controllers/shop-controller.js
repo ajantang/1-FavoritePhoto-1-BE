@@ -13,16 +13,8 @@ async function createShop(req, res, next) {
 }
 
 async function getShopList(req, res, next) {
-  const shops = await shopService.getShopListByQuery(req.query);
-  const count = await shopService.countShopListByQuery(req.query);
-  const [list, total] = await Promise.all([shops, count]);
-
-  console.log("shops : ", shops);
-  console.log("count : ", count);
-
-  const responseData = getShopListMapper(list, total);
-
-  res.send(responseData);
+  const shops = await shopService.getShopList(req.query);
+  res.send(shops);
 }
 
 async function getShopDetail(req, res, next) {
