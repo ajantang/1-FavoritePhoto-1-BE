@@ -365,24 +365,22 @@
   "quantity": 7
   }
 
-## POST /shop/:shopId/purchase
+## POST /shop/purchase
 
 ### req template
 
 - description: 포토카드 구매
 - path: /shop/:shopId/purchase
-- method: POST
-- params
-  - shopId: 상점ID
+- method: POS
 - body
+  - shopId: 상점 아이디
   - purchaseQuantity: 구매 수량
 
 ### req example
 
-- params
-  - adfc1706-a7f6-4c6e-a006-1733a854afbb
 - body
   {
+  shopId: adfc1706-a7f6-4c6e-a006-1733a854afbb
   purchaseQuantity: 2
   }
 
