@@ -68,7 +68,7 @@ export async function validateUpdaeShopData(req, res, next) {
   const isOwner = await shopRepository.findFirstData({
     where: {
       userId,
-      shopId,
+      id: shopId,
     },
   });
 
@@ -84,9 +84,15 @@ export async function validateUpdaeShopData(req, res, next) {
   let ownIncrementQuantity;
   let isOutOfStock = false;
   let creatOwnQuantity;
+  let isQuantityChanged = false;
 
-  // req.body에 salesQuantity가 있을 시
-  if (salesQuantity) {
+  // 수량에 변경 사항이 있는지 확인
+  if (salesQuantity !== remainingQuantity) {
+    isQuantityChanged = true;
+  }
+
+  // req.body에 수량에 변경 사항이 있을 시
+  if (isQuantityChanged) {
     // own이 있는 지 확인
     const own = await ownRepository.findFirstData({
       where: {
@@ -126,6 +132,7 @@ export async function validateUpdaeShopData(req, res, next) {
     ownIncrementQuantity,
     isOutOfStock,
     creatOwnQuantity,
+    isQuantityChanged,
   };
 
   req.body.ownData = ownData;

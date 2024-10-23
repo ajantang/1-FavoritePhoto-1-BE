@@ -20,17 +20,20 @@ GET http://localhost:3000/shop/b49e0270-04b4-4d69-aea8-f720c3cefbe6
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-PATCH http://localhost:3000/shop/601cb12a-2ab9-49d4-a75e-b64295c3939b
+PATCH http://localhost:3000/shop/b49e0270-04b4-4d69-aea8-f720c3cefbe6
 Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
     "salesQuantity": 1,
-    "price": 4,
-    "exchangeGrade": 0,
-    "exchangeGenre": 4,
+    "price": 5,
+    "exchangeGrade": 1,
+    "exchangeGenre": 2,
     "exchangeDescription": "테스트 진행중"
 }
+
+###
+DELETE http://localhost:3000/shop/fb2a7655-e9a1-4f48-8669-60cd8ca130d7
 
 ###
 POST http://localhost:3000/shop/cbb24524-6818-4b46-8afb-00dd26f379ba/purchase

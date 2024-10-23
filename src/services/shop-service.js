@@ -6,7 +6,10 @@ import purchaseRepository from "../repositories/purchase-repository.js";
 import shopRepository from "../repositories/shop-repository.js";
 import userRepository from "../repositories/user-repository.js";
 import { basicCardMapper, myCardMapper } from "./mappers/card-mapper.js";
-import { ownCardListSelect } from "../services/selects/own-select.js";
+import {
+  ownCardListSelect,
+  ownCardSelect,
+} from "../services/selects/own-select.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
 import {
   shopCreateSelect,
@@ -111,60 +114,77 @@ async function getShopDetail(userId, shopId) {
   });
 }
 
-async function checkUserShopOwner(userId, shopId) {
-  const filter = {
-    userId,
-    id: shopId,
-  };
+async function updateShop(shopId, updateData) {
+  const { ownData, userId, cardId, ...rest } = updateData;
+  const {
+    ownId,
+    ownIncrementQuantity,
+    isOutOfStock,
+    creatOwnQuantity,
+    isQuantityChanged,
+  } = ownData;
 
-  return await shopRepository.checkUserShopOwner(filter);
+  return await prisma.$transaction(async () => {
+    const shop = await shopRepository.updateData({
+      where: { id: shopId },
+      data: rest,
+      select: shopCreateSelect,
+    });
+    console.log(shop);
+
+    // 판매 수량을 최대치로 변경 시
+    if (isOutOfStock) {
+      await ownRepository.deleteData({ id: ownId });
+
+      // 판매 수량이 수정됐을 때
+    } else if (isQuantityChanged) {
+      const own = await ownRepository.upsertData({
+        where: { id: ownId },
+        update: {
+          quantity: { increment: ownIncrementQuantity },
+        },
+        create: {
+          userId,
+          cardId,
+          quantity: creatOwnQuantity,
+        },
+      });
+      console.log(own);
+    }
+
+    return createShopMapper(shop);
+  });
 }
 
-// service 파일 내에서 사용
-async function updateOrDeleteOwn(id, updateData) {
-  const { ownData, userId, cardId, ...rest } = updateData;
-  const { ownId, ownUpdateQuantity, isOutOfStock } = ownData;
-
-  const where = { id: ownId };
-  const updateQuantity = { quantity: ownUpdateQuantity };
-
-  if (isOutOfStock) {
-    return await prisma.$transaction(async () => {
-      const shop = await shopRepository.updateShop(id, rest);
-      const q = await ownRepository.deleteById(ownId);
-
-      return shop;
+async function deleteShop({ userId, shopId }) {
+  return await prisma.$transaction(async () => {
+    const shop = await shopRepository.findUniqueOrThrowtData({
+      where: { id: shopId },
     });
-  } else if (!isOutOfStock) {
-    return await prisma.$transaction(async () => {
-      const shop = await shopRepository.updateShop(id, rest);
-      const q = await ownRepository.update(where, updateQuantity);
-
-      return shop;
-    });
-  }
-}
-
-async function updateShop(id, updateData) {
-  const { ownData, userId, cardId, ...rest } = updateData;
-  const { ownId, isOwn, creatOwnQuantity } = ownData;
-  if (ownId) {
-    return await updateOrDeleteOwn(id, updateData);
-  } else if (!isOwn) {
-    return await prisma.$transaction(async () => {
-      const createOwnData = {
+    const own = await ownRepository.upsertData({
+      where: {
+        userId_cardId: {
+          userId,
+          cardId: shop.cardId,
+        },
+      },
+      update: {
+        quantity: {
+          increment: shop.remainingQuantity,
+        },
+      },
+      create: {
         userId,
-        cardId,
-        quantity: creatOwnQuantity,
-      };
-      const shop = await shopRepository.updateShop(id, rest);
-      const q = await ownRepository.createOwn(createOwnData);
-
-      return shop;
+        cardId: shop.cardId,
+        quantity: shop.remainingQuantity,
+      },
+      select: ownCardSelect,
     });
-  } else {
-    return await shopRepository.updateShop(id, rest);
-  }
+
+    await shopRepository.deleteData({ id: shopId });
+
+    return myCardMapper(own);
+  });
 }
 
 async function purchaseService(id, userId, purchaseData) {
@@ -249,21 +269,6 @@ async function purchaseService(id, userId, purchaseData) {
   });
 }
 
-async function deleteShop({ userId, shopId }) {
-  return prisma.$transaction(async () => {
-    const shop = await shopRepository.getShopDetailById(shopId);
-    const own = await ownRepository.addQuantity({
-      userId,
-      cardId: shop.Card.id,
-      increment: shop.remainingQuantity,
-    });
-
-    await shopRepository.deleteShop(shopId);
-
-    return myCardMapper(own);
-  });
-}
-
 async function calculateTotalQuantity(userId, shopData) {
   const own = await ownRepository.findFirstData({
     where: {
@@ -280,7 +285,6 @@ export default {
   createShop,
   getShopList,
   getShopDetail,
-  checkUserShopOwner,
   updateShop,
   purchaseService,
   deleteShop,

@@ -27,24 +27,7 @@ async function getShopDetail(req, res, next) {
 async function updateShop(req, res, next) {
   const { shopId } = req.params;
   const shop = await shopService.updateShop(shopId, req.body);
-  const responseData = createShopMapper(shop);
-  res.send(responseData);
-}
-// 상품 업데이트
-// 수량변경 시 own 업데이트
-// 내가 보유한 양의 최대치로 변경 시 own 삭제
-// 반대로 최대치에서 줄일때 own 생성
-// upsert 사용
-
-async function purchaseController(req, res, next) {
-  const { shopId } = req.params;
-  const userId = req.session.userId;
-
-  const purchase = await shopService.purchaseService(shopId, userId, req.body);
-  res.send(purchase);
-  // 구매 관련 알림 추가(구매자, 판매자).
-  // 교환 취소 알림 추가
-  // 매진 됐을 시 알람
+  res.send(shop);
 }
 
 async function deleteShop(req, res, next) {
@@ -57,6 +40,17 @@ async function deleteShop(req, res, next) {
   } catch (err) {
     return next(err);
   }
+}
+
+async function purchaseController(req, res, next) {
+  const { shopId } = req.params;
+  const userId = req.session.userId;
+
+  const purchase = await shopService.purchaseService(shopId, userId, req.body);
+  res.send(purchase);
+  // 구매 관련 알림 추가(구매자, 판매자).
+  // 교환 취소 알림 추가
+  // 매진 됐을 시 알람
 }
 
 async function createExchange(req, res, next) {
