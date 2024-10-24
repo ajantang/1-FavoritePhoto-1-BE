@@ -239,10 +239,6 @@ async function purchaseService(userId, purchaseData) {
       console.log({ purchase });
 
       // 구매자 해당 카드 보유 추가
-      const updateOwnWhere = {
-        userId,
-        cardId: shopDetailData.Card.id,
-      };
       const purchaserOwn = await ownRepository.upsertData({
         where: {
           userId_cardId: {
