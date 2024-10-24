@@ -69,13 +69,10 @@ async function createExchange(req, res, next) {
     return next(err);
   }
 }
-// 보유량 감소
-// excahage 추가
 
 async function calculateTotalQuantity(req, res, next) {
   const userId = req.session.userId;
   const shopData = req.body.shopData;
-  console.log(1);
 
   const result = await shopService.calculateTotalQuantity(userId, shopData);
 

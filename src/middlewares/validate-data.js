@@ -60,12 +60,10 @@ export function validateSignInUserData(req, res, next) {
   return next();
 }
 
-export async function validateUpdaeShopData(req, res, next) {
-  const userId = req.session.userId;
+export async function checkShopCreatorByParams(req, res, next) {
   const { shopId } = req.params;
-  const { salesQuantity, ...rest } = req.body;
+  const userId = req.session.userId;
 
-  // 등록한 사람인지 확인
   const isOwner = await shopRepository.findFirstData({
     where: {
       userId,
@@ -73,10 +71,18 @@ export async function validateUpdaeShopData(req, res, next) {
     },
   });
 
-  // 등록한 사람이 아닐 시
   if (isOwner === null || isOwner === undefined) {
-    return next(CustomError(40302));
+    return next(CustomError(40102));
   }
+
+  req.body.shopData = isOwner;
+
+  next();
+}
+
+export async function validateUpdaeShopData(req, res, next) {
+  const userId = req.session.userId;
+  const { salesQuantity, shopData: isOwner, ...rest } = req.body;
 
   const { remainingQuantity } = isOwner;
   const newReqBody = { ...rest };
@@ -301,26 +307,6 @@ export async function validateExchangeCreator(req, res, next) {
   req.body.exchangeCardId = exchangeCardId;
   req.body.shopId = shopId;
   req.body.buyerId = buyerId;
-
-  next();
-}
-
-export async function checkShopCreator(req, res, next) {
-  const { shopId } = req.params;
-  const userId = req.session.userId;
-
-  const isOwner = await shopRepository.findFirstData({
-    where: {
-      userId,
-      id: shopId,
-    },
-  });
-
-  if (isOwner === null || isOwner === undefined) {
-    return next(CustomError(40398));
-  }
-
-  req.body.shopData = isOwner;
 
   next();
 }

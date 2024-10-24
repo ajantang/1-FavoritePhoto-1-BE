@@ -1,7 +1,7 @@
 import express from "express";
 import shopController from "../controllers/shop-controller.js";
 import {
-  checkShopCreator,
+  checkShopCreatorByParams,
   validateCreateShopData,
   validatePurchaseConditions,
   validateUpdaeShopData,
@@ -29,7 +29,7 @@ shopRouter.post(
 shopRouter
   .route("/:shopId")
   .get(shopController.getShopDetail)
-  .patch(authMiddleware, validateUpdaeShopData, shopController.updateShop)
+  .patch(authMiddleware, checkShopCreatorByParams, validateUpdaeShopData, shopController.updateShop)
   .delete(
     authMiddleware,
     authMiddlewareByShopIdParam,
@@ -46,6 +46,6 @@ shopRouter
 
 shopRouter
   .route("/:shopId/quantity")
-  .get(authMiddleware, checkShopCreator, shopController.calculateTotalQuantity);
+  .get(authMiddleware, checkShopCreatorByParams, shopController.calculateTotalQuantity);
 
 export default shopRouter;
