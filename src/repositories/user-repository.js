@@ -11,13 +11,6 @@ async function createUser({ email, encryptedPassword, nickname }) {
   });
 }
 
-async function getUserInfoByUserId(id) {
-  return await prisma.user.findUniqueOrThrow({
-    where: { id },
-    select: userSelect,
-  });
-}
-
 async function getUserInfoPasswordByEmail(email) {
   return await prisma.user.findUniqueOrThrow({
     where: { email },
@@ -97,7 +90,6 @@ async function deleteManyData(where) {
 
 export default {
   createUser,
-  getUserInfoByUserId,
   getUserInfoPasswordByEmail,
   increaseUserPoint,
   decreaseUserPoint,

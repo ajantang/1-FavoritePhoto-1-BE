@@ -166,7 +166,6 @@
   - genre : 장르 (필터 / int로 전달)
   - sellout : true || false매진 여부 (필터)
   - grade : 등급 (필터 / int로 전달)
-  - ownerId : 판매자 ID(필터)
   - pageNum : 페이지 넘버(페이지네이션)
   - pageSize : 페이지 사이즈(페이지네이션)
   - keyword : 판매 포토 카드의 이름(name), 설명(description) 중 포함 단어 여부로 검색
