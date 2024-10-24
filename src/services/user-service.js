@@ -18,8 +18,11 @@ import {
 import userRepository from "../repositories/user-repository.js";
 import { userSelect } from "./selects/user-select.js";
 import { exchangeCardShopSelect } from "./selects/exchange-select.js";
-import { ownCardSelect } from "./selects/own-select.js";
+import { ownCardSelect, ownGradeSelect } from "./selects/own-select.js";
 import { cardDetailSelect } from "./selects/card-select.js";
+import { shopListSelect, shopGradeSelect } from "./selects/shop-select.js";
+
+import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 
 async function getMyCardList({ userId, query }) {
   const filter = createCardListFilterByQuery(query);
@@ -31,7 +34,22 @@ async function getMyCardList({ userId, query }) {
     where,
     select: ownCardSelect,
   });
-  const counts = await ownRepository.getGroupCountByGrade({ userId, filter });
+
+  const ownGradeList = await ownRepository.findManyData({
+    where,
+    select: ownGradeSelect,
+  });
+  const counts = ownGradeList.reduce((acc, own) => {
+    const grade = own.Card.grade;
+
+    if (!acc[grade]) {
+      acc[grade] = 0;
+    }
+
+    acc[grade] += own.quantity;
+
+    return acc;
+  }, {});
 
   return myCardListMapper({ counts, list });
 }
@@ -85,13 +103,35 @@ async function createMyCard({
 
 async function getMyShopList({ userId, query }) {
   const filter = createShopListFilterByQuery(query);
-  const list = await shopRepository.findMyShopList({ userId, filter });
-  const counts = await shopRepository.getGroupCountByGrade({ userId, filter });
+  const where = { userId, ...filter.where };
+  const list = await shopRepository.findManyByPaginationData({
+    orderBy: filter.orderBy,
+    skip: filter.skip,
+    take: filter.take,
+    where,
+    select: shopListSelect,
+  });
+
+  const shopGradeList = await shopRepository.findManyData({
+    where,
+    select: shopGradeSelect,
+  });
+  const counts = shopGradeList.reduce((acc, shop) => {
+    const grade = shop.Card.grade;
+
+    if (!acc[grade]) {
+      acc[grade] = 0;
+    }
+
+    acc[grade] += shop.remainingQuantity;
+
+    return acc;
+  }, {});
 
   return myShopListMapper({ counts, list });
 }
 
-async function getMyRequestList({ userId, query }) {
+async function getMyExchangeList({ userId, query }) {
   const { sort, genre, grade, pageNum, pageSize, keyword = "" } = query;
   const orderBy = createOrderBy(sort);
   const page = pageNum || 1;
@@ -99,7 +139,12 @@ async function getMyRequestList({ userId, query }) {
   const offset = (page - 1) * pageSizeNum;
   const skip = parseInt(offset);
   const take = parseInt(pageSizeNum);
-  const where = createGenreGradeKeywordWhere({ genre, grade, keyword });
+  const genreGradeKwywordWhere = createGenreGradeKeywordWhere({
+    genre,
+    grade,
+    keyword,
+  });
+  const where = { userId, ...genreGradeKwywordWhere };
   const list = await exchangeRepository.findManyByPaginationData({
     orderBy,
     skip,
@@ -107,19 +152,32 @@ async function getMyRequestList({ userId, query }) {
     where,
     select: exchangeCardShopSelect,
   });
-  const counts = await exchangeRepository.countGroupCountByGrade({
-    userId,
+  const ownGradeList = await exchangeRepository.findManyData({
     where,
+    select: {
+      Card: {
+        select: {
+          grade: true,
+        },
+      },
+    },
   });
+  const counts = ownGradeList.reduce((acc, own) => {
+    const grade = own.Card.grade;
+
+    if (!acc[grade]) {
+      acc[grade] = 0;
+    }
+
+    acc[grade] += EXCHANGE_VOLUME;
+
+    return acc;
+  }, {});
 
   return myExchangeListMapper({ counts, list });
 }
 
-async function getUserInfoByUserId(id) {
-  return await userRepository.getUserInfoByUserId(id);
-}
-
-async function getMyInfo(id) {
+async function getUserInfoById(id) {
   const where = { id };
 
   return await userRepository.findFirstData({ where, select: userSelect });
@@ -130,7 +188,6 @@ export default {
   getMyCard,
   createMyCard,
   getMyShopList,
-  getMyRequestList,
-  getUserInfoByUserId,
-  getMyInfo,
+  getMyExchangeList,
+  getUserInfoById,
 };

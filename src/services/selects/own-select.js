@@ -17,3 +17,12 @@ export const ownCardListSelect = {
   ...ownSelect,
   Card: { select: cardSelect },
 };
+
+export const ownGradeSelect = {
+  quantity: true,
+  Card: {
+    select: {
+      grade: true,
+    },
+  },
+};

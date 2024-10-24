@@ -164,7 +164,6 @@ export async function validatePurchaseConditions(req, res, next) {
   });
   console.log({ shop });
   const { remainingQuantity } = shop;
-  // const updatedShopQuantity = remainingQuantity - purchaseQuantity;
 
   // 매진 여부 확인
   if (remainingQuantity === 0) {
@@ -179,6 +178,7 @@ export async function validatePurchaseConditions(req, res, next) {
     where: { id: userId },
   });
   console.log({ user });
+
   const totalPrice = purchaseQuantity * shop.price;
 
   // 총 판매가와 보유 포인트 대조
@@ -186,19 +186,9 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(CustomError(40399));
   }
 
-  // 구매자가 해당 카드를 소유하는지 확인
-  // const ownsCard = await ownRepository.findFirstData({
-  //   where: {
-  //     userId,
-  //     cardId: shop.Card.id,
-  //   },
-  // });
-
   req.body.sellerUserId = shop.userId;
   req.body.tradePoints = totalPrice;
-  // req.body.updatedShopQuantity = updatedShopQuantity;
   req.body.shopDetailData = shop;
-  // req.body.ownsCard = ownsCard;
 
   return next();
 }

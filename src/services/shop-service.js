@@ -189,9 +189,7 @@ async function purchaseService(userId, purchaseData) {
     purchaseQuantity,
     sellerUserId,
     tradePoints,
-    // updatedShopQuantity,
     shopDetailData,
-    // ownsCard,
   } = purchaseData;
 
   return await prisma.$transaction(async () => {

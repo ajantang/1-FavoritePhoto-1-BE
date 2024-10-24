@@ -59,11 +59,11 @@ async function getMyShopList(req, res, next) {
   }
 }
 
-async function getMyRequestList(req, res, next) {
+async function getMyExchangeList(req, res, next) {
   try {
     const userId = req.session.userId;
     const query = req.query;
-    const result = await userService.getMyRequestList({ userId, query });
+    const result = await userService.getMyExchangeList({ userId, query });
 
     return res.status(200).send(result);
   } catch (err) {
@@ -74,7 +74,7 @@ async function getMyRequestList(req, res, next) {
 async function getMyInfo(req, res, next) {
   try {
     const userId = req.session.userId;
-    const result = await userService.getMyInfo(userId);
+    const result = await userService.getUserInfoById(userId);
 
     return res.status(200).send(result);
   } catch (err) {
@@ -119,7 +119,7 @@ export default {
   getMyCard,
   createMyCard,
   getMyShopList,
-  getMyRequestList,
+  getMyExchangeList,
   getMyInfo,
   getMyNotificationList,
 };
