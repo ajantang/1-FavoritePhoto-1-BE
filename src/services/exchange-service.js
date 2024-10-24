@@ -11,6 +11,8 @@ import {
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shop-repository.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
+import notificationRepository from "../repositories/notification-repository.js";
+import { shopListSelect } from "./selects/shop-select.js";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {
@@ -48,6 +50,21 @@ async function createExchange({ userId, shopId, cardId, description }) {
     const exchange = await exchangeRepository.createData({
       data: exchangeData,
       select: exchangeCardShopSelect,
+    });
+
+    const shop = await shopRepository.findUniqueOrThrowtData({
+      where: { id: shopId },
+      select: shopListSelect,
+    });
+    const grade = shop.Card.grade;
+    const name = shop.Card.name;
+
+    const notification = await notificationRepository.createData({
+      data: {
+        // userId: shop.userId
+        // shopId,
+        // message:
+      },
     });
 
     return exchangeCreateMapper(exchange);
