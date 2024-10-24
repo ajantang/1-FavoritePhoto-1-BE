@@ -1,49 +1,43 @@
+import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import ownRepository from "../repositories/own-repository.js";
+import prisma from "../repositories/prisma.js";
 
-
-export async function exchangeDelete(shopDetailDataWithExchange) {
-
+export async function exchangeDelete(
+  shopDetailDataWithExchange,
+  excludeExchangeId
+) {
   const exchangesCardInfo = shopDetailDataWithExchange.Exchanges;
-  const exchangeDeleteData = await Promise.all(
-    exchangesCardInfo.map(async (exchangeInfo) => {
-      const userId = exchangeInfo.userId;
-      const cardId = exchangeInfo.Card.id;
 
-      const own = await ownRepository.findFirstData({
-        where: {
-          userId,
-          cardId,
-        },
-      });
+  await prisma.$transaction(async () => {
+    const updateOrcreateOwn = await Promise.all(
+      exchangesCardInfo.map(async (exchangeInfo) => {
+        const userId = exchangeInfo.userId;
+        const cardId = exchangeInfo.Card.id;
 
-      if (own === null || own === undefined) {
-        const createData = {
-          userId,
-          cardId,
-          quantity: 1,
-        };
-        const result = await ownRepository.createData({ data: createData });
-      } else {
-        const updateWhere = {
-          userId_cardId: {
+        if (exchangeInfo.id === excludeExchangeId) {
+          return;
+        }
+        
+        return await ownRepository.upsertData({
+          where: {
+            userId_cardId: { userId, cardId },
+          },
+          update: {
+            quantity: { increment: EXCHANGE_VOLUME },
+          },
+          create: {
             userId,
             cardId,
+            quantity: EXCHANGE_VOLUME,
           },
-        };
-        const updateData = {
-          quantity: {
-            increment: 1,
-          },
-        };
-        const result = await ownRepository.updateData({
-          where: updateWhere,
-          data: updateData,
         });
-      }
-    })
-  );
-  await exchangeRepository.deleteManyData({
-    shopId: shopDetailDataWithExchange.id,
+      })
+    );
+    console.log({ updateOrcreateOwn });
+
+    await exchangeRepository.deleteManyData({
+      shopId: shopDetailDataWithExchange.id,
+    });
   });
 }

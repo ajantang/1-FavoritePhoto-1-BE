@@ -365,50 +365,104 @@
   "quantity": 7
   }
 
-
-## POST /shop/:shopId/purchase
+## POST /shop/purchase
 
 ### req template
+
 - description: 포토카드 구매
 - path: /shop/:shopId/purchase
-- method: POST
-- params
-    - shopId: 상점ID
+- method: POS
 - body
-    - purchaseQuantity: 구매 수량
+  - shopId: 상점 아이디
+  - purchaseQuantity: 구매 수량
 
 ### req example
 
-- params
-  - adfc1706-a7f6-4c6e-a006-1733a854afbb
 - body
-{
-	purchaseQuantity: 2
-}
+  {
+  shopId: adfc1706-a7f6-4c6e-a006-1733a854afbb
+  purchaseQuantity: 2
+  }
 
 ### res template
 
 - data
-    - grade: 구매한  포토카드 등급
-    - name: 구매한 포토카드 이름
-    - purchaseQuantity: 구매 수량
+  - id: 구매한 카드 아이디
+  - image: 구매한 카드 이미지
+  - name: 구매한 카드 이름
+  - grade: 구매한 카드 등급
+  - genre: 구매한 카드 장르
+  - price: 구매한 카드 원가
+  - nickname: 구매한 카드 원작자
+  - purchaseQuantity: 구매 수량
 
 ### res example
 
 - data : {
-	grade: 5,
-	name: "우리집 앞마당",
-	purchaseQuantity: 2
+  id: "2dfc4706-a7f6-4c6e-a006-1733a854afbb",
+  image: "이미지 URL",
+  name: "우리집 앞마당",
+  grade: 3,
+  genre: 5,
+  price: 4,
+  nickname: "유디",
+  purchaseQuantity: 2
+  }
+
+## GET /shop/exchange
+
+### req template
+
+- description: 포토 카드 교환 제시
+- path: /shop/exchange
+- method: POST
+- body 
+  - shopId: 상점ID
+  - cardId: 교환할 내 포토카드 ID
+  - description: 교환 제시 내용
+
+### req example
+
+- body: {
+  shopId : "adfc1706-a7f6-4c6e-a006-1733a854afbb",
+  cardId: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
+  description: "스페인 여행 사진도 좋은데.. 우리집 앞마당 포토카드와 교환하고 싶습니다!"
+  }
+
+### res template
+
+- data
+    - id: 교환ID
+    - description: 교환 제시 내용량
+    - image: 사진
+    - name: 카드 이름
+    - grade: 등급
+    - genre: 장르
+    - price: 원가
+    - creatorNickname: 원작자 이름
+
+### res example
+
+- data : {
+  "id": "32fb1538-5b54-4270-a9e4-d0bddaacdedd",
+  "description": "교환 신청 테스트00",
+  "image": "123456",
+  "name": "wewewew",
+  "grade": 1,
+  "genre": 1,
+  "price": 5,
+  "nickname": "코드잇01"
 }
 
 ## GET /shop/:shopId/quantity
 
 ### req template
+
 - description: 상점 잔여량 + 보유 중인 카드 조회
 - path: /shop/:shopId/quantity
 - method: GET
 - params
-    - shopId: 상점ID
+  - shopId: 상점ID
 
 ### req example
 
@@ -418,10 +472,10 @@
 ### res template
 
 - data
-    - totalQuantity: 상점 잔여량 + 보유 중인 카드
+  - totalQuantity: 상점 잔여량 + 보유 중인 카드
 
 ### res example
 
 - data : {
-	totalQuantity: 10,
-}
+  totalQuantity: 10,
+  }

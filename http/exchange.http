@@ -3,8 +3,8 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-    "shopId" : "3860b272-c816-4f52-bf09-1e0227f639ee",
-    "cardId" : "9ee4c9c8-8bbf-4aac-a93b-1a75647d5b56",
+    "shopId" : "b49e0270-04b4-4d69-aea8-f720c3cefbe6",
+    "cardId" : "4a1945e8-246e-4386-8e46-7cc3f8842b7b",
     "description" :"교환 신청 테스트00"
 }
 
@@ -76,15 +76,15 @@ POST http://localhost:3000/auth/sign-out
 
 
 ###
-POST http://localhost:3000/exchange/d4ba8021-fb6c-4862-a53e-0bb01ab12003/accept
+POST http://localhost:3000/exchange/1596e3d0-7788-4f10-a2ae-f76e5dac860c/accept
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-POST http://localhost:3000/exchange/d4ba8021-fb6c-4862-a53e-0bb01ab12003/refuse
+POST http://localhost:3000/exchange/8507947e-20cf-4e8d-b48f-f9053f772e5b/refuse
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-DELETE http://localhost:3000/exchange/d4ba8021-fb6c-4862-a53e-0bb01ab12003
+DELETE http://localhost:3000/exchange/cfc86b35-9782-46f6-8064-053e0129d126
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 
