@@ -5,7 +5,7 @@ export function exchangeMapper(basicSelect) {
   const mappedCard = basicCardMapper(basicSelect);
 
   return {
-    exchangeId: basicSelect.id,
+    id: basicSelect.id,
     shopId: basicSelect.shopId,
     description: basicSelect.description,
     ...mappedCard,
@@ -24,4 +24,14 @@ export function myExchangeListMapper({ counts, list }) {
   };
 
   return mappedData;
+}
+
+export function exchangeCreateMapper(basicSelect) {
+  const { id, ...rest } = basicCardMapper(basicSelect);
+
+  return {
+    id: basicSelect.id,
+    description: basicSelect.description,
+    ...rest,
+  };
 }

@@ -3,8 +3,8 @@ Content-Type : application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-    "shopId" : "3860b272-c816-4f52-bf09-1e0227f639ee",
-    "cardId" : "9ee4c9c8-8bbf-4aac-a93b-1a75647d5b56",
+    "shopId" : "b49e0270-04b4-4d69-aea8-f720c3cefbe6",
+    "cardId" : "4a1945e8-246e-4386-8e46-7cc3f8842b7b",
     "description" :"교환 신청 테스트00"
 }
 

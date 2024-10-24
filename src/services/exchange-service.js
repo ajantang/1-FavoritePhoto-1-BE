@@ -3,7 +3,7 @@ import ownRepository from "../repositories/own-repository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import { ownCardSelect } from "../services/selects/own-select.js";
 import { exchangeCardShopSelect } from "../services/selects/exchange-select.js";
-import { exchangeMapper } from "./mappers/exchange-mapper.js";
+import { exchangeCreateMapper } from "./mappers/exchange-mapper.js";
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shop-repository.js";
@@ -47,7 +47,7 @@ async function createExchange({ userId, shopId, cardId, description }) {
       select: exchangeCardShopSelect,
     });
 
-    return exchangeMapper(exchange);
+    return exchangeCreateMapper(exchange);
   });
 }
 
@@ -128,7 +128,7 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
         await exchangeDelete(shopDetailData);
       }
 
-      const responseMappeing = exchangeMapper(exchangeData);
+      const responseMappeing = exchangeCreateMapper(exchangeData);
 
       return {
         successStatus: true,
@@ -166,7 +166,7 @@ async function refuseOrCancelExchange(exchangeId, reqBody) {
         },
       });
 
-      const responseMappeing = exchangeMapper(exchangeData);
+      const responseMappeing = exchangeCreateMapper(exchangeData);
 
       return {
         successStatus: true,
