@@ -11,6 +11,7 @@ import {
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shop-repository.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
+import { create } from "superstruct";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {
@@ -62,8 +63,6 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
     buyerId,
     shopDetailData,
     shopCardId,
-    // hasSellerExchangeCard,
-    // hasBuyershopCard,
   } = reqBody;
   console.log(shopCardId);
 
@@ -153,19 +152,24 @@ async function refuseOrCancelExchange(exchangeId, reqBody) {
       console.log(delteeExchange);
 
       // 교환 희망자의 own에 +1
-      const own = await ownRepository.updateData({
+      const own = await ownRepository.upsertData({
         where: {
           userId_cardId: {
             userId: buyerId,
             cardId: exchangeCardId,
           },
         },
-        data: {
-          quantity: { increment: 1 },
+        update: {
+          quantity: { increment: EXCHANGE_VOLUME },
+        },
+        create: {
+          userId: buyerId,
+          cardId: exchangeCardId,
+          quantity: EXCHANGE_VOLUME,
         },
       });
 
-      const responseMappeing = exchangeCreateMapper(exchangeData);
+      const responseMappeing = exchangeDecisionMapper(exchangeData);
 
       return {
         successStatus: true,
