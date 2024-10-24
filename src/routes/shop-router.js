@@ -15,44 +15,39 @@ import {
 const shopRouter = express.Router();
 
 shopRouter
-  .route("/")
-  .post(authMiddleware, validateCreateShopData, shopController.createShop)
-  .get(shopController.getShopList);
-
-shopRouter
-  .route("/:shopId")
-  .get(shopController.getShopDetail)
+  .post("/", authMiddleware, validateCreateShopData, shopController.createShop)
+  .get("/", shopController.getShopList)
+  .get("/:shopId", shopController.getShopDetail)
   .patch(
+    "/:shopId",
     authMiddleware,
     checkShopCreatorByParams,
     validateUpdaeShopData,
     shopController.updateShop
   )
   .delete(
+    "/:shopId",
     authMiddleware,
     authMiddlewareByShopIdParam,
     shopController.deleteShop
+  )
+  .get(
+    "/:shopId/quantity",
+    authMiddleware,
+    checkShopCreatorByParams,
+    shopController.calculateTotalQuantity
+  )
+  .post(
+    "/purchase",
+    authMiddleware,
+    validatePurchaseConditions,
+    shopController.purchaseController
+  )
+  .post(
+    "/exchange",
+    authMiddleware,
+    authMiddlewareByCardIdBody,
+    shopController.createExchange
   );
-
-shopRouter.get(
-  "/:shopId/quantity",
-  authMiddleware,
-  checkShopCreatorByParams,
-  shopController.calculateTotalQuantity
-);
-
-shopRouter.post(
-  "/purchase",
-  authMiddleware,
-  validatePurchaseConditions,
-  shopController.purchaseController
-);
-
-shopRouter.post(
-  "/exchange",
-  authMiddleware,
-  authMiddlewareByCardIdBody,
-  shopController.createExchange
-);
 
 export default shopRouter;
