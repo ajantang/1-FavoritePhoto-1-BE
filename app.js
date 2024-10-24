@@ -37,7 +37,7 @@ redisClient.connect().then(console.log("redis connected")).catch(console.error);
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "https://localhost:3000"],
     credentials: true,
   })
 );
@@ -48,7 +48,7 @@ app.use(
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    rolling: true,
+    rolling: false,
     cookie: {
       httpOnly: true,
       secure: SESSION_SECURE,
