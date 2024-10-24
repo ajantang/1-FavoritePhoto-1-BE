@@ -63,7 +63,6 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
     shopDetailData,
     shopCardId,
   } = reqBody;
-  console.log(shopCardId);
 
   return await prisma.$transaction(async () => {
     try {
@@ -94,7 +93,6 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
           quantity: EXCHANGE_VOLUME,
         },
       });
-      console.log({ sellerOwn });
 
       // 구매자가 교환을 시도했던 상점 카드의 보유량 생성 혹은 증가
       const buyerOwn = await ownRepository.upsertData({
@@ -113,7 +111,6 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
           quantity: EXCHANGE_VOLUME,
         },
       });
-      console.log({ buyerOwn });
 
       // 승인된 exchange 삭제
       const delteeExchange = await exchangeRepository.deleteData({
@@ -148,7 +145,6 @@ async function refuseOrCancelExchange(exchangeId, reqBody) {
       const delteeExchange = await exchangeRepository.deleteData({
         id: exchangeId,
       });
-      console.log(delteeExchange);
 
       // 교환 희망자의 own에 +1
       const own = await ownRepository.upsertData({

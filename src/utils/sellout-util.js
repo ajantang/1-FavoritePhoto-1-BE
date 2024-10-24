@@ -18,7 +18,7 @@ export async function exchangeDelete(
         if (exchangeInfo.id === excludeExchangeId) {
           return;
         }
-        
+
         return await ownRepository.upsertData({
           where: {
             userId_cardId: { userId, cardId },
@@ -34,7 +34,6 @@ export async function exchangeDelete(
         });
       })
     );
-    console.log({ updateOrcreateOwn });
 
     await exchangeRepository.deleteManyData({
       shopId: shopDetailDataWithExchange.id,

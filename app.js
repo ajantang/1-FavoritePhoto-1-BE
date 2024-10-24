@@ -60,12 +60,6 @@ app.use(
 );
 app.use(express.json());
 
-app.use((req, res, next) => {
-  console.log("session: ", req.session);
-  console.log("Request Cookies: ", req.headers.cookie);
-  next();
-});
-
 app.use("/admin", adminRouter);
 app.use("/auth", authRouter);
 app.use("/cards", cardRouter);
