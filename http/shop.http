@@ -36,11 +36,12 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 DELETE http://localhost:3000/shop/fb2a7655-e9a1-4f48-8669-60cd8ca130d7
 
 ###
-POST http://localhost:3000/shop/cbb24524-6818-4b46-8afb-00dd26f379ba/purchase
+POST http://localhost:3000/shop/purchase
 Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
+    "shopId":"45c5fdf0-1528-45d1-b111-6b0b642dd109",
     "purchaseQuantity": 1
 }
 

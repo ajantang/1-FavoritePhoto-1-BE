@@ -43,25 +43,15 @@ async function deleteShop(req, res, next) {
 }
 
 async function purchaseController(req, res, next) {
-  const { shopId } = req.params;
   const userId = req.session.userId;
 
-  const purchase = await shopService.purchaseService(shopId, userId, req.body);
+  const purchase = await shopService.purchaseService(userId, req.body);
   res.send(purchase);
   // 구매 관련 알림 추가(구매자, 판매자).
   // 교환 취소 알림 추가
   // 매진 됐을 시 알람
 }
-// 오너가 아닌지 확인
-// 매진 여부 확인
-// 구매량과 잔여량 확인
-// 총 판매가와 보유 포인트 확인
-// 구매자가 해당 카드를 소유하는지 확인
-// 구매자 포인트 차감
 // 구매자 카드 추가
-// 판매자 포인투 추가
-// 상점 잔여량 차감
-// 매진시 교환 신청 삭제
 // 구매 이력 추가
 
 

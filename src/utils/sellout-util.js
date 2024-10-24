@@ -1,49 +1,35 @@
 import exchangeRepository from "../repositories/exchange-repository.js";
 import ownRepository from "../repositories/own-repository.js";
-
+import prisma from "../repositories/prisma.js";
 
 export async function exchangeDelete(shopDetailDataWithExchange) {
-
   const exchangesCardInfo = shopDetailDataWithExchange.Exchanges;
-  const exchangeDeleteData = await Promise.all(
-    exchangesCardInfo.map(async (exchangeInfo) => {
-      const userId = exchangeInfo.userId;
-      const cardId = exchangeInfo.Card.id;
 
-      const own = await ownRepository.findFirstData({
-        where: {
-          userId,
-          cardId,
-        },
-      });
+  await prisma.$transaction(async () => {
+    const updateOrcreateOwn = await Promise.all(
+      exchangesCardInfo.map(async (exchangeInfo) => {
+        const userId = exchangeInfo.userId;
+        const cardId = exchangeInfo.Card.id;
 
-      if (own === null || own === undefined) {
-        const createData = {
-          userId,
-          cardId,
-          quantity: 1,
-        };
-        const result = await ownRepository.createData({ data: createData });
-      } else {
-        const updateWhere = {
-          userId_cardId: {
+        return await ownRepository.upsertData({
+          where: {
+            userId_cardId: { userId, cardId },
+          },
+          update: {
+            quantity: { increment: 1 },
+          },
+          create: {
             userId,
             cardId,
+            quantity: 1,
           },
-        };
-        const updateData = {
-          quantity: {
-            increment: 1,
-          },
-        };
-        const result = await ownRepository.updateData({
-          where: updateWhere,
-          data: updateData,
         });
-      }
-    })
-  );
-  await exchangeRepository.deleteManyData({
-    shopId: shopDetailDataWithExchange.id,
+      })
+    );
+    console.log({ updateOrcreateOwn });
+
+    await exchangeRepository.deleteManyData({
+      shopId: shopDetailDataWithExchange.id,
+    });
   });
 }
