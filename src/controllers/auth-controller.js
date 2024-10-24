@@ -26,8 +26,7 @@ async function signIn(req, res, next) {
       return CustomError(40098);
     }
 
-    req.session = session;
-    await req.session.save();
+    req.session.userId = session.userId;
 
     return res.status(200).send(userInfo);
   } catch (err) {
