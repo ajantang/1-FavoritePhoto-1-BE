@@ -42,9 +42,7 @@ async function createShop(createData) {
         console.log(deleteOwn);
       } else {
         const updateOwn = await ownRepository.updateData({
-          where: {
-            id: own.id,
-          },
+          where: { id: own.id },
           data: {
             quantity: { decrement: rest.remainingQuantity },
           },
@@ -169,9 +167,7 @@ async function deleteShop({ userId, shopId }) {
         },
       },
       update: {
-        quantity: {
-          increment: shop.remainingQuantity,
-        },
+        quantity: { increment: shop.remainingQuantity },
       },
       create: {
         userId,
@@ -187,75 +183,79 @@ async function deleteShop({ userId, shopId }) {
   });
 }
 
-async function purchaseService(id, userId, purchaseData) {
+async function purchaseService(userId, purchaseData) {
   const {
+    shopId,
     purchaseQuantity,
     sellerUserId,
     tradePoints,
-    updatedShopQuantity,
     shopDetailData,
-    ownsCard,
   } = purchaseData;
 
   return await prisma.$transaction(async () => {
     try {
       // 구매자 포인트 차감
-      const decreasePoint = await userRepository.decreaseUserPoint({
-        id: userId,
-        lostPoint: tradePoints,
+      const decreasePoint = await userRepository.updateData({
+        where: { id: userId },
+        data: {
+          point: { decrement: tradePoints },
+        },
       });
+      console.log({ decreasePoint });
 
       // 판매자 포인트 증가
-      const increasePoint = await userRepository.increaseUserPoint({
-        id: sellerUserId,
-        earnedPoint: tradePoints,
+      const increasePoint = await userRepository.updateData({
+        where: { id: sellerUserId },
+        data: {
+          point: { increment: tradePoints },
+        },
       });
+      console.log({ increasePoint });
 
       // 상점 잔여수량 차감
-      const quantityData = { remainingQuantity: updatedShopQuantity };
-      const decreaseQuantity = await shopRepository.updateShop(
-        id,
-        quantityData
-      );
+      const decreaseQuantity = await shopRepository.updateData({
+        where: { id: shopId },
+        data: {
+          remainingQuantity: { decrement: purchaseQuantity },
+        },
+      });
+      console.log({ decreaseQuantity });
 
       // 매진 시 교환 신청 삭제
-      if (updatedShopQuantity === 0) {
+      if (decreaseQuantity.remainingQuantity === 0) {
         await exchangeDelete(shopDetailData);
       }
 
       // 구매 이력 추가
-      const createpurchaseData = {
-        consumerId: sellerUserId,
-        purchaserId: userId,
-        cardId: shopDetailData.Card.id,
-        purchaseVolumn: purchaseQuantity,
-        cardPrice: shopDetailData.price,
-      };
-      const purchase = await purchaseRepository.create(createpurchaseData);
+      const purchase = await purchaseRepository.createData({
+        data: {
+          consumerId: sellerUserId,
+          purchaserId: userId,
+          cardId: shopDetailData.Card.id,
+          purchaseVolumn: purchaseQuantity,
+          cardPrice: shopDetailData.price,
+        },
+      });
+      console.log({ purchase });
 
       // 구매자 해당 카드 보유 추가
-      const updateOwnWhere = {
-        userId,
-        cardId: shopDetailData.Card.id,
-      };
-      let purchaserOwn;
-      if (ownsCard === null || ownsCard === undefined) {
-        const createOwnData = { ...updateOwnWhere, quantity: purchaseQuantity };
-        purchaserOwn = await ownRepository.createData({
-          data: createOwnData,
-        });
-      } else {
-        const updateOwnData = { quantity: { increment: purchaseQuantity } };
-        purchaserOwn = await ownRepository.updateData({
-          where: {
-            userId_cardId: {
-              ...updateOwnWhere,
-            },
+      const purchaserOwn = await ownRepository.upsertData({
+        where: {
+          userId_cardId: {
+            userId,
+            cardId: shopDetailData.Card.id,
           },
-          data: updateOwnData,
-          select: ownCardListSelect,
-        });
-      }
+        },
+        update: {
+          quantity: { increment: purchaseQuantity },
+        },
+        create: {
+          userId,
+          cardId: shopDetailData.Card.id,
+          quantity: purchaseQuantity,
+        },
+        select: ownCardListSelect,
+      });
 
       const responseMapping = basicCardMapper(purchaserOwn);
 

@@ -37,7 +37,7 @@ shopRouter
   );
 
 shopRouter
-  .route("/:shopId/purchase")
+  .route("/purchase")
   .post(
     authMiddleware,
     validatePurchaseConditions,

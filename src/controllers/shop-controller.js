@@ -14,20 +14,20 @@ async function createShop(req, res, next) {
 
 async function getShopList(req, res, next) {
   const shops = await shopService.getShopList(req.query);
-  res.send(shops);
+  res.status(200).send(shops);
 }
 
 async function getShopDetail(req, res, next) {
   const { shopId } = req.params;
   const userId = req.session?.userId || "";
   const shop = await shopService.getShopDetail(userId, shopId);
-  res.send(shop);
+  res.status(200).send(shop);
 }
 
 async function updateShop(req, res, next) {
   const { shopId } = req.params;
   const shop = await shopService.updateShop(shopId, req.body);
-  res.send(shop);
+  res.status(200).send(shop);
 }
 
 async function deleteShop(req, res, next) {
@@ -43,15 +43,17 @@ async function deleteShop(req, res, next) {
 }
 
 async function purchaseController(req, res, next) {
-  const { shopId } = req.params;
   const userId = req.session.userId;
 
-  const purchase = await shopService.purchaseService(shopId, userId, req.body);
+  const purchase = await shopService.purchaseService(userId, req.body);
   res.send(purchase);
   // 구매 관련 알림 추가(구매자, 판매자).
   // 교환 취소 알림 추가
   // 매진 됐을 시 알람
 }
+// 구매자 카드 추가
+// 구매 이력 추가
+
 
 async function createExchange(req, res, next) {
   try {

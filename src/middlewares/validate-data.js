@@ -10,6 +10,7 @@ import shopRepository from "../repositories/shop-repository.js";
 import { exchangeCardShopAndUserSelect } from "../services/selects/exchange-select.js";
 import { shopDetailSelect } from "../services/selects/shop-select.js";
 import { CustomError } from "../lib/custom-error.js";
+import userRepository from "../repositories/user-repository.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -142,19 +143,27 @@ export async function validateUpdaeShopData(req, res, next) {
 }
 
 export async function validatePurchaseConditions(req, res, next) {
-  const { shopId } = req.params;
   const userId = req.session.userId;
-  const { purchaseQuantity } = req.body;
+  const { purchaseQuantity, shopId } = req.body;
 
   // 상점 등록자인지 확인
-  const isOwner = await shopService.checkUserShopOwner(userId, shopId);
+  const isOwner = await shopRepository.findFirstData({
+    where: {
+      userId,
+      id: shopId,
+    },
+  });
+  console.log({ isOwner });
   if (isOwner) {
     return next(CustomError(40398));
   }
 
-  const shop = await shopService.getShopDetailById(shopId);
+  const shop = await shopRepository.findUniqueOrThrowtData({
+    where: { id: shopId },
+    select: shopDetailSelect,
+  });
+  console.log({ shop });
   const { remainingQuantity } = shop;
-  const updatedShopQuantity = remainingQuantity - purchaseQuantity;
 
   // 매진 여부 확인
   if (remainingQuantity === 0) {
@@ -165,7 +174,11 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(CustomError(40002));
   }
 
-  const user = await userService.getUserInfoById(userId);
+  const user = await userRepository.findUniqueOrThrowtData({
+    where: { id: userId },
+  });
+  console.log({ user });
+
   const totalPrice = purchaseQuantity * shop.price;
 
   // 총 판매가와 보유 포인트 대조
@@ -173,15 +186,9 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(CustomError(40399));
   }
 
-  // 구매자가 해당 카드를 소유하는지 확인
-  const ownsCardWhere = { userId, cardId: shop.Card.id };
-  const ownsCard = await ownRepository.findFirstData({ where: ownsCardWhere });
-
   req.body.sellerUserId = shop.userId;
   req.body.tradePoints = totalPrice;
-  req.body.updatedShopQuantity = updatedShopQuantity;
   req.body.shopDetailData = shop;
-  req.body.ownsCard = ownsCard;
 
   return next();
 }
