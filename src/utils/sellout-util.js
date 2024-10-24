@@ -1,3 +1,4 @@
+import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import ownRepository from "../repositories/own-repository.js";
 import prisma from "../repositories/prisma.js";
@@ -16,12 +17,12 @@ export async function exchangeDelete(shopDetailDataWithExchange) {
             userId_cardId: { userId, cardId },
           },
           update: {
-            quantity: { increment: 1 },
+            quantity: { increment: EXCHANGE_VOLUME },
           },
           create: {
             userId,
             cardId,
-            quantity: 1,
+            quantity: EXCHANGE_VOLUME,
           },
         });
       })

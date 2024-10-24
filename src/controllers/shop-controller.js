@@ -51,8 +51,6 @@ async function purchaseController(req, res, next) {
   // 교환 취소 알림 추가
   // 매진 됐을 시 알람
 }
-// 구매자 카드 추가
-// 구매 이력 추가
 
 
 async function createExchange(req, res, next) {
@@ -71,6 +69,8 @@ async function createExchange(req, res, next) {
     return next(err);
   }
 }
+// 보유량 감소
+// excahage 추가
 
 async function calculateTotalQuantity(req, res, next) {
   const userId = req.session.userId;
