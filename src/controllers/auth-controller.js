@@ -27,6 +27,7 @@ async function signIn(req, res, next) {
     }
 
     req.session.userId = session.userId;
+    console.log("req.session.userId : ", req.session.userId);
 
     return res.status(200).send(userInfo);
   } catch (err) {

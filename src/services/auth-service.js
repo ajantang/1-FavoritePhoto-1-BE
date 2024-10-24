@@ -45,6 +45,7 @@ async function signIn({ email, password, session }) {
 
     const userId = rest.id;
     session.userId = userId;
+    console.log("rest.id : ", rest.id);
     const now = new Date();
     const expires = new Date(now.getTime() + EXPIRE_TIME);
     const data = JSON.stringify(session);
