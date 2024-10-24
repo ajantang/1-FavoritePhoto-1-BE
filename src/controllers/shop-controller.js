@@ -1,11 +1,5 @@
 import exchangeService from "../services/exchange-service.js";
-import ownService from "../services/own-service.js";
 import shopService from "../services/shop-service.js";
-import {
-  createShopMapper,
-  getShopDetailMapper,
-  getShopListMapper,
-} from "../services/mappers/shop-mapper.js";
 
 async function createShop(req, res, next) {
   const shop = await shopService.createShop(req.body);

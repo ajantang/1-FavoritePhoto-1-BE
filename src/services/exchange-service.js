@@ -11,7 +11,6 @@ import {
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shop-repository.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
-import { create } from "superstruct";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {

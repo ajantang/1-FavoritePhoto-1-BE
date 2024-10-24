@@ -1,9 +1,6 @@
 import { assert } from "superstruct";
-import ownService from "../services/own-service.js";
 import { createShopStruct, updateShopStruct } from "../structs/shop-struct.js";
 import { SignUpUser, SignInUser } from "../structs/user-struct.js";
-import shopService from "../services/shop-service.js";
-import userService from "../services/user-service.js";
 import ownRepository from "../repositories/own-repository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import shopRepository from "../repositories/shop-repository.js";
