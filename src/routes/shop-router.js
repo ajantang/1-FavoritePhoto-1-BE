@@ -19,33 +19,40 @@ shopRouter
   .post(authMiddleware, validateCreateShopData, shopController.createShop)
   .get(shopController.getShopList);
 
-shopRouter.post(
-  "/exchange",
-  authMiddleware,
-  authMiddlewareByCardIdBody,
-  shopController.createExchange
-);
-
 shopRouter
   .route("/:shopId")
   .get(shopController.getShopDetail)
-  .patch(authMiddleware, checkShopCreatorByParams, validateUpdaeShopData, shopController.updateShop)
+  .patch(
+    authMiddleware,
+    checkShopCreatorByParams,
+    validateUpdaeShopData,
+    shopController.updateShop
+  )
   .delete(
     authMiddleware,
     authMiddlewareByShopIdParam,
     shopController.deleteShop
   );
 
-shopRouter
-  .route("/purchase")
-  .post(
-    authMiddleware,
-    validatePurchaseConditions,
-    shopController.purchaseController
-  );
+shopRouter.get(
+  "/:shopId/quantity",
+  authMiddleware,
+  checkShopCreatorByParams,
+  shopController.calculateTotalQuantity
+);
 
-shopRouter
-  .route("/:shopId/quantity")
-  .get(authMiddleware, checkShopCreatorByParams, shopController.calculateTotalQuantity);
+shopRouter.post(
+  "/purchase",
+  authMiddleware,
+  validatePurchaseConditions,
+  shopController.purchaseController
+);
+
+shopRouter.post(
+  "/exchange",
+  authMiddleware,
+  authMiddlewareByCardIdBody,
+  shopController.createExchange
+);
 
 export default shopRouter;
