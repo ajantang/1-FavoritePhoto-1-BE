@@ -1,15 +1,13 @@
 import { assert } from "superstruct";
-import ownService from "../services/own-service.js";
 import { createShopStruct, updateShopStruct } from "../structs/shop-struct.js";
 import { SignUpUser, SignInUser } from "../structs/user-struct.js";
-import shopService from "../services/shop-service.js";
-import userService from "../services/user-service.js";
 import ownRepository from "../repositories/own-repository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import shopRepository from "../repositories/shop-repository.js";
 import { exchangeCardShopAndUserSelect } from "../services/selects/exchange-select.js";
 import { shopDetailSelect } from "../services/selects/shop-select.js";
 import { CustomError } from "../lib/custom-error.js";
+import userRepository from "../repositories/user-repository.js";
 
 export async function validateCreateShopData(req, res, next) {
   const userId = req.session.userId;
@@ -59,12 +57,10 @@ export function validateSignInUserData(req, res, next) {
   return next();
 }
 
-export async function validateUpdaeShopData(req, res, next) {
-  const userId = req.session.userId;
+export async function checkShopCreatorByParams(req, res, next) {
   const { shopId } = req.params;
-  const { salesQuantity, ...rest } = req.body;
+  const userId = req.session.userId;
 
-  // 등록한 사람인지 확인
   const isOwner = await shopRepository.findFirstData({
     where: {
       userId,
@@ -72,10 +68,18 @@ export async function validateUpdaeShopData(req, res, next) {
     },
   });
 
-  // 등록한 사람이 아닐 시
   if (isOwner === null || isOwner === undefined) {
-    return next(CustomError(40302));
+    return next(CustomError(40102));
   }
+
+  req.body.shopData = isOwner;
+
+  next();
+}
+
+export async function validateUpdaeShopData(req, res, next) {
+  const userId = req.session.userId;
+  const { salesQuantity, shopData: isOwner, ...rest } = req.body;
 
   const { remainingQuantity } = isOwner;
   const newReqBody = { ...rest };
@@ -142,19 +146,27 @@ export async function validateUpdaeShopData(req, res, next) {
 }
 
 export async function validatePurchaseConditions(req, res, next) {
-  const { shopId } = req.params;
   const userId = req.session.userId;
-  const { purchaseQuantity } = req.body;
+  const { purchaseQuantity, shopId } = req.body;
 
   // 상점 등록자인지 확인
-  const isOwner = await shopService.checkUserShopOwner(userId, shopId);
+  const isOwner = await shopRepository.findFirstData({
+    where: {
+      userId,
+      id: shopId,
+    },
+  });
+  console.log({ isOwner });
   if (isOwner) {
     return next(CustomError(40398));
   }
 
-  const shop = await shopService.getShopDetailById(shopId);
+  const shop = await shopRepository.findUniqueOrThrowtData({
+    where: { id: shopId },
+    select: shopDetailSelect,
+  });
+  console.log({ shop });
   const { remainingQuantity } = shop;
-  const updatedShopQuantity = remainingQuantity - purchaseQuantity;
 
   // 매진 여부 확인
   if (remainingQuantity === 0) {
@@ -165,7 +177,11 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(CustomError(40002));
   }
 
-  const user = await userService.getUserInfoById(userId);
+  const user = await userRepository.findUniqueOrThrowtData({
+    where: { id: userId },
+  });
+  console.log({ user });
+
   const totalPrice = purchaseQuantity * shop.price;
 
   // 총 판매가와 보유 포인트 대조
@@ -173,15 +189,9 @@ export async function validatePurchaseConditions(req, res, next) {
     return next(CustomError(40399));
   }
 
-  // 구매자가 해당 카드를 소유하는지 확인
-  const ownsCardWhere = { userId, cardId: shop.Card.id };
-  const ownsCard = await ownRepository.findFirstData({ where: ownsCardWhere });
-
   req.body.sellerUserId = shop.userId;
   req.body.tradePoints = totalPrice;
-  req.body.updatedShopQuantity = updatedShopQuantity;
   req.body.shopDetailData = shop;
-  req.body.ownsCard = ownsCard;
 
   return next();
 }
@@ -211,7 +221,7 @@ export async function validateExchangeAndOwner(req, res, next) {
   });
 
   if (isOwner === null || isOwner === undefined) {
-    next(CustomError(40398));
+    next(CustomError(40102));
   }
 
   req.body.exchangeData = exchange;
@@ -236,7 +246,7 @@ export async function validateExchangeConditions(req, res, next) {
     return next(CustomError(40003));
   }
 
-  const shopCardId = shop.cardId;
+  const shopCardId = shop.Card.id;
 
   // 판매자가 제시된 카드를 보유히는지 확인하는 코드
   const hasSellerExchangeCard = await ownRepository.findFirstData({
@@ -256,8 +266,6 @@ export async function validateExchangeConditions(req, res, next) {
 
   req.body.shopDetailData = shop;
   req.body.shopCardId = shopCardId;
-  req.body.hasSellerExchangeCard = hasSellerExchangeCard;
-  req.body.hasBuyershopCard = hasBuyershopCard;
 
   next();
 }
@@ -287,33 +295,12 @@ export async function validateExchangeCreator(req, res, next) {
   });
 
   if (exchangeCreator === null || exchangeCreator === undefined) {
-    next(CustomError(40397));
+    next(CustomError(40103));
   }
 
   req.body.exchangeData = exchange;
   req.body.exchangeCardId = exchangeCardId;
-  req.body.shopId = shopId;
   req.body.buyerId = buyerId;
-
-  next();
-}
-
-export async function checkShopCreator(req, res, next) {
-  const { shopId } = req.params;
-  const userId = req.session.userId;
-
-  const isOwner = await shopRepository.findFirstData({
-    where: {
-      userId,
-      id: shopId,
-    },
-  });
-
-  if (isOwner === null || isOwner === undefined) {
-    return next(CustomError(40398));
-  }
-
-  req.body.shopData = isOwner;
 
   next();
 }

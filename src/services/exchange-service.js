@@ -3,7 +3,10 @@ import ownRepository from "../repositories/own-repository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import { ownCardSelect } from "../services/selects/own-select.js";
 import { exchangeCardShopSelect } from "../services/selects/exchange-select.js";
-import { exchangeMapper } from "./mappers/exchange-mapper.js";
+import {
+  exchangeCreateMapper,
+  exchangeDecisionMapper,
+} from "./mappers/exchange-mapper.js";
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shop-repository.js";
@@ -47,7 +50,7 @@ async function createExchange({ userId, shopId, cardId, description }) {
       select: exchangeCardShopSelect,
     });
 
-    return exchangeMapper(exchange);
+    return exchangeCreateMapper(exchange);
   });
 }
 
@@ -59,9 +62,8 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
     buyerId,
     shopDetailData,
     shopCardId,
-    hasSellerExchangeCard,
-    hasBuyershopCard,
   } = reqBody;
+  console.log(shopCardId);
 
   return await prisma.$transaction(async () => {
     try {
@@ -76,47 +78,42 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
       });
 
       // 판매자에게 제시된 카드 보유량 증가 혹은 생성
-      if (
-        hasSellerExchangeCard === null ||
-        hasSellerExchangeCard == undefined
-      ) {
-        const createSellerOwn = await ownRepository.createData({
-          data: {
+      const sellerOwn = await ownRepository.upsertData({
+        where: {
+          userId_cardId: {
             userId,
             cardId: exchangeCardId,
-            quantity: 1,
           },
-        });
-      } else {
-        const increaseSellerCard = await ownRepository.updateData({
-          where: {
-            id: hasSellerExchangeCard.id,
-          },
-          data: {
-            quantity: { increment: 1 },
-          },
-        });
-      }
+        },
+        update: {
+          quantity: { increment: EXCHANGE_VOLUME },
+        },
+        create: {
+          userId,
+          cardId: exchangeCardId,
+          quantity: EXCHANGE_VOLUME,
+        },
+      });
+      console.log({ sellerOwn });
 
       // 구매자가 교환을 시도했던 상점 카드의 보유량 생성 혹은 증가
-      if (hasBuyershopCard === null || hasBuyershopCard === undefined) {
-        const createBuyerOwn = await ownRepository.createData({
-          data: {
+      const buyerOwn = await ownRepository.upsertData({
+        where: {
+          userId_cardId: {
             userId: buyerId,
             cardId: shopCardId,
-            quantity: 1,
           },
-        });
-      } else {
-        const increaseBuyerCard = await ownRepository.updateData({
-          where: {
-            id: hasBuyershopCard.id,
-          },
-          data: {
-            quantity: { increment: 1 },
-          },
-        });
-      }
+        },
+        update: {
+          quantity: { increment: EXCHANGE_VOLUME },
+        },
+        create: {
+          userId: buyerId,
+          cardId: shopCardId,
+          quantity: EXCHANGE_VOLUME,
+        },
+      });
+      console.log({ buyerOwn });
 
       // 승인된 exchange 삭제
       const delteeExchange = await exchangeRepository.deleteData({
@@ -125,10 +122,10 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
 
       // 매진 시 관련 exchange 삭제
       if (shopDetailData.remainingQuantity === 1) {
-        await exchangeDelete(shopDetailData);
+        await exchangeDelete(shopDetailData, exchangeId);
       }
 
-      const responseMappeing = exchangeMapper(exchangeData);
+      const responseMappeing = exchangeDecisionMapper(exchangeData);
 
       return {
         successStatus: true,
@@ -154,19 +151,24 @@ async function refuseOrCancelExchange(exchangeId, reqBody) {
       console.log(delteeExchange);
 
       // 교환 희망자의 own에 +1
-      const own = await ownRepository.updateData({
+      const own = await ownRepository.upsertData({
         where: {
           userId_cardId: {
             userId: buyerId,
             cardId: exchangeCardId,
           },
         },
-        data: {
-          quantity: { increment: 1 },
+        update: {
+          quantity: { increment: EXCHANGE_VOLUME },
+        },
+        create: {
+          userId: buyerId,
+          cardId: exchangeCardId,
+          quantity: EXCHANGE_VOLUME,
         },
       });
 
-      const responseMappeing = exchangeMapper(exchangeData);
+      const responseMappeing = exchangeDecisionMapper(exchangeData);
 
       return {
         successStatus: true,
