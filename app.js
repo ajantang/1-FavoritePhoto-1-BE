@@ -48,7 +48,7 @@ app.use(
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    rolling: false,
+    rolling: true,
     cookie: {
       httpOnly: true,
       secure: SESSION_SECURE,
@@ -59,6 +59,12 @@ app.use(
   })
 );
 app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log("session: ", req.session);
+  console.log("Request Cookies: ", req.headers.cookie);
+  next();
+});
 
 app.use("/admin", adminRouter);
 app.use("/auth", authRouter);
