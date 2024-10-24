@@ -76,7 +76,7 @@ POST http://localhost:3000/auth/sign-out
 
 
 ###
-POST http://localhost:3000/exchange/d4ba8021-fb6c-4862-a53e-0bb01ab12003/accept
+POST http://localhost:3000/exchange/1596e3d0-7788-4f10-a2ae-f76e5dac860c/accept
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###

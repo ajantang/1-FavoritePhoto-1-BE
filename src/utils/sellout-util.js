@@ -3,7 +3,10 @@ import exchangeRepository from "../repositories/exchange-repository.js";
 import ownRepository from "../repositories/own-repository.js";
 import prisma from "../repositories/prisma.js";
 
-export async function exchangeDelete(shopDetailDataWithExchange) {
+export async function exchangeDelete(
+  shopDetailDataWithExchange,
+  excludeExchangeId
+) {
   const exchangesCardInfo = shopDetailDataWithExchange.Exchanges;
 
   await prisma.$transaction(async () => {
@@ -12,6 +15,10 @@ export async function exchangeDelete(shopDetailDataWithExchange) {
         const userId = exchangeInfo.userId;
         const cardId = exchangeInfo.Card.id;
 
+        if (exchangeInfo.id === excludeExchangeId) {
+          return;
+        }
+        
         return await ownRepository.upsertData({
           where: {
             userId_cardId: { userId, cardId },

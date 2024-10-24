@@ -224,7 +224,7 @@ export async function validateExchangeAndOwner(req, res, next) {
   });
 
   if (isOwner === null || isOwner === undefined) {
-    next(CustomError(40398));
+    next(CustomError(40102));
   }
 
   req.body.exchangeData = exchange;
@@ -249,7 +249,8 @@ export async function validateExchangeConditions(req, res, next) {
     return next(CustomError(40003));
   }
 
-  const shopCardId = shop.cardId;
+  const shopCardId = shop.Card.id;
+  console.log(shopCardId)
 
   // 판매자가 제시된 카드를 보유히는지 확인하는 코드
   const hasSellerExchangeCard = await ownRepository.findFirstData({
@@ -269,8 +270,8 @@ export async function validateExchangeConditions(req, res, next) {
 
   req.body.shopDetailData = shop;
   req.body.shopCardId = shopCardId;
-  req.body.hasSellerExchangeCard = hasSellerExchangeCard;
-  req.body.hasBuyershopCard = hasBuyershopCard;
+  // req.body.hasSellerExchangeCard = hasSellerExchangeCard;
+  // req.body.hasBuyershopCard = hasBuyershopCard;
 
   next();
 }

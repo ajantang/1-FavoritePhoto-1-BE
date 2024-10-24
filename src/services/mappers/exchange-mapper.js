@@ -35,3 +35,14 @@ export function exchangeCreateMapper(basicSelect) {
     ...rest,
   };
 }
+
+export function exchangeDecisionMapper(basicSelect) {
+  const { id, ...rest } = basicCardMapper(basicSelect);
+
+  return {
+    id: basicSelect.id,
+    description: basicSelect.description,
+    cardId: id,
+    ...rest,
+  };
+}
