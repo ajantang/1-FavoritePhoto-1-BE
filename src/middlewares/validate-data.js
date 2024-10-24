@@ -298,12 +298,11 @@ export async function validateExchangeCreator(req, res, next) {
   });
 
   if (exchangeCreator === null || exchangeCreator === undefined) {
-    next(CustomError(40397));
+    next(CustomError(40103));
   }
 
   req.body.exchangeData = exchange;
   req.body.exchangeCardId = exchangeCardId;
-  req.body.shopId = shopId;
   req.body.buyerId = buyerId;
 
   next();

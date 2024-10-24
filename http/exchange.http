@@ -84,7 +84,7 @@ POST http://localhost:3000/exchange/8507947e-20cf-4e8d-b48f-f9053f772e5b/refuse
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-DELETE http://localhost:3000/exchange/d4ba8021-fb6c-4862-a53e-0bb01ab12003
+DELETE http://localhost:3000/exchange/cfc86b35-9782-46f6-8064-053e0129d126
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 
