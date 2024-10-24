@@ -409,6 +409,51 @@
   purchaseQuantity: 2
   }
 
+## GET /shop/exchange
+
+### req template
+
+- description: 포토 카드 교환 제시
+- path: /shop/exchange
+- method: POST
+- body 
+  - shopId: 상점ID
+  - cardId: 교환할 내 포토카드 ID
+  - description: 교환 제시 내용
+
+### req example
+
+- body: {
+  shopId : "adfc1706-a7f6-4c6e-a006-1733a854afbb",
+  cardId: "8f1e54c6-f439-4b3b-b710-296bd27cdd72",
+  description: "스페인 여행 사진도 좋은데.. 우리집 앞마당 포토카드와 교환하고 싶습니다!"
+  }
+
+### res template
+
+- data
+    - id: 교환ID
+    - description: 교환 제시 내용량
+    - image: 사진
+    - name: 카드 이름
+    - grade: 등급
+    - genre: 장르
+    - price: 원가
+    - creatorNickname: 원작자 이름
+
+### res example
+
+- data : {
+  "id": "32fb1538-5b54-4270-a9e4-d0bddaacdedd",
+  "description": "교환 신청 테스트00",
+  "image": "123456",
+  "name": "wewewew",
+  "grade": 1,
+  "genre": 1,
+  "price": 5,
+  "nickname": "코드잇01"
+}
+
 ## GET /shop/:shopId/quantity
 
 ### req template

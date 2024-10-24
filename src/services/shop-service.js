@@ -1,4 +1,3 @@
-import card from "../constants/card.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
 import ownRepository from "../repositories/own-repository.js";
 import prisma from "../repositories/prisma.js";
@@ -22,7 +21,6 @@ import {
   getShopListMapper,
 } from "./mappers/shop-mapper.js";
 import { createShopListFilterByQuery } from "../utils/query-util.js";
-import shop from "../constants/shop.js";
 import { exchangeCardInfo } from "./selects/exchange-select.js";
 
 async function createShop(createData) {

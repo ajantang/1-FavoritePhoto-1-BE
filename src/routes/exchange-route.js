@@ -9,19 +9,21 @@ import exchangeController from "../controllers/exchange-controller.js";
 const exchangeRouter = express.Router();
 
 exchangeRouter
-  .route("/:exchangeId/accept")
   .post(
+    "/:exchangeId/accept",
     validateExchangeAndOwner,
     validateExchangeConditions,
     exchangeController.acceptByExchange
+  )
+  .post(
+    "/:exchangeId/refuse",
+    validateExchangeAndOwner,
+    exchangeController.refuseOrCancelExchange
+  )
+  .delete(
+    "/:exchangeId",
+    validateExchangeCreator,
+    exchangeController.refuseOrCancelExchange
   );
-
-exchangeRouter
-  .route("/:exchangeId/refuse")
-  .post(validateExchangeAndOwner, exchangeController.refuseOrCancelExchange);
-
-exchangeRouter
-  .route("/:exchangeId")
-  .delete(validateExchangeCreator, exchangeController.refuseOrCancelExchange);
 
 export default exchangeRouter;

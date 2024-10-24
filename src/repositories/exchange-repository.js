@@ -1,60 +1,4 @@
 import prisma from "./prisma.js";
-import { exchangeCardInfo } from "../services/selects/exchange-select.js";
-
-async function checkExchangeByUser(filter) {
-  return await prisma.exchange.findMany({
-    where: filter,
-    select: exchangeCardInfo,
-  });
-}
-
-async function findMyExchangeList({ userId, filter }) {
-  const { orderBy, skip, take, where } = filter;
-
-  return await prisma.exchange.findMany({
-    orderBy,
-    skip,
-    take,
-    where: { userId, ...where },
-    select: exchangeCardInfo,
-  });
-}
-
-async function getGroupCountByGrade({ userId, where }) {
-  const exchanges = await prisma.exchange.findMany({
-    where: {
-      userId,
-      ...where,
-    },
-    select: {
-      Card: {
-        select: {
-          grade: true,
-        },
-      },
-    },
-  });
-
-  const counts = exchanges.reduce((acc, exchange) => {
-    const grade = exchange.Card.grade;
-
-    if (!acc[grade]) {
-      acc[grade] = 0;
-    }
-
-    acc[grade]++;
-
-    return acc;
-  }, {});
-
-  return counts;
-}
-
-async function deleteByExchangeId(id) {
-  return await prisma.exchange.delete({
-    where: { id },
-  });
-}
 
 async function createData({ data, select }) {
   return await prisma.exchange.create({ data, select });
@@ -99,10 +43,6 @@ async function deleteManyData(where) {
 }
 
 export default {
-  checkExchangeByUser,
-  findMyExchangeList,
-  getGroupCountByGrade,
-  deleteByExchangeId,
   createData,
   findFirstData,
   findUniqueOrThrowtData,

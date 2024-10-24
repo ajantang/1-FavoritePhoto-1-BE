@@ -25,11 +25,11 @@ Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-    "salesQuantity": 1,
-    "price": 5,
-    "exchangeGrade": 1,
-    "exchangeGenre": 2,
-    "exchangeDescription": "테스트 진행중"
+    "salesQuantity": 2,
+    "price": 100,
+    "exchangeGrade": 3,
+    "exchangeGenre": 5,
+    "exchangeDescription": "스트 진행중"
 }
 
 ###
@@ -46,17 +46,31 @@ Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 }
 
 ###
-GET http://localhost:3000/shop/cbb24524-6818-4b46-8afb-00dd26f379ba/quantity
+GET http://localhost:3000/shop/b49e0270-04b4-4d69-aea8-f720c3cefbe6/quantity
 
 ###
-PATCH  https://one-favoritephoto-1-be.onrender.com/shop/8d444419-89d6-46b7-987c-89fc12f231aa
+PATCH  https://one-favoritephoto-1-be.onrender.com/shop/57acbe6e-2eb1-48f1-8079-1addf439da48
 Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
     "salesQuantity": 1,
+    "price": 5,
+    "exchangeGrade": 2,
+    "exchangeGenre": 3,
+    "exchangeDescription": "테스트"
+}
+
+###
+POST https://one-favoritephoto-1-be.onrender.com/shop
+Content-Type: application/json
+Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
+
+{
+    "cardId": "613caa1c-6f97-4073-885e-d8679e2bccf2",
+    "salesQuantity": 1,
     "price": 4,
-    "exchangeGrade": 0,
-    "exchangeGenre": 4,
+    "exchangeGrade": 1,
+    "exchangeGenre": 2,
     "exchangeDescription": "테스트 진행중"
 }
