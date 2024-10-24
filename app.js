@@ -31,7 +31,6 @@ import {
 export const app = express();
 
 const redisClient = createClient({
-  legacyMode: true,
   url: REDIS_URL,
 });
 redisClient.connect().then(console.log("redis connected")).catch(console.error);
