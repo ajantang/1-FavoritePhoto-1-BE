@@ -45,15 +45,29 @@ export async function validateCreateShopData(req, res, next) {
 }
 
 export function validateSignUpUserData(req, res, next) {
-  assert(req.body, SignUpUser);
+  try {
+    assert(req.body, SignUpUser);
 
-  return next();
+    return next();
+  } catch (err) {
+    if (err.message.includes("email -- Expected a string matching")) {
+      return next(CustomError(40096));
+    }
+    return next(err);
+  }
 }
 
 export function validateSignInUserData(req, res, next) {
-  assert(req.body, SignInUser);
+  try {
+    assert(req.body, SignInUser);
 
-  return next();
+    return next();
+  } catch (err) {
+    if (err.message.includes("email -- Expected a string matching")) {
+      return next(CustomError(40096));
+    }
+    return next(err);
+  }
 }
 
 export async function checkShopCreatorByParams(req, res, next) {
