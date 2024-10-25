@@ -52,8 +52,4 @@ async function getLastOpenBoxTime(userId) {
   return { timeDifference, success };
 }
 
-async function createNewBoxTime(userId) {
-  await pointRepository.createLastBoxTime(userId);
-}
-
-export default { openBox, getLastOpenBoxTime, createNewBoxTime };
+export default { openBox, getLastOpenBoxTime };

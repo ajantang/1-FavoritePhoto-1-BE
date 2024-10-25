@@ -15,7 +15,6 @@ async function signUp(req, res, next) {
 async function signIn(req, res, next) {
   try {
     const { email, password } = req.body;
-
     const { userInfo, session } = await authService.signIn({
       email,
       password,

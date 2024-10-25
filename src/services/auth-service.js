@@ -6,6 +6,7 @@ import {
   createHashedPassword,
   comparePassword,
 } from "../utils/password-util.js";
+import { userSelect } from "./selects/user-select.js";
 
 import { EXPIRE_TIME } from "../constants/session.js";
 
@@ -13,13 +14,13 @@ async function signUp({ email, password, nickname }) {
   const encryptedPassword = await createHashedPassword(password);
 
   return prisma.$transaction(async () => {
-    const createdUser = await userRepository.createUser({
-      email,
-      encryptedPassword,
-      nickname,
+    const userData = { email, encryptedPassword, nickname };
+    const createdUser = await userRepository.createData({
+      data: userData,
+      select: userSelect,
     });
-
-    await lastBoxTimeRepository.createLastBoxTime(createdUser.id);
+    const lastBoxTimeData = { id: createdUser.id };
+    await lastBoxTimeRepository.createData({ data: lastBoxTimeData });
 
     return createdUser;
   });
