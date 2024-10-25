@@ -14,6 +14,7 @@ async function getShopList(req, res, next) {
 async function getShopDetail(req, res, next) {
   const { shopId } = req.params;
   const userId = req.session?.userId || "";
+
   const shop = await shopService.getShopDetail(userId, shopId);
   res.status(200).send(shop);
 }
@@ -42,7 +43,6 @@ async function purchaseController(req, res, next) {
   const purchase = await shopService.purchaseService(userId, req.body);
   res.send(purchase);
 }
-
 
 async function createExchange(req, res, next) {
   try {

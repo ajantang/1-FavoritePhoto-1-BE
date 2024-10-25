@@ -42,7 +42,6 @@ async function createShop(createData) {
       // 보유량 감소 혹은 삭제
       if (rest.remainingQuantity === own.quantity) {
         const deleteOwn = await ownRepository.deleteData({ id: own.id });
-
       } else {
         const updateOwn = await ownRepository.updateData({
           where: { id: own.id },

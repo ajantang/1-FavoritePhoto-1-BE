@@ -14,4 +14,5 @@ export const config = {
     ? JSON.parse(process.env.SESSION_SECURE.toLowerCase())
     : false,
   SESSION_SAMESITE: process.env.SESSION_SAMESITE,
+  REDIS_URL: process.env.REDIS_URL,
 };

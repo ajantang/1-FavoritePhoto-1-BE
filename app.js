@@ -1,6 +1,8 @@
 import cors from "cors";
 import express from "express";
 import session from "express-session";
+import RedisStore from "connect-redis";
+import { createClient } from "redis";
 
 import adminRouter from "./src/controllers/admin-controller.js";
 import authRouter from "./src/routes/auth-router.js";
@@ -23,9 +25,15 @@ import {
   SESSION_SECURE,
   SESSION_SAMESITE,
   PORT,
+  REDIS_URL,
 } from "./config.js";
 
 export const app = express();
+
+const redisClient = createClient({
+  url: REDIS_URL,
+});
+redisClient.connect().then(console.log("redis connected")).catch(console.error);
 
 app.use(
   cors({
@@ -36,6 +44,7 @@ app.use(
 app.set("trust proxy", 1);
 app.use(
   session({
+    store: new RedisStore({ client: redisClient }),
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
