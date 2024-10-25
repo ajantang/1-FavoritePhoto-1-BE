@@ -177,6 +177,7 @@ async function deleteShop({ userId, shopId }) {
 
     await shopRepository.deleteData({ id: shopId });
 
+    // exchange 삭제
     return myCardMapper(own);
   });
 }

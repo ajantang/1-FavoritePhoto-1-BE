@@ -12,7 +12,7 @@ import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shop-repository.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
 import notificationRepository from "../repositories/notification-repository.js";
-import { shopListSelect } from "./selects/shop-select.js";
+import { createNotificationMassage } from "../utils/notification-util.js";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {
@@ -52,18 +52,17 @@ async function createExchange({ userId, shopId, cardId, description }) {
       select: exchangeCardShopSelect,
     });
 
-    const shop = await shopRepository.findUniqueOrThrowtData({
-      where: { id: shopId },
-      select: shopListSelect,
+    const massage = await createNotificationMassage({
+      idx: 2,
+      userId,
+      shopId,
     });
-    const grade = shop.Card.grade;
-    const name = shop.Card.name;
 
     const notification = await notificationRepository.createData({
       data: {
         // userId: shop.userId
         // shopId,
-        // message:
+        message: massage[0]
       },
     });
 
@@ -80,7 +79,6 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
     shopDetailData,
     shopCardId,
   } = reqBody;
-  console.log(shopCardId);
 
   return await prisma.$transaction(async () => {
     try {
