@@ -67,8 +67,15 @@ export async function exchangeDeleteAndCreateNotification({
       });
     }
 
+    const newMessage = updateOrcreateOwnAndCreateMessage.reduce((acc, item) => {
+      if (item !== null && item !== undefined) {
+        acc.push(item);
+      }
+      return acc;
+    }, []);
+
     const failseExchange = await notificationRepository.createManyData({
-      data: [...updateOrcreateOwnAndCreateMessage],
+      data: [...newMessage],
       skipDuplicates: true,
     });
 
