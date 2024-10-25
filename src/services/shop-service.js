@@ -120,68 +120,76 @@ async function updateShop(shopId, updateData) {
   } = ownData;
 
   return await prisma.$transaction(async () => {
-    const shop = await shopRepository.updateData({
-      where: { id: shopId },
-      data: rest,
-      select: shopCreateSelect,
-    });
-
-    // 판매 수량을 최대치로 변경 시
-    if (isOutOfStock) {
-      await ownRepository.deleteData({ id: ownId });
-
-      // 판매 수량이 수정됐을 때
-    } else if (isQuantityChanged) {
-      const own = await ownRepository.upsertData({
-        where: { id: ownId },
-        update: {
-          quantity: { increment: ownIncrementQuantity },
-        },
-        create: {
-          userId,
-          cardId,
-          quantity: creatOwnQuantity,
-        },
+    try {
+      const shop = await shopRepository.updateData({
+        where: { id: shopId },
+        data: rest,
+        select: shopCreateSelect,
       });
-    }
 
-    return createShopMapper(shop);
+      // 판매 수량을 최대치로 변경 시
+      if (isOutOfStock) {
+        await ownRepository.deleteData({ id: ownId });
+
+        // 판매 수량이 수정됐을 때
+      } else if (isQuantityChanged) {
+        const own = await ownRepository.upsertData({
+          where: { id: ownId },
+          update: {
+            quantity: { increment: ownIncrementQuantity },
+          },
+          create: {
+            userId,
+            cardId,
+            quantity: creatOwnQuantity,
+          },
+        });
+      }
+
+      return createShopMapper(shop);
+    } catch (e) {
+      throw e;
+    }
   });
 }
 
 async function deleteShop({ userId, shopId }) {
   return await prisma.$transaction(async () => {
-    const shop = await shopRepository.findUniqueOrThrowtData({
-      where: { id: shopId },
-      select: shopDetailSelect,
-    });
+    try {
+      const shop = await shopRepository.findUniqueOrThrowtData({
+        where: { id: shopId },
+        select: shopDetailSelect,
+      });
 
-    const notification = await exchangeDeleteAndCreateNotification({
-      sellout: false,
-      shopDetailDataWithExchange: shop,
-    });
+      const notification = await exchangeDeleteAndCreateNotification({
+        sellout: false,
+        shopDetailDataWithExchange: shop,
+      });
 
-    const own = await ownRepository.upsertData({
-      where: {
-        userId_cardId: {
+      const own = await ownRepository.upsertData({
+        where: {
+          userId_cardId: {
+            userId,
+            cardId: shop.cardId,
+          },
+        },
+        update: {
+          quantity: { increment: shop.remainingQuantity },
+        },
+        create: {
           userId,
           cardId: shop.cardId,
+          quantity: shop.remainingQuantity,
         },
-      },
-      update: {
-        quantity: { increment: shop.remainingQuantity },
-      },
-      create: {
-        userId,
-        cardId: shop.cardId,
-        quantity: shop.remainingQuantity,
-      },
-      select: ownCardSelect,
-    });
+        select: ownCardSelect,
+      });
 
-    await shopRepository.deleteData({ id: shopId });
+      await shopRepository.deleteData({ id: shopId });
 
-    return myCardMapper(own);
+      return myCardMapper(own);
+    } catch (e) {
+      throw e;
+    }
   });
 }
 

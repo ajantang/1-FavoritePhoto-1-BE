@@ -2,27 +2,46 @@ import exchangeService from "../services/exchange-service.js";
 import shopService from "../services/shop-service.js";
 
 async function createShop(req, res, next) {
-  const shop = await shopService.createShop(req.body);
-  res.status(201).send(shop);
+  try {
+    const shop = await shopService.createShop(req.body);
+
+    res.status(201).send(shop);
+  } catch (err) {
+    return next(err);
+  }
 }
 
 async function getShopList(req, res, next) {
-  const shops = await shopService.getShopList(req.query);
-  res.status(200).send(shops);
+  try {
+    const shops = await shopService.getShopList(req.query);
+
+    res.status(200).send(shops);
+  } catch (err) {
+    return next(err);
+  }
 }
 
 async function getShopDetail(req, res, next) {
-  const { shopId } = req.params;
-  const userId = req.session?.userId || "";
+  try {
+    const { shopId } = req.params;
+    const userId = req.session?.userId || "";
 
-  const shop = await shopService.getShopDetail(userId, shopId);
-  res.status(200).send(shop);
+    const shop = await shopService.getShopDetail(userId, shopId);
+    res.status(200).send(shop);
+  } catch (err) {
+    return next(err);
+  }
 }
 
 async function updateShop(req, res, next) {
-  const { shopId } = req.params;
-  const shop = await shopService.updateShop(shopId, req.body);
-  res.status(200).send(shop);
+  try {
+    const { shopId } = req.params;
+    const shop = await shopService.updateShop(shopId, req.body);
+
+    res.status(200).send(shop);
+  } catch (err) {
+    return next(err);
+  }
 }
 
 async function deleteShop(req, res, next) {
@@ -38,10 +57,14 @@ async function deleteShop(req, res, next) {
 }
 
 async function purchaseController(req, res, next) {
-  const userId = req.session.userId;
+  try {
+    const userId = req.session.userId;
+    const purchase = await shopService.purchaseService(userId, req.body);
 
-  const purchase = await shopService.purchaseService(userId, req.body);
-  res.send(purchase);
+    res.send(purchase);
+  } catch (err) {
+    return next(err);
+  }
 }
 
 async function createExchange(req, res, next) {
@@ -62,12 +85,15 @@ async function createExchange(req, res, next) {
 }
 
 async function calculateTotalQuantity(req, res, next) {
-  const userId = req.session.userId;
-  const shopData = req.body.shopData;
+  try {
+    const userId = req.session.userId;
+    const shopData = req.body.shopData;
+    const result = await shopService.calculateTotalQuantity(userId, shopData);
 
-  const result = await shopService.calculateTotalQuantity(userId, shopData);
-
-  res.send(result);
+    res.send(result);
+  } catch (err) {
+    return next(err);
+  }
 }
 
 export default {
