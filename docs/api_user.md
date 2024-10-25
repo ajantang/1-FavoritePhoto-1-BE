@@ -258,32 +258,63 @@
 
 - data :
   - totalCount : 총 카드 수,
-  - cards : 카드 배열
-    - {카드 정보}
+  - exchanges : 교환 배열
+    - {교환 신청 정보}
+      - id : 교환 신청 id,
+      - cardId : 교환용 카드 id,
+      - shopId : 대상 상점 id,
+      - description : 교환 설명,
       - image : 카드 이미지 url (max-length : 2048)
+      - name : 카드 이름
       - grade : 카드 등급 (int로 전달)
       - genre : 카드 장르 (int로 전달)
-      - ownCount : 카드 보유량
       - price : 카드 가격(포인트)
-      - authorNickname : 카드 생성자 닉네임
+      - nickname : 카드 생성자 닉네임
 
 ### res example
 
 - data : {
-  totalCount : 100,
-  card : [
+  "totalCount": 3,
+  "countsGroupByGrade": {
+  "3": 3
+  },
+  "exchanges": [
   {
-  image : http://code-it.com/test-image1.png,
-  grade : 1,
-  genre : 2,
-  ownCount : 2,
-  price : 4,
-  authorNickname : 프로여행러
+  "id": "f8b49d60-9f6f-4b25-854a-54fbbba870b2",
+  "cardId": "e69b7943-dbd6-4ff9-b069-039a2e6f1a3c",
+  "shopId": "8d444419-89d6-46b7-987c-89fc12f231aa",
+  "description": "교환제시합니다.",
+  "image": "https://cdn.pixabay.com/photo/2017/04/05/01/16/food-2203732_640.jpg",
+  "name": "음식",
+  "grade": 3,
+  "genre": 4,
+  "price": 4,
+  "nickname": "코드잇02"
   },
   {
-  ...
+  "id": "10add903-ea51-45b0-b794-5ffa1ce3da85",
+  "cardId": "e69b7943-dbd6-4ff9-b069-039a2e6f1a3c",
+  "shopId": "8d444419-89d6-46b7-987c-89fc12f231aa",
+  "description": "교환제시합니다.",
+  "image": "https://cdn.pixabay.com/photo/2017/04/05/01/16/food-2203732_640.jpg",
+  "name": "음식",
+  "grade": 3,
+  "genre": 4,
+  "price": 4,
+  "nickname": "코드잇02"
   },
-  ...
+  {
+  "id": "7b21c6e0-5788-4f2f-94e4-026cb9d79056",
+  "cardId": "9ee4c9c8-8bbf-4aac-a93b-1a75647d5b56",
+  "shopId": "3860b272-c816-4f52-bf09-1e0227f639ee",
+  "description": "교환 신청 테스트00",
+  "image": "https://cdn.pixabay.com/photo/2017/04/05/01/16/food-2203732_640.jpg",
+  "name": "음식",
+  "grade": 3,
+  "genre": 4,
+  "price": 4,
+  "nickname": "코드잇01"
+  }
   ]
   }
 

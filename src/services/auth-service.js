@@ -6,7 +6,7 @@ import {
   createHashedPassword,
   comparePassword,
 } from "../utils/password-util.js";
-import { userSelect } from "./selects/user-select.js";
+import { userSelect, userPasswordSelect } from "./selects/user-select.js";
 
 import { EXPIRE_TIME } from "../constants/session.js";
 
@@ -28,8 +28,11 @@ async function signUp({ email, password, nickname }) {
 
 async function signIn({ email, password, session }) {
   return prisma.$transaction(async () => {
-    const { encryptedPassword, ...rest } =
-      await userRepository.getUserInfoPasswordByEmail(email);
+    const where = { email };
+    const { encryptedPassword, ...rest } = await userRepository.findFirstData({
+      where,
+      select: userPasswordSelect,
+    });
 
     if (!encryptedPassword) {
       return null;
