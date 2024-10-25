@@ -226,26 +226,6 @@ async function purchaseService(userId, purchaseData) {
       });
       console.log({ decreaseQuantity });
 
-      // 매진 시 교환 신청 삭제
-      if (decreaseQuantity.remainingQuantity === 0) {
-        await exchangeDeleteAndCreateNotification({
-          sellout: true,
-          shopDetailDataWithExchange: shopDetailData,
-        });
-      }
-
-      // 구매 이력 추가
-      const purchase = await purchaseRepository.createData({
-        data: {
-          consumerId: sellerUserId,
-          purchaserId: userId,
-          cardId: shopDetailData.Card.id,
-          purchaseVolumn: purchaseQuantity,
-          cardPrice: shopDetailData.price,
-        },
-      });
-      console.log({ purchase });
-
       // 구매자 해당 카드 보유 추가
       const purchaserOwn = await ownRepository.upsertData({
         where: {
@@ -264,6 +244,25 @@ async function purchaseService(userId, purchaseData) {
         },
         select: ownCardListSelect,
       });
+
+      // 구매 이력 추가
+      const purchase = await purchaseRepository.createData({
+        data: {
+          consumerId: sellerUserId,
+          purchaserId: userId,
+          cardId: shopDetailData.Card.id,
+          purchaseVolumn: purchaseQuantity,
+          cardPrice: shopDetailData.price,
+        },
+      });
+
+      // 매진 시 교환 신청 삭제
+      if (decreaseQuantity.remainingQuantity === 0) {
+        await exchangeDeleteAndCreateNotification({
+          sellout: true,
+          shopDetailDataWithExchange: shopDetailData,
+        });
+      }
 
       const responseMapping = basicCardMapper(purchaserOwn);
 
