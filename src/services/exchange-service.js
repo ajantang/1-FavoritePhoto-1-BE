@@ -10,7 +10,14 @@ import {
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shop-repository.js";
-import { exchangeDelete } from "../utils/sellout-util.js";
+import { exchangeDeleteAndCreateNotification } from "../utils/sellout-util.js";
+import notificationRepository from "../repositories/notification-repository.js";
+import { createNotificationMessage } from "../utils/notification-util.js";
+import {
+  EXCHANGE_PROPOSAL_INDEX,
+  FAILES_EXCHANGE_INDEX,
+  SUCCESSFUL_EXCHANGE_INDEX,
+} from "../constants/notification.js";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {
@@ -48,6 +55,20 @@ async function createExchange({ userId, shopId, cardId, description }) {
     const exchange = await exchangeRepository.createData({
       data: exchangeData,
       select: exchangeCardShopSelect,
+    });
+
+    const { message, sellerId } = await createNotificationMessage({
+      idx: EXCHANGE_PROPOSAL_INDEX,
+      userId,
+      shopId,
+    });
+
+    const notification = await notificationRepository.createData({
+      data: {
+        userId: sellerId,
+        shopId,
+        message,
+      },
     });
 
     return exchangeCreateMapper(exchange);
@@ -117,9 +138,27 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
         id: exchangeId,
       });
 
+      const { message } = await createNotificationMessage({
+        idx: SUCCESSFUL_EXCHANGE_INDEX,
+        shopId,
+        userId,
+      });
+
+      const notification = await notificationRepository.createData({
+        data: {
+          userId: buyerId,
+          shopId,
+          message,
+        },
+      });
+
       // 매진 시 관련 exchange 삭제
       if (shopDetailData.remainingQuantity === 1) {
-        await exchangeDelete(shopDetailData, exchangeId);
+        await exchangeDeleteAndCreateNotification({
+          sellout: true,
+          shopDetailDataWithExchange: shopDetailData,
+          excludeExchangeId: exchangeId,
+        });
       }
 
       const responseMappeing = exchangeDecisionMapper(exchangeData);
@@ -128,8 +167,6 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
         successStatus: true,
         ...responseMappeing,
       };
-
-      // 관련된 알림 추가
     } catch (e) {
       throw e;
     }
@@ -137,10 +174,28 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
 }
 
 async function refuseOrCancelExchange(exchangeId, reqBody) {
-  const { exchangeData, exchangeCardId, buyerId } = reqBody;
+  const { exchangeData, exchangeCardId, shopId, buyerId } = reqBody;
 
   return await prisma.$transaction(async () => {
     try {
+      const shop = await shopRepository.findUniqueOrThrowtData({
+        where: { id: shopId },
+      });
+
+      const { message } = await createNotificationMessage({
+        idx: FAILES_EXCHANGE_INDEX,
+        userId: shop.userId,
+        shopId,
+      });
+
+      const notification = await notificationRepository.createData({
+        data: {
+          userId: buyerId,
+          shopId,
+          message,
+        },
+      });
+
       // exchange 삭제
       const delteeExchange = await exchangeRepository.deleteData({
         id: exchangeId,
@@ -174,7 +229,6 @@ async function refuseOrCancelExchange(exchangeId, reqBody) {
       throw e;
     }
   });
-  // 관련 알림 등록
 }
 
 export default {

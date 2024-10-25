@@ -164,6 +164,7 @@ export async function validatePurchaseConditions(req, res, next) {
     where: { id: shopId },
     select: shopDetailSelect,
   });
+
   const { remainingQuantity } = shop;
 
   // 매진 여부 확인

@@ -42,9 +42,6 @@ async function purchaseController(req, res, next) {
 
   const purchase = await shopService.purchaseService(userId, req.body);
   res.send(purchase);
-  // 구매 관련 알림 추가(구매자, 판매자).
-  // 교환 취소 알림 추가
-  // 매진 됐을 시 알람
 }
 
 async function createExchange(req, res, next) {
