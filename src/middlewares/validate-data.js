@@ -86,7 +86,7 @@ export async function checkShopCreatorByParams(req, res, next) {
 
     req.body.shopData = isOwner;
 
-    next();
+    return next();
   } catch (err) {
     return next(err);
   }
@@ -158,7 +158,7 @@ export async function validateUpdaeShopData(req, res, next) {
     req.body.ownData = ownData;
     req.body.userId = userId;
     req.body.cardId = isOwner.cardId;
-    next();
+    return next();
   } catch (err) {
     return next(err);
   }

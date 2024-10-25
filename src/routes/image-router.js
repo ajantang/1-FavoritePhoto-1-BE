@@ -2,15 +2,18 @@ import express from "express";
 
 import imageController from "../controllers/image-controller.js";
 import { authMiddleware } from "../middlewares/auth.js";
-import multer from "multer";
+import {
+  imageUploader,
+  multerMiddleware,
+} from "../middlewares/image-uploader.js";
 
-const upload = multer({ storage: multer.memoryStorage() });
 const imageRouter = express.Router();
 
 imageRouter.post(
   "/upload",
   authMiddleware,
-  upload.single("image"),
+  multerMiddleware,
+  imageUploader,
   imageController.uploadImage
 );
 

@@ -2,7 +2,14 @@ import imageService from "../services/image-service.js";
 
 export async function uploadImage(req, res, next) {
   try {
-    const result = await imageService.UploadGoogelCloud(req.file);
+    let result;
+    const { imageUrl } = req.body;
+
+    if (imageUrl) {
+      result = { url: imageUrl };
+    } else {
+      result = await imageService.UploadGoogelCloud(req.file);
+    }
 
     return res.status(201).send(result);
   } catch (err) {
