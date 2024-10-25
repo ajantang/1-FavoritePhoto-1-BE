@@ -53,7 +53,7 @@ async function createExchange({ userId, shopId, cardId, description }) {
       select: exchangeCardShopSelect,
     });
 
-    const message = await createNotificationMassage({
+    const { message, sellerId } = await createNotificationMassage({
       idx: EXCHANGE_PROPOSAL_INDEX,
       userId,
       shopId,
@@ -61,7 +61,7 @@ async function createExchange({ userId, shopId, cardId, description }) {
 
     const notification = await notificationRepository.createData({
       data: {
-        userId: shop.userId,
+        userId: sellerId,
         shopId,
         message,
       },

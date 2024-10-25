@@ -10,13 +10,14 @@ export async function createNotificationMassage({
   purchaseQuantity,
 }) {
   let user;
-  console.log(shopId)
+  console.log(shopId);
 
   // 상점 카드 정보 확인
   const shop = await shopRepository.findUniqueOrThrowtData({
     where: { id: shopId },
     select: shopListSelect,
   });
+  console.log(shop);
 
   if (userId) {
     // 유저 정보 확인
@@ -29,14 +30,17 @@ export async function createNotificationMassage({
   const cardName = shop.Card.name;
   const userName = user?.nickname;
 
-  const massage = [
-    `${userName}님과의 [${grade}] | ${cardName}]의 포토카드 교환이 성사되었습니다.`,
-    `${userName}님과의 [${grade}] | ${cardName}]의 포토카드 교환이 불발되었습니다.`,
-    `${userName}님이 [${grade}] | ${cardName}]의 포토카드 교환을 제안했습니다.`,
-    `[${grade}] | ${cardName}] ${purchaseQuantity}장을 성공적으로 구매했습니다.`,
-    `${userName}님이 [${grade}] | ${cardName}]을 ${purchaseQuantity}장 구매했습니다.`,
-    `[${grade}] | ${cardName}]이 품절되었습니다.`,
+  const message = [
+    `${userName}님과의 [${grade} | ${cardName}]의 포토카드 교환이 성사되었습니다.`,
+    `${userName}님과의 [${grade} | ${cardName}]의 포토카드 교환이 불발되었습니다.`,
+    `${userName}님이 [${grade} | ${cardName}]의 포토카드 교환을 제안했습니다.`,
+    `[${grade} | ${cardName}] ${purchaseQuantity}장을 성공적으로 구매했습니다.`,
+    `${userName}님이 [${grade} | ${cardName}]을 ${purchaseQuantity}장 구매했습니다.`,
+    `[${grade} | ${cardName}]이 품절되었습니다.`,
   ];
 
-  return massage[idx];
+  return {
+    message: message[idx],
+    sellerId: shop.userId,
+  };
 }
