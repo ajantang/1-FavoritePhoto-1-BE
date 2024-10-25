@@ -9,7 +9,7 @@ import ownRepository from "../repositories/own-repository.js";
 import prisma from "../repositories/prisma.js";
 import { createNotificationMessage } from "./notification-util.js";
 
-export async function exchangeDelete(
+export async function exchangeDeleteAndCreateNotification(
   shopDetailDataWithExchange,
   excludeExchangeId
 ) {
@@ -18,7 +18,7 @@ export async function exchangeDelete(
   const shopId = shopDetailDataWithExchange.id;
 
   await prisma.$transaction(async () => {
-    const updateOrcreateOwn = await Promise.all(
+    const updateOrcreateOwnAndCreateMessage = await Promise.all(
       exchangesCardInfo.map(async (exchangeInfo) => {
         const userId = exchangeInfo.userId;
         const cardId = exchangeInfo.Card.id;
@@ -52,7 +52,7 @@ export async function exchangeDelete(
     );
 
     const failseExchange = await notificationRepository.createManyData({
-      data: updateOrcreateOwn,
+      data: updateOrcreateOwnAndCreateMessage,
       skipDuplicates: true,
     });
 

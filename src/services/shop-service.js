@@ -9,7 +9,7 @@ import {
   ownCardListSelect,
   ownCardSelect,
 } from "../services/selects/own-select.js";
-import { exchangeDelete } from "../utils/sellout-util.js";
+import { exchangeDeleteAndCreateNotification } from "../utils/sellout-util.js";
 import {
   shopCreateSelect,
   shopDetailSelect,
@@ -222,7 +222,7 @@ async function purchaseService(userId, purchaseData) {
 
       // 매진 시 교환 신청 삭제
       if (decreaseQuantity.remainingQuantity === 0) {
-        await exchangeDelete(shopDetailData);
+        await exchangeDeleteAndCreateNotification(shopDetailData);
       }
 
       // 구매 이력 추가

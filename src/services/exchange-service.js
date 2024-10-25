@@ -10,7 +10,7 @@ import {
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shop-repository.js";
-import { exchangeDelete } from "../utils/sellout-util.js";
+import { exchangeDeleteAndCreateNotification } from "../utils/sellout-util.js";
 import notificationRepository from "../repositories/notification-repository.js";
 import { createNotificationMessage } from "../utils/notification-util.js";
 import {
@@ -155,7 +155,7 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
 
       // 매진 시 관련 exchange 삭제
       if (shopDetailData.remainingQuantity === 1) {
-        await exchangeDelete(shopDetailData, exchangeId);
+        await exchangeDeleteAndCreateNotification(shopDetailData, exchangeId);
       }
 
       const responseMappeing = exchangeDecisionMapper(exchangeData);
