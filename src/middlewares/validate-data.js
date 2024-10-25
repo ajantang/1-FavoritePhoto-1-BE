@@ -25,7 +25,7 @@ export async function validateCreateShopData(req, res, next) {
 
   // 등록하는 양이 보유량보다 적은 지 확인
   if (stock < salesQuantity) {
-    next(CustomError(40001));
+    return next(CustomError(40001));
   }
 
   const newReqBody = {
@@ -199,12 +199,16 @@ export async function validateExchangeAndOwner(req, res, next) {
   const userId = req.session.userId;
 
   // exchange 테이블이 존재하는지 확인
-  const exchange = await exchangeRepository.findUniqueOrThrowtData({
+  const exchange = await exchangeRepository.findFirstData({
     where: {
       id: exchangeId,
     },
     select: exchangeCardShopAndUserSelect,
   });
+
+  if (exchange === null || exchange === undefined) {
+    return next(CustomError(40400));
+  }
 
   const exchangeCardId = exchange.Card.id;
   const shopId = exchange.shopId;
@@ -219,7 +223,7 @@ export async function validateExchangeAndOwner(req, res, next) {
   });
 
   if (isOwner === null || isOwner === undefined) {
-    next(CustomError(40102));
+    return next(CustomError(40102));
   }
 
   req.body.exchangeData = exchange;
@@ -227,7 +231,7 @@ export async function validateExchangeAndOwner(req, res, next) {
   req.body.shopId = shopId;
   req.body.buyerId = buyerId;
 
-  next();
+  return next();
 }
 
 export async function validateExchangeConditions(req, res, next) {
@@ -265,7 +269,7 @@ export async function validateExchangeConditions(req, res, next) {
   req.body.shopDetailData = shop;
   req.body.shopCardId = shopCardId;
 
-  next();
+  return next();
 }
 
 export async function validateExchangeCreator(req, res, next) {
@@ -273,12 +277,16 @@ export async function validateExchangeCreator(req, res, next) {
   const userId = req.session.userId;
 
   // exchange 테이블이 존재하는지 확인
-  const exchange = await exchangeRepository.findUniqueOrThrowtData({
+  const exchange = await exchangeRepository.findFirstData({
     where: {
       id: exchangeId,
     },
     select: exchangeCardShopAndUserSelect,
   });
+
+  if (exchange === null || exchange === undefined) {
+    return next(CustomError(40400));
+  }
 
   const exchangeCardId = exchange.Card.id;
   const shopId = exchange.shopId;
@@ -293,12 +301,12 @@ export async function validateExchangeCreator(req, res, next) {
   });
 
   if (exchangeCreator === null || exchangeCreator === undefined) {
-    next(CustomError(40103));
+    return next(CustomError(40103));
   }
 
   req.body.exchangeData = exchange;
   req.body.exchangeCardId = exchangeCardId;
   req.body.buyerId = buyerId;
 
-  next();
+  return next();
 }

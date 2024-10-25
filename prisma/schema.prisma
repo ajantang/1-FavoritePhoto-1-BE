@@ -79,6 +79,7 @@ model Shop {
   price               Int
   remainingQuantity   Int      @map("remaining_quantity")
   totalQuantity       Int      @map("total_quantity")
+  hasExchangeRequest  Boolean  @default(false) @map("has_exchange_request")
   exchangeGrade       Int      @map("exchange_grade")
   exchangeGenre       Int      @map("exchange_genre")
   exchangeDescription String   @map("exchange_description") @db.VarChar(1024)
@@ -125,7 +126,7 @@ model Notification {
   id        String   @id @default(uuid()) @db.VarChar(36)
   User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String   @map("user_id") @db.VarChar(36)
-  Shop      Shop?    @relation(fields: [shopId], references: [id], onDelete: Cascade)
+  Shop      Shop?    @relation(fields: [shopId], references: [id], onDelete: SetNull)
   shopId    String?  @map("shop_id") @db.VarChar(36)
   message   String   @db.VarChar(1024)
   check     Boolean  @default(false)

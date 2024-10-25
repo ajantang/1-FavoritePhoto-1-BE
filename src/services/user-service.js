@@ -12,7 +12,7 @@ import { myExchangeListMapper } from "./mappers/exchange-mapper.js";
 import {
   createCardListFilterByQuery,
   createOrderBy,
-  createShopListFilterByQuery,
+  createMyShopListFilterByQuery,
   createGenreGradeKeywordWhere,
 } from "../utils/query-util.js";
 import userRepository from "../repositories/user-repository.js";
@@ -102,7 +102,7 @@ async function createMyCard({
 }
 
 async function getMyShopList({ userId, query }) {
-  const filter = createShopListFilterByQuery(query);
+  const filter = createMyShopListFilterByQuery(query);
   const where = { userId, ...filter.where };
   const list = await shopRepository.findManyByPaginationData({
     orderBy: filter.orderBy,

@@ -169,11 +169,12 @@
   - pageNum : 페이지 넘버(페이지네이션)
   - pageSize : 페이지 사이즈(페이지네이션)
   - keyword : 판매 포토 카드의 이름(name), 설명(description) 중 포함 단어 여부로 검색
+  - hasExchangeRequest : 해당 상점에 교환 신청 여부
 
 ### req example
 
 - query :
-  - sort=recent?genre=1&&grade=0&&pageSize=15&&pageNum=1&&sellout=false
+  - sort=recent?genre=1&&grade=0&&pageSize=15&&pageNum=1&&sellout=false&&hasExchangeRequest=true
 
 ### res template
 
@@ -192,6 +193,7 @@
       - remainingQuantity : 판매 카드 잔여량,
       - totalQuantity : 판매 카드 총량,
       - sellout : 매진 여부
+      - hasExchangeRequest : 교환 신청 여부
 
 ### res example
 
@@ -211,7 +213,8 @@
   "nickname": "코드잇05",
   "remainingQuantity": 1,
   "totalQuantity": 1,
-  "sellout": false
+  "sellout": false,
+  "hasExchangeRequest": true
   },
   {
   "id": "b5ccc355-5abb-49a4-9eef-7a8a0de57310",
@@ -223,7 +226,8 @@
   "nickname": "코드잇05",
   "remainingQuantity": 1,
   "totalQuantity": 1,
-  "sellout": false
+  "sellout": false,
+  "hasExchangeRequest": true
   }
   ]
   }

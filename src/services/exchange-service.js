@@ -50,6 +50,10 @@ async function createExchange({ userId, shopId, cardId, description }) {
       await ownRepository.deleteData(deleteWhere);
     }
 
+    const shpoWhere = { id: shopId };
+    const updateShopData = { hasExchangeRequest: true };
+    await shopRepository.updateData({ where: shpoWhere, data: updateShopData });
+
     const exchangeData = { userId, shopId, cardId, description };
 
     const exchange = await exchangeRepository.createData({
@@ -134,9 +138,24 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
       });
 
       // 승인된 exchange 삭제
-      const delteeExchange = await exchangeRepository.deleteData({
+      await exchangeRepository.deleteData({
         id: exchangeId,
       });
+
+      // exchange 잔여 여부로 상점 정보 갱신
+      const countExchangeOfShop = await exchangeRepository.countData({
+        shopId,
+      });
+
+      // exchange 잔여량 0 > hasExchangeRequest : false
+      if (countExchangeOfShop == 0) {
+        const shpoWhere = { id: shopId };
+        const updateShopData = { hasExchangeRequest: false };
+        await shopRepository.updateData({
+          where: shpoWhere,
+          data: updateShopData,
+        });
+      }
 
       const { message } = await createNotificationMessage({
         idx: SUCCESSFUL_EXCHANGE_INDEX,
@@ -158,6 +177,13 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
           sellout: true,
           shopDetailDataWithExchange: shopDetailData,
           excludeExchangeId: exchangeId,
+        });
+        // 상점 매진시 전체 exchange 삭제 0 > hasExchangeRequest : false
+        const shpoWhere = { id: shopId };
+        const updateShopData = { hasExchangeRequest: false };
+        await shopRepository.updateData({
+          where: shpoWhere,
+          data: updateShopData,
         });
       }
 
@@ -196,10 +222,28 @@ async function refuseOrCancelExchange(exchangeId, reqBody) {
         },
       });
 
+      const exchangeInfo = await exchangeRepository.findFirstData({
+        where: { id: exchangeId },
+      });
+
       // exchange 삭제
       const delteeExchange = await exchangeRepository.deleteData({
         id: exchangeId,
       });
+
+      // exchange 잔여 여부로 상점 정보 갱신
+      const countExchangeOfShop = await exchangeRepository.countData({
+        shopId: exchangeInfo.shopId,
+      });
+      // exchange 잔여량 0 > hasExchangeRequest : false
+      if (countExchangeOfShop === 0) {
+        const shpoWhere = { id: exchangeInfo.shopId };
+        const updateShopData = { hasExchangeRequest: false };
+        await shopRepository.updateData({
+          where: shpoWhere,
+          data: updateShopData,
+        });
+      }
 
       // 교환 희망자의 own에 +1
       const own = await ownRepository.upsertData({

@@ -3,12 +3,14 @@ import { calculateTotalCountByObject } from "../../utils/number-util.js";
 
 export function exchangeMapper(basicSelect) {
   const mappedCard = basicCardMapper(basicSelect);
+  const { id: cardId, ...rest } = mappedCard;
 
   return {
     id: basicSelect.id,
+    cardId,
     shopId: basicSelect.shopId,
     description: basicSelect.description,
-    ...mappedCard,
+    ...rest,
   };
 }
 
