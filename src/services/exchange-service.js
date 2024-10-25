@@ -156,7 +156,11 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
 
       // 매진 시 관련 exchange 삭제
       if (shopDetailData.remainingQuantity === 1) {
-        await exchangeDeleteAndCreateNotification(shopDetailData, exchangeId);
+        await exchangeDeleteAndCreateNotification({
+          sellout: true,
+          shopDetailDataWithExchange: shopDetailData,
+          excludeExchangeId: exchangeId,
+        });
       }
 
       const responseMappeing = exchangeDecisionMapper(exchangeData);

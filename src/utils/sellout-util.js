@@ -9,10 +9,11 @@ import ownRepository from "../repositories/own-repository.js";
 import prisma from "../repositories/prisma.js";
 import { createNotificationMessage } from "./notification-util.js";
 
-export async function exchangeDeleteAndCreateNotification(
+export async function exchangeDeleteAndCreateNotification({
+  sellout,
   shopDetailDataWithExchange,
-  excludeExchangeId
-) {
+  excludeExchangeId,
+}) {
   const exchangesCardInfo = shopDetailDataWithExchange.Exchanges;
   const sellerUserId = shopDetailDataWithExchange.userId;
   const shopId = shopDetailDataWithExchange.id;
@@ -51,16 +52,23 @@ export async function exchangeDeleteAndCreateNotification(
       })
     );
 
-    const { message } = await createNotificationMessage({
-      idx: SOLD_OUT_INDEX,
-      shopId,
-    });
+    if (sellout) {
+      const { message } = await createNotificationMessage({
+        idx: SOLD_OUT_INDEX,
+        shopId,
+      });
+
+      const selloutNotification = await notificationRepository.createData({
+        data: {
+          userId: sellerUserId,
+          shopId,
+          message,
+        },
+      });
+    }
 
     const failseExchange = await notificationRepository.createManyData({
-      data: [
-        ...updateOrcreateOwnAndCreateMessage,
-        { userId: sellerUserId, shopId, message },
-      ],
+      data: [...updateOrcreateOwnAndCreateMessage],
       skipDuplicates: true,
     });
 

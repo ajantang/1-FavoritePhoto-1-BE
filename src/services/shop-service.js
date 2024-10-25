@@ -156,7 +156,9 @@ async function deleteShop({ userId, shopId }) {
   return await prisma.$transaction(async () => {
     const shop = await shopRepository.findUniqueOrThrowtData({
       where: { id: shopId },
+      select: shopDetailSelect,
     });
+
     const own = await ownRepository.upsertData({
       where: {
         userId_cardId: {
@@ -177,7 +179,6 @@ async function deleteShop({ userId, shopId }) {
 
     await shopRepository.deleteData({ id: shopId });
 
-    // exchange 삭제
     return myCardMapper(own);
   });
 }
@@ -222,7 +223,10 @@ async function purchaseService(userId, purchaseData) {
 
       // 매진 시 교환 신청 삭제
       if (decreaseQuantity.remainingQuantity === 0) {
-        await exchangeDeleteAndCreateNotification(shopDetailData);
+        await exchangeDeleteAndCreateNotification({
+          sellout: true,
+          shopDetailDataWithExchange: shopDetailData,
+        });
       }
 
       // 구매 이력 추가
