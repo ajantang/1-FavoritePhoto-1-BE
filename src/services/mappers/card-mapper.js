@@ -52,6 +52,7 @@ export function myShopMapper(shopCardSelect) {
     remainingQuantity: shopCardSelect.remainingQuantity,
     totalQuantity: shopCardSelect.totalQuantity,
     sellout,
+    hasExchangeRequest: shopCardSelect.hasExchangeRequest,
   };
 }
 

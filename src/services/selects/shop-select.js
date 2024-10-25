@@ -29,6 +29,7 @@ export const shopCreateSelect = {
 
 export const shopListSelect = {
   ...shopSelect,
+  hasExchangeRequest: true,
   createdAt: true,
   Card: {
     select: cardSelect,
