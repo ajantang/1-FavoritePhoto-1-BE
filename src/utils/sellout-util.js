@@ -73,13 +73,12 @@ export async function exchangeDeleteAndCreateNotification({
       }
       return acc;
     }, []);
-    console.log({ newMessage });
 
     const failseExchange = await notificationRepository.createManyData({
       data: [...newMessage],
       skipDuplicates: true,
     });
-    console.log({ failseExchange });
+
     await exchangeRepository.deleteManyData({
       shopId,
     });

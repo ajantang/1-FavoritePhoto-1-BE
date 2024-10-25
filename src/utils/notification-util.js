@@ -10,14 +10,12 @@ export async function createNotificationMessage({
   purchaseQuantity,
 }) {
   let user;
-  console.log(shopId);
 
   // 상점 카드 정보 확인
   const shop = await shopRepository.findUniqueOrThrowtData({
     where: { id: shopId },
     select: shopListSelect,
   });
-  console.log(shop);
 
   if (userId) {
     // 유저 정보 확인

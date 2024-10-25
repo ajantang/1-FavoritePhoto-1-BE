@@ -38,12 +38,11 @@ async function createShop(createData) {
         data: rest,
         select: shopCreateSelect,
       });
-      console.log(shop);
 
       // 보유량 감소 혹은 삭제
       if (rest.remainingQuantity === own.quantity) {
         const deleteOwn = await ownRepository.deleteData({ id: own.id });
-        console.log(deleteOwn);
+
       } else {
         const updateOwn = await ownRepository.updateData({
           where: { id: own.id },
@@ -51,7 +50,6 @@ async function createShop(createData) {
             quantity: { decrement: rest.remainingQuantity },
           },
         });
-        console.log(updateOwn);
       }
 
       return createShopMapper(shop);
@@ -69,10 +67,8 @@ async function getShopList(query) {
         ...filterOptions,
         select: shopListSelect,
       });
-      console.log(shopList);
 
       const count = await shopRepository.conutData(filterOptions.where);
-      console.log(count);
 
       return getShopListMapper(shopList, count);
     } catch (e) {
@@ -88,14 +84,13 @@ async function getShopDetail(userId, shopId) {
         where: { id: shopId },
         select: shopDetailSelect,
       });
-      console.log(shop);
+
       const isOwner = await shopRepository.findFirstData({
         where: {
           id: shopId,
           userId,
         },
       });
-      console.log(isOwner);
 
       let isExchanges = null;
       if (isOwner === null || isOwner === undefined) {
@@ -106,7 +101,6 @@ async function getShopDetail(userId, shopId) {
           },
           select: exchangeCardInfo,
         });
-        console.log(isExchanges);
       }
 
       return getShopDetailMapper(shop, isExchanges);
@@ -132,7 +126,6 @@ async function updateShop(shopId, updateData) {
       data: rest,
       select: shopCreateSelect,
     });
-    console.log(shop);
 
     // 판매 수량을 최대치로 변경 시
     if (isOutOfStock) {
@@ -151,7 +144,6 @@ async function updateShop(shopId, updateData) {
           quantity: creatOwnQuantity,
         },
       });
-      console.log(own);
     }
 
     return createShopMapper(shop);
@@ -212,7 +204,6 @@ async function purchaseService(userId, purchaseData) {
           point: { decrement: tradePoints },
         },
       });
-      console.log({ decreasePoint });
 
       // 판매자 포인트 증가
       const increasePoint = await userRepository.updateData({
@@ -221,7 +212,6 @@ async function purchaseService(userId, purchaseData) {
           point: { increment: tradePoints },
         },
       });
-      console.log({ increasePoint });
 
       // 상점 잔여수량 차감
       const decreaseQuantity = await shopRepository.updateData({
@@ -230,7 +220,6 @@ async function purchaseService(userId, purchaseData) {
           remainingQuantity: { decrement: purchaseQuantity },
         },
       });
-      console.log({ decreaseQuantity });
 
       // 구매자 해당 카드 보유 추가
       const purchaserOwn = await ownRepository.upsertData({
@@ -269,13 +258,12 @@ async function purchaseService(userId, purchaseData) {
         shopId,
         purchaseQuantity,
       });
-      console.log({ sellerMessage });
+
       const { message: buyerMessage } = await createNotificationMessage({
         idx: PURCHASE_SUCCESS_INDEX,
         shopId,
         purchaseQuantity,
       });
-      console.log({ buyerMessage });
 
       // 알림 추가
       const notification = await notificationRepository.createManyData({
@@ -284,7 +272,6 @@ async function purchaseService(userId, purchaseData) {
           { userId, shopId, message: buyerMessage },
         ],
       });
-      console.log({ notification });
 
       // 매진 시 교환 신청 삭제
       if (decreaseQuantity.remainingQuantity === 0) {

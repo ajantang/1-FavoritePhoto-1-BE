@@ -20,7 +20,6 @@ export async function validateCreateShopData(req, res, next) {
       cardId,
     },
   });
-  console.log(own);
 
   const stock = own ? own.quantity : 0;
 
@@ -156,7 +155,7 @@ export async function validatePurchaseConditions(req, res, next) {
       id: shopId,
     },
   });
-  console.log({ isOwner });
+
   if (isOwner) {
     return next(CustomError(40398));
   }
@@ -165,7 +164,7 @@ export async function validatePurchaseConditions(req, res, next) {
     where: { id: shopId },
     select: shopDetailSelect,
   });
-  console.log({ shop });
+
   const { remainingQuantity } = shop;
 
   // 매진 여부 확인
@@ -180,7 +179,6 @@ export async function validatePurchaseConditions(req, res, next) {
   const user = await userRepository.findUniqueOrThrowtData({
     where: { id: userId },
   });
-  console.log({ user });
 
   const totalPrice = purchaseQuantity * shop.price;
 
