@@ -15,9 +15,16 @@ async function openBox(userId) {
     return prisma.$transaction(async () => {
       const earnedPoint =
         Math.floor(Math.random() * MAX_BOX_POINT) + MIN_BOX_POINT;
-      const userInfo = await userRepository.increaseUserPoint({
-        id: userId,
-        earnedPoint,
+      const where = { id: userId };
+      const data = {
+        point: {
+          increment: earnedPoint,
+        },
+      };
+      const userInfo = await userRepository.updateData({
+        where,
+        data,
+        select: userSelect,
       });
       await pointRepository.updateLastBoxTime(userId);
 

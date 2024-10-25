@@ -1,46 +1,4 @@
 import prisma from "./prisma.js";
-import {
-  userSelect,
-  userPasswordSelect,
-} from "../services/selects/user-select.js";
-
-async function createUser({ email, encryptedPassword, nickname }) {
-  return await prisma.user.create({
-    data: { email, encryptedPassword, nickname },
-    select: userSelect,
-  });
-}
-
-async function getUserInfoPasswordByEmail(email) {
-  return await prisma.user.findUniqueOrThrow({
-    where: { email },
-    select: userPasswordSelect,
-  });
-}
-
-async function increaseUserPoint({ id, earnedPoint }) {
-  return prisma.user.update({
-    where: { id },
-    data: {
-      point: {
-        increment: earnedPoint,
-      },
-    },
-    select: userSelect,
-  });
-}
-
-async function decreaseUserPoint({ id, lostPoint }) {
-  return prisma.user.update({
-    where: { id },
-    data: {
-      point: {
-        decrement: lostPoint,
-      },
-    },
-    select: userSelect,
-  });
-}
 
 async function createData({ data, select }) {
   return await prisma.user.create({ data, select });
@@ -89,10 +47,6 @@ async function deleteManyData(where) {
 }
 
 export default {
-  createUser,
-  getUserInfoPasswordByEmail,
-  increaseUserPoint,
-  decreaseUserPoint,
   createData,
   upsertData,
   findFirstData,
