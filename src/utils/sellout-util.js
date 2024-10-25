@@ -51,22 +51,17 @@ export async function exchangeDeleteAndCreateNotification(
       })
     );
 
-    const failseExchange = await notificationRepository.createManyData({
-      data: updateOrcreateOwnAndCreateMessage,
-      skipDuplicates: true,
-    });
-
     const { message } = await createNotificationMessage({
       idx: SOLD_OUT_INDEX,
       shopId,
     });
 
-    const sellOut = await notificationRepository.createData({
-      data: {
-        userId: sellerUserId,
-        shopId,
-        message,
-      },
+    const failseExchange = await notificationRepository.createManyData({
+      data: [
+        ...updateOrcreateOwnAndCreateMessage,
+        { userId: sellerUserId, shopId, message },
+      ],
+      skipDuplicates: true,
     });
 
     await exchangeRepository.deleteManyData({
