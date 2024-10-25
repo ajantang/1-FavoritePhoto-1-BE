@@ -12,7 +12,7 @@ import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 import shopRepository from "../repositories/shop-repository.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
 import notificationRepository from "../repositories/notification-repository.js";
-import { createNotificationMassage } from "../utils/notification-util.js";
+import { createNotificationMessage } from "../utils/notification-util.js";
 import { EXCHANGE_PROPOSAL_INDEX } from "../constants/notification.js";
 
 async function checkExchangeByUser(userId, shopId) {
@@ -53,7 +53,7 @@ async function createExchange({ userId, shopId, cardId, description }) {
       select: exchangeCardShopSelect,
     });
 
-    const { message, sellerId } = await createNotificationMassage({
+    const { message, sellerId } = await createNotificationMessage({
       idx: EXCHANGE_PROPOSAL_INDEX,
       userId,
       shopId,
@@ -148,7 +148,6 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
         ...responseMappeing,
       };
 
-      // 관련된 알림 추가
     } catch (e) {
       throw e;
     }

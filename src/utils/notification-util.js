@@ -3,7 +3,7 @@ import shopRepository from "../repositories/shop-repository.js";
 import userRepository from "../repositories/user-repository.js";
 import { shopListSelect } from "../services/selects/shop-select.js";
 
-export async function createNotificationMassage({
+export async function createNotificationMessage({
   idx,
   userId,
   shopId,
