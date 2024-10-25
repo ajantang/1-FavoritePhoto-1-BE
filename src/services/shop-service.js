@@ -9,7 +9,7 @@ import {
   ownCardListSelect,
   ownCardSelect,
 } from "../services/selects/own-select.js";
-import { exchangeDelete } from "../utils/sellout-util.js";
+import { exchangeDeleteAndCreateNotification } from "../utils/sellout-util.js";
 import {
   shopCreateSelect,
   shopDetailSelect,
@@ -22,6 +22,12 @@ import {
 } from "./mappers/shop-mapper.js";
 import { createShopListFilterByQuery } from "../utils/query-util.js";
 import { exchangeCardInfo } from "./selects/exchange-select.js";
+import { createNotificationMessage } from "../utils/notification-util.js";
+import notificationRepository from "../repositories/notification-repository.js";
+import {
+  PURCHASE_SUCCESS_INDEX,
+  SALE_NOTIFICATION_INDEX,
+} from "../constants/notification.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
@@ -77,6 +83,7 @@ async function getShopDetail(userId, shopId) {
         where: { id: shopId },
         select: shopDetailSelect,
       });
+
       const isOwner = await shopRepository.findFirstData({
         where: {
           id: shopId,
@@ -146,7 +153,14 @@ async function deleteShop({ userId, shopId }) {
   return await prisma.$transaction(async () => {
     const shop = await shopRepository.findUniqueOrThrowtData({
       where: { id: shopId },
+      select: shopDetailSelect,
     });
+
+    const notification = await exchangeDeleteAndCreateNotification({
+      sellout: false,
+      shopDetailDataWithExchange: shop,
+    });
+
     const own = await ownRepository.upsertData({
       where: {
         userId_cardId: {
@@ -218,17 +232,6 @@ async function purchaseService(userId, purchaseData) {
         });
       }
 
-      // 구매 이력 추가
-      const purchase = await purchaseRepository.createData({
-        data: {
-          consumerId: sellerUserId,
-          purchaserId: userId,
-          cardId: shopDetailData.Card.id,
-          purchaseVolumn: purchaseQuantity,
-          cardPrice: shopDetailData.price,
-        },
-      });
-
       // 구매자 해당 카드 보유 추가
       const purchaserOwn = await ownRepository.upsertData({
         where: {
@@ -247,6 +250,47 @@ async function purchaseService(userId, purchaseData) {
         },
         select: ownCardListSelect,
       });
+
+      // 구매 이력 추가
+      const purchase = await purchaseRepository.createData({
+        data: {
+          consumerId: sellerUserId,
+          purchaserId: userId,
+          cardId: shopDetailData.Card.id,
+          purchaseVolumn: purchaseQuantity,
+          cardPrice: shopDetailData.price,
+        },
+      });
+
+      // 알림 메세지 생성
+      const { message: sellerMessage } = await createNotificationMessage({
+        idx: SALE_NOTIFICATION_INDEX,
+        userId,
+        shopId,
+        purchaseQuantity,
+      });
+
+      const { message: buyerMessage } = await createNotificationMessage({
+        idx: PURCHASE_SUCCESS_INDEX,
+        shopId,
+        purchaseQuantity,
+      });
+
+      // 알림 추가
+      const notification = await notificationRepository.createManyData({
+        data: [
+          { userId: sellerUserId, shopId, message: sellerMessage },
+          { userId, shopId, message: buyerMessage },
+        ],
+      });
+
+      // 매진 시 교환 신청 삭제
+      if (decreaseQuantity.remainingQuantity === 0) {
+        await exchangeDeleteAndCreateNotification({
+          sellout: true,
+          shopDetailDataWithExchange: shopDetailData,
+        });
+      }
 
       const responseMapping = basicCardMapper(purchaserOwn);
 
