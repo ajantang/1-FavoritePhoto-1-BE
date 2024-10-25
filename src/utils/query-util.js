@@ -95,3 +95,16 @@ export function createShopListFilterByQuery(query) {
 
   return filterOptions;
 }
+
+export function createMyShopListFilterByQuery(query) {
+  const { hasExchangeRequest, ...rest } = query;
+  const filterOptions = createShopListFilterByQuery(rest);
+
+  if (hasExchangeRequest) {
+    const toBoolean = (value) => value === "true";
+
+    filterOptions.where.hasExchangeRequest = toBoolean(hasExchangeRequest);
+  }
+
+  return filterOptions;
+}
