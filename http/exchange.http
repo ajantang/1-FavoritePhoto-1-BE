@@ -80,7 +80,7 @@ POST http://localhost:3000/exchange/39f29951-ee5c-44b3-9dfd-b6ce36cb1b5b/accept
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
-POST http://localhost:3000/exchange/8507947e-20cf-4e8d-b48f-f9053f772e5b/refuse
+POST http://localhost:3000/exchange/07c48062-9b89-42ad-94e7-c83f34471259/refuse
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 ###
