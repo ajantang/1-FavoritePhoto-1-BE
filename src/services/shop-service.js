@@ -22,6 +22,12 @@ import {
 } from "./mappers/shop-mapper.js";
 import { createShopListFilterByQuery } from "../utils/query-util.js";
 import { exchangeCardInfo } from "./selects/exchange-select.js";
+import { createNotificationMessage } from "../utils/notification-util.js";
+import notificationRepository from "../repositories/notification-repository.js";
+import {
+  PURCHASE_SUCCESS_INDEX,
+  SALE_NOTIFICATION_INDEX,
+} from "../constants/notification.js";
 
 async function createShop(createData) {
   const { own, ...rest } = createData;
@@ -255,6 +261,30 @@ async function purchaseService(userId, purchaseData) {
           cardPrice: shopDetailData.price,
         },
       });
+
+      // 알림 메세지 생성
+      const { message: sellerMessage } = await createNotificationMessage({
+        idx: SALE_NOTIFICATION_INDEX,
+        userId,
+        shopId,
+        purchaseQuantity,
+      });
+      console.log({ sellerMessage });
+      const { message: buyerMessage } = await createNotificationMessage({
+        idx: PURCHASE_SUCCESS_INDEX,
+        shopId,
+        purchaseQuantity,
+      });
+      console.log({ buyerMessage });
+
+      // 알림 추가
+      const notification = await notificationRepository.createManyData({
+        data: [
+          { userId: sellerUserId, shopId, message: sellerMessage },
+          { userId, shopId, message: buyerMessage },
+        ],
+      });
+      console.log({ notification });
 
       // 매진 시 교환 신청 삭제
       if (decreaseQuantity.remainingQuantity === 0) {
