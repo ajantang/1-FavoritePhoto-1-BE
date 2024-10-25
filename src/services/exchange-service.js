@@ -13,6 +13,7 @@ import shopRepository from "../repositories/shop-repository.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
 import notificationRepository from "../repositories/notification-repository.js";
 import { createNotificationMassage } from "../utils/notification-util.js";
+import { EXCHANGE_PROPOSAL_INDEX } from "../constants/notification.js";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {
@@ -52,17 +53,17 @@ async function createExchange({ userId, shopId, cardId, description }) {
       select: exchangeCardShopSelect,
     });
 
-    const massage = await createNotificationMassage({
-      idx: 2,
+    const message = await createNotificationMassage({
+      idx: EXCHANGE_PROPOSAL_INDEX,
       userId,
       shopId,
     });
 
     const notification = await notificationRepository.createData({
       data: {
-        // userId: shop.userId
-        // shopId,
-        message: massage[0]
+        userId: shop.userId,
+        shopId,
+        message,
       },
     });
 
