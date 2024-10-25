@@ -13,7 +13,10 @@ import shopRepository from "../repositories/shop-repository.js";
 import { exchangeDelete } from "../utils/sellout-util.js";
 import notificationRepository from "../repositories/notification-repository.js";
 import { createNotificationMessage } from "../utils/notification-util.js";
-import { EXCHANGE_PROPOSAL_INDEX } from "../constants/notification.js";
+import {
+  EXCHANGE_PROPOSAL_INDEX,
+  SUCCESSFUL_EXCHANGE_INDEX,
+} from "../constants/notification.js";
 
 async function checkExchangeByUser(userId, shopId) {
   const filter = {
@@ -136,6 +139,20 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
         id: exchangeId,
       });
 
+      const { message } = await createNotificationMessage({
+        idx: SUCCESSFUL_EXCHANGE_INDEX,
+        shopId,
+        userId,
+      });
+
+      const notification = await notificationRepository.createData({
+        data: {
+          userId: buyerId,
+          shopId,
+          message,
+        },
+      });
+
       // 매진 시 관련 exchange 삭제
       if (shopDetailData.remainingQuantity === 1) {
         await exchangeDelete(shopDetailData, exchangeId);
@@ -147,7 +164,6 @@ async function acceptByExchange(userId, exchangeId, reqBody) {
         successStatus: true,
         ...responseMappeing,
       };
-
     } catch (e) {
       throw e;
     }
