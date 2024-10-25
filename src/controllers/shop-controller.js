@@ -14,6 +14,7 @@ async function getShopList(req, res, next) {
 async function getShopDetail(req, res, next) {
   const { shopId } = req.params;
   const userId = req.session?.userId || "";
+
   const shop = await shopService.getShopDetail(userId, shopId);
   res.status(200).send(shop);
 }
@@ -45,7 +46,6 @@ async function purchaseController(req, res, next) {
   // 교환 취소 알림 추가
   // 매진 됐을 시 알람
 }
-
 
 async function createExchange(req, res, next) {
   try {

@@ -30,7 +30,7 @@
 ### req template
 
 - description : 마지막으로 호출한 POST /point/box 시간 차이 확인
-- path : /points/last-box-time-gap
+- path : /points/last-box-time
 - type : GET
 
 ### req example
