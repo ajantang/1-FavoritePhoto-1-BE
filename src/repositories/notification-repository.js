@@ -4,6 +4,10 @@ async function createData({ data, select }) {
   return await prisma.notification.create({ data, select });
 }
 
+async function createManyData({ data, skipDuplicates, select }) {
+  return await prisma.notification.createMany({ data, skipDuplicates, select });
+}
+
 async function findFirstData({ where, select }) {
   return await prisma.notification.findFirst({ where, select });
 }
@@ -46,6 +50,7 @@ async function deleteData(where) {
 
 export default {
   createData,
+  createManyData,
   findFirstData,
   findUniqueOrThrowtData,
   countData,

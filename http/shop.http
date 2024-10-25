@@ -41,7 +41,7 @@ Content-Type: application/json
 Cookie: connect.sid=YOUR_SESSION_COOKIE_HERE
 
 {
-    "shopId":"45c5fdf0-1528-45d1-b111-6b0b642dd109",
+    "shopId":"b49e0270-04b4-4d69-aea8-f720c3cefbe6",
     "purchaseQuantity": 1
 }
 
