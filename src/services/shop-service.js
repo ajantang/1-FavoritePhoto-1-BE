@@ -159,6 +159,11 @@ async function deleteShop({ userId, shopId }) {
       select: shopDetailSelect,
     });
 
+    const notification = await exchangeDeleteAndCreateNotification({
+      sellout: false,
+      shopDetailDataWithExchange: shop,
+    });
+
     const own = await ownRepository.upsertData({
       where: {
         userId_cardId: {
