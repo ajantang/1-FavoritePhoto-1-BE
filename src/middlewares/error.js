@@ -24,6 +24,14 @@ export function clientErrorHandler(err, req, res, next) {
     err instanceof Prisma.PrismaClientValidationError ||
     err.name === "StructError"
   ) {
+    if (err.message.includes("email -- Expected a string matching")) {
+      return res.status(400).send({ message: CUSTOM_ERROR_INFO[40096] });
+    } else if (
+      err.message.includes("password -- Expected a string with a length")
+    ) {
+      return res.status(400).send({ message: CUSTOM_ERROR_INFO[40095] });
+    }
+
     res
       .status(400)
       .send({ message: CUSTOM_ERROR_INFO[40099] + ": " + err.message });

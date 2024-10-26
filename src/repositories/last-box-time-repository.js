@@ -15,9 +15,22 @@ async function updateLastBoxTime(userId) {
   });
 }
 
-// 회원 가입시
-async function createLastBoxTime(userId) {
-  return await prisma.lastBoxTime.create({ data: { id: userId } });
+async function createData({ data, select }) {
+  return await prisma.user.create({ data, select });
 }
 
-export default { findLastBoxTime, updateLastBoxTime, createLastBoxTime };
+async function findFirstData({ where, select }) {
+  return await prisma.user.findFirst({ where, select });
+}
+
+async function updateData({ where, data, select }) {
+  return await prisma.user.update({ where, data, select });
+}
+
+export default {
+  findLastBoxTime,
+  updateLastBoxTime,
+  createData,
+  findFirstData,
+  updateData,
+};

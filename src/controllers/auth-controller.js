@@ -15,16 +15,17 @@ async function signUp(req, res, next) {
 async function signIn(req, res, next) {
   try {
     const { email, password } = req.body;
-
-    const { userInfo, session } = await authService.signIn({
+    const authInfo = await authService.signIn({
       email,
       password,
       session: req.session,
     });
 
-    if (!userInfo) {
-      return CustomError(40098);
+    if (!authInfo) {
+      return next(CustomError(40098));
     }
+
+    const { userInfo, session } = authInfo;
 
     req.session.userId = session.userId;
 
