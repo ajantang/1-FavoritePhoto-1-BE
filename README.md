@@ -42,9 +42,129 @@
 # 📂 파일구조
 
 <details>
-  <summary>파일 구조</summary>
-  <pre>
-  </pre>
+  
+```bash
+  📦1-FavoritePhoto-BE
+ ┣ 📂docs
+ ┃ ┣ 📜api.md
+ ┃ ┣ 📜api_auth.md
+ ┃ ┣ 📜api_card.md
+ ┃ ┣ 📜api_exchange.md
+ ┃ ┣ 📜api_image.md
+ ┃ ┣ 📜api_norification.md
+ ┃ ┣ 📜api_point.md
+ ┃ ┣ 📜api_shop.md
+ ┃ ┣ 📜api_user.md
+ ┃ ┗ 📜tech-stack.md
+ ┣ 📂prisma
+ ┃ ┣ 📂migrations
+ ┃ ┃ ┣ 📂20241017132355_init
+ ┃ ┃ ┃ ┗ 📜migration.sql
+ ┃ ┃ ┣ 📂20241017153750_add_user_id_card_id_unique_constraint
+ ┃ ┃ ┃ ┗ 📜migration.sql
+ ┃ ┃ ┣ 📂20241025014714_add_shop_column_for_exchange_info
+ ┃ ┃ ┃ ┗ 📜migration.sql
+ ┃ ┃ ┣ 📂20241025020246_keep_noti_row_after_shop_row_deleted
+ ┃ ┃ ┃ ┗ 📜migration.sql
+ ┃ ┃ ┗ 📜migration_lock.toml
+ ┃ ┗ 📜schema.prisma
+ ┣ 📂src
+ ┃ ┣ 📂constants
+ ┃ ┃ ┣ 📜box.js
+ ┃ ┃ ┣ 📜card.js
+ ┃ ┃ ┣ 📜error.js
+ ┃ ┃ ┣ 📜exchange.js
+ ┃ ┃ ┣ 📜grade.js
+ ┃ ┃ ┣ 📜notification.js
+ ┃ ┃ ┣ 📜password.js
+ ┃ ┃ ┣ 📜session.js
+ ┃ ┃ ┣ 📜shop.js
+ ┃ ┃ ┗ 📜user.js
+ ┃ ┣ 📂controllers
+ ┃ ┃ ┣ 📜admin-controller.js
+ ┃ ┃ ┣ 📜auth-controller.js
+ ┃ ┃ ┣ 📜cards-controller.js
+ ┃ ┃ ┣ 📜exchange-controller.js
+ ┃ ┃ ┣ 📜image-controller.js
+ ┃ ┃ ┣ 📜notification-controller.js
+ ┃ ┃ ┣ 📜own-controller.js
+ ┃ ┃ ┣ 📜point-controller.js
+ ┃ ┃ ┣ 📜shop-controller.js
+ ┃ ┃ ┗ 📜users-controller.js
+ ┃ ┣ 📂lib
+ ┃ ┃ ┗ 📜custom-error.js
+ ┃ ┣ 📂middlewares
+ ┃ ┃ ┣ 📜admin.js
+ ┃ ┃ ┣ 📜auth.js
+ ┃ ┃ ┣ 📜error.js
+ ┃ ┃ ┣ 📜image-uploader.js
+ ┃ ┃ ┣ 📜validate-DB-data.js
+ ┃ ┃ ┗ 📜validate-data.js
+ ┃ ┣ 📂repositories
+ ┃ ┃ ┣ 📜card-repository.js
+ ┃ ┃ ┣ 📜exchange-repository.js
+ ┃ ┃ ┣ 📜last-box-time-repository.js
+ ┃ ┃ ┣ 📜notification-repository.js
+ ┃ ┃ ┣ 📜own-repository.js
+ ┃ ┃ ┣ 📜prisma.js
+ ┃ ┃ ┣ 📜purchase-repository.js
+ ┃ ┃ ┣ 📜session-repository.js
+ ┃ ┃ ┣ 📜shop-repository.js
+ ┃ ┃ ┗ 📜user-repository.js
+ ┃ ┣ 📂routes
+ ┃ ┃ ┣ 📜auth-router.js
+ ┃ ┃ ┣ 📜exchange-route.js
+ ┃ ┃ ┣ 📜image-router.js
+ ┃ ┃ ┣ 📜notification-router.js
+ ┃ ┃ ┣ 📜point-router.js
+ ┃ ┃ ┣ 📜shop-router.js
+ ┃ ┃ ┗ 📜user-router.js
+ ┃ ┣ 📂services
+ ┃ ┃ ┣ 📂mappers
+ ┃ ┃ ┃ ┣ 📜box-mapper.js
+ ┃ ┃ ┃ ┣ 📜card-mapper.js
+ ┃ ┃ ┃ ┣ 📜exchange-mapper.js
+ ┃ ┃ ┃ ┣ 📜notification-mapper.js
+ ┃ ┃ ┃ ┗ 📜shop-mapper.js
+ ┃ ┃ ┣ 📂selects
+ ┃ ┃ ┃ ┣ 📜card-select.js
+ ┃ ┃ ┃ ┣ 📜exchange-select.js
+ ┃ ┃ ┃ ┣ 📜notification-select.js
+ ┃ ┃ ┃ ┣ 📜own-select.js
+ ┃ ┃ ┃ ┣ 📜session-select.js
+ ┃ ┃ ┃ ┣ 📜shop-select.js
+ ┃ ┃ ┃ ┗ 📜user-select.js
+ ┃ ┃ ┣ 📜auth-service.js
+ ┃ ┃ ┣ 📜exchange-service.js
+ ┃ ┃ ┣ 📜image-service.js
+ ┃ ┃ ┣ 📜notification-service.js
+ ┃ ┃ ┣ 📜own-service.js
+ ┃ ┃ ┣ 📜point-service.js
+ ┃ ┃ ┣ 📜shop-service.js
+ ┃ ┃ ┗ 📜user-service.js
+ ┃ ┣ 📂structs
+ ┃ ┃ ┣ 📂patterns
+ ┃ ┃ ┃ ┗ 📜pattern.js
+ ┃ ┃ ┣ 📜card-struct.js
+ ┃ ┃ ┣ 📜exchange-struct.js
+ ┃ ┃ ┣ 📜shop-struct.js
+ ┃ ┃ ┣ 📜user-struct.js
+ ┃ ┃ ┗ 📜uuid.js
+ ┃ ┗ 📂utils
+ ┃ ┃ ┣ 📜notification-util.js
+ ┃ ┃ ┣ 📜number-util.js
+ ┃ ┃ ┣ 📜password-util.js
+ ┃ ┃ ┣ 📜query-util.js
+ ┃ ┃ ┣ 📜sellout-util.js
+ ┃ ┃ ┗ 📜time-util.js
+ ┣ 📜.gitignore
+ ┣ 📜README.md
+ ┣ 📜app.js
+ ┣ 📜config.js
+ ┣ 📜env.js
+ ┣ 📜package-lock.json
+ ┗ 📜package.json
+```
 </details>
 
 # 🏁 구현 홈페이지
