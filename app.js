@@ -18,7 +18,7 @@ import {
   serverErrorHandler,
 } from "./src/middlewares/error.js";
 
-import { EXPIRE_TIME } from "./src/constants/session.js";
+import { EXPIRE_TIME, REDIS_EXPIRE_TIME } from "./src/constants/session.js";
 import exchangeRouter from "./src/routes/exchange-route.js";
 import {
   SESSION_SECRET,
@@ -44,7 +44,7 @@ app.use(
 app.set("trust proxy", 1);
 app.use(
   session({
-    store: new RedisStore({ client: redisClient }),
+    store: new RedisStore({ client: redisClient, ttl: REDIS_EXPIRE_TIME }),
     secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,

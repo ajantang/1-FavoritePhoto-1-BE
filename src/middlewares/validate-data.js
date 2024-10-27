@@ -339,6 +339,7 @@ export async function validateExchangeCreator(req, res, next) {
 
     req.body.exchangeData = exchange;
     req.body.exchangeCardId = exchangeCardId;
+    req.body.shopId = shopId;
     req.body.buyerId = buyerId;
 
     return next();
