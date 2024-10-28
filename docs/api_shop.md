@@ -416,7 +416,7 @@
 - description: 포토 카드 교환 제시
 - path: /shop/exchange
 - method: POST
-- body 
+- body
   - shopId: 상점ID
   - cardId: 교환할 내 포토카드 ID
   - description: 교환 제시 내용
@@ -432,14 +432,14 @@
 ### res template
 
 - data
-    - id: 교환ID
-    - description: 교환 제시 내용량
-    - image: 사진
-    - name: 카드 이름
-    - grade: 등급
-    - genre: 장르
-    - price: 원가
-    - creatorNickname: 원작자 이름
+  - id: 교환ID
+  - description: 교환 제시 내용량
+  - image: 사진
+  - name: 카드 이름
+  - grade: 등급
+  - genre: 장르
+  - price: 원가
+  - creatorNickname: 원작자 이름
 
 ### res example
 
@@ -452,7 +452,7 @@
   "genre": 1,
   "price": 5,
   "nickname": "코드잇01"
-}
+  }
 
 ## GET /shop/:shopId/quantity
 
