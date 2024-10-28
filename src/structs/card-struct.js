@@ -1,6 +1,6 @@
 import { object, size, string, refine, number } from "superstruct";
 
-import card from "../constants/card";
+import card from "../constants/card.js";
 
 export const Card = object({
   name: size(string(), card.NAME_MIN_LENGTH, card.NAME_MAX_LENGTH),
