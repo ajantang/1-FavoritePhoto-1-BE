@@ -24,13 +24,46 @@ export function clientErrorHandler(err, req, res, next) {
     err instanceof Prisma.PrismaClientValidationError ||
     err.name === "StructError"
   ) {
-    if (err.message.includes("email -- Expected a string matching")) {
-      console.log(err);
-      return res.status(400).send({ message: CUSTOM_ERROR_INFO[40096] });
+    if (err.message.includes("Expected a string matching")) {
+      switch (err.type) {
+        case "image": {
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40079] });
+        }
+        case "email": {
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40096] });
+        }
+        default:
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40099] });
+      }
     } else if (err.message.includes("Expected a string with a length")) {
-      console.log("password -- Expected ... err.key :", err.key);
-      console.log("err :", err);
-      return res.status(400).send({ message: CUSTOM_ERROR_INFO[40095] });
+      switch (err.type) {
+        case "nickname": {
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40094] });
+        }
+        case "password": {
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40095] });
+        }
+        case "email": {
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40093] });
+        }
+        case "image": {
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40087] });
+        }
+        case "name": {
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40085] });
+        }
+        case "exchange description": {
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40083] });
+        }
+        case "shop description": {
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40084] });
+        }
+        case "image description": {
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40086] });
+        }
+        default:
+          return res.status(400).send({ message: CUSTOM_ERROR_INFO[40080] });
+      }
     } else if (err.message.includes("Expected a value of type `never`")) {
       return res.status(400).send({
         message:
@@ -43,10 +76,7 @@ export function clientErrorHandler(err, req, res, next) {
       return res.status(400).send({
         message: `'${err.key}' 필드가 누락됐습니다.`, // 값이 누락된 경우
       });
-    } else if (
-      err.message.includes("Expected a value of type `number`") ||
-      err.message.includes("Expected a string with a length")
-    ) {
+    } else if (err.message.includes("Expected a value of type `number`")) {
       return res.status(400).send({
         message: `값이 허용된 범위를 벗어났습니다. '${err.key}' 필드를 확인해 주세요.`, // 문자열 길이, 숫자가 범위를 벗어날 경우
       });

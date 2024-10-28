@@ -22,10 +22,12 @@ const shopStructBody = {
     "exchangeGenre",
     (value) => card.GENRE_MIN_VALUE <= value && value <= card.GENRE_MAX_VALUE
   ), // 추후 수정 가능
-  exchangeDescription: s.size(
-    s.string(),
-    shop.DESCRIPTION_MIN_LENGTH,
-    shop.DESCRIPTION_MAX_LENGTH
+  exchangeDescription: refine(
+    string(),
+    "shop description",
+    (value) =>
+      shop.DESCRIPTION_MIN_LENGTH <= value.length &&
+      value.length <= shop.DESCRIPTION_MAX_LENGTH
   ),
 };
 

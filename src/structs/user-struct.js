@@ -6,7 +6,7 @@ import { emailPattern } from "./patterns/pattern.js";
 export const SignUpUser = object({
   email: refine(
     emailPattern,
-    "Email Length",
+    "email",
     (value) =>
       user.EMAIL_MIN_LENGTH <= value.length &&
       value.length <= user.EMAIL_MAX_LENGTH
@@ -18,7 +18,7 @@ export const SignUpUser = object({
 export const SignInUser = object({
   email: refine(
     emailPattern,
-    "Email Length",
+    "email",
     (value) =>
       user.EMAIL_MIN_LENGTH <= value.length &&
       value.length <= user.EMAIL_MAX_LENGTH
