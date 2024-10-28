@@ -29,7 +29,21 @@ async function signIn(req, res, next) {
 
     req.session.userId = session.userId;
 
-    return res.status(200).send(userInfo);
+    req.session.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+
+        if (err.message.includes("Redis")) {
+          return next(CustomError(50350));
+        }
+
+        return next(CustomError(50050));
+      }
+
+      console.log("Session successfully saved:", req.session);
+
+      return res.status(200).send(userInfo);
+    });
   } catch (err) {
     return next(err);
   }
