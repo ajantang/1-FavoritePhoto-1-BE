@@ -1,15 +1,29 @@
 import prisma from "../repositories/prisma.js";
 import pointRepository from "../repositories/last-box-time-repository.js";
 import userRepository from "../repositories/user-repository.js";
-import { hasTimeElapsed } from "../utils/time-util.js";
+import sessionRepository from "../repositories/session-repository.js";
+import { hasTimeElapsed, getCurrentTime } from "../utils/time-util.js";
 import { myPointMapper } from "./mappers/box-mapper.js";
 import { userSelect } from "./selects/user-select.js";
 
 import { MIN_BOX_POINT, MAX_BOX_POINT } from "../constants/box.js";
 
-async function openBox(userId) {
-  const lastBoxTimeData = await pointRepository.findLastBoxTime(userId);
-  const success = hasTimeElapsed(lastBoxTimeData.updatedAt);
+async function openBox({ userId, sessionId }) {
+  const where = { id: userId };
+  const lastBoxTimeData = await pointRepository.findFirstData({
+    where,
+    select: { updatedAt: true },
+  });
+  const sessionWhere = { id: sessionId };
+  const lastSignInTimeData = await sessionRepository.findFirstData({
+    where: sessionWhere,
+    select: { createdAt: true },
+  });
+  const currentTimeData = getCurrentTime(
+    lastBoxTimeData.updatedAt,
+    lastSignInTimeData.createdAt
+  );
+  const success = hasTimeElapsed(currentTimeData);
 
   if (success) {
     return prisma.$transaction(async () => {
@@ -26,7 +40,14 @@ async function openBox(userId) {
         data,
         select: userSelect,
       });
-      await pointRepository.updateLastBoxTime(userId);
+      const pointUpdateWhere = { id: userId };
+      const pointUpdateDate = { updatedAt: new Date() };
+
+      await pointRepository.updateData({
+        where: pointUpdateWhere,
+        data: pointUpdateDate,
+        select: { updatedAt: true },
+      });
 
       return myPointMapper({
         id: userId,
@@ -50,11 +71,24 @@ async function openBox(userId) {
   });
 }
 
-async function getLastOpenBoxTime(userId) {
-  const lastBoxTimeData = await pointRepository.findLastBoxTime(userId);
-  const success = hasTimeElapsed(lastBoxTimeData.updatedAt);
+async function getLastOpenBoxTime({ userId, sessionId }) {
+  const where = { id: userId };
+  const lastBoxTimeData = await pointRepository.findFirstData({
+    where,
+    select: { updatedAt: true },
+  });
+  const sessionWhere = { id: sessionId };
+  const lastSignInTimeData = await sessionRepository.findFirstData({
+    where: sessionWhere,
+    select: { createdAt: true },
+  });
+  const currentTimeData = getCurrentTime(
+    lastBoxTimeData.updatedAt,
+    lastSignInTimeData.createdAt
+  );
+  const success = hasTimeElapsed(currentTimeData);
   const now = new Date();
-  const timeDifference = now - lastBoxTimeData.updatedAt;
+  const timeDifference = now - currentTimeData;
 
   return { timeDifference, success };
 }
