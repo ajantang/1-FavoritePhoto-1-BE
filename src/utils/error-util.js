@@ -2,7 +2,7 @@ import {
   PATTERN_ERROR_MESSAGES,
   LENGTH_ERROR_MESSAGES,
   RANGE_ERROR_MESSAGES,
-} from "../constants/error";
+} from "../constants/error.js";
 
 export function handleStructError({ err, res }) {
   if (err.message.includes("Expected a string matching")) {

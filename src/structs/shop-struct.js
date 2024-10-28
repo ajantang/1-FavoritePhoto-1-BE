@@ -22,8 +22,8 @@ const shopStructBody = {
     "exchangeGenre",
     (value) => card.GENRE_MIN_VALUE <= value && value <= card.GENRE_MAX_VALUE
   ), // 추후 수정 가능
-  exchangeDescription: refine(
-    string(),
+  exchangeDescription: s.refine(
+    s.string(),
     "shop description",
     (value) =>
       shop.DESCRIPTION_MIN_LENGTH <= value.length &&
