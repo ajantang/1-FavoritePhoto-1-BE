@@ -6,3 +6,7 @@ export function hasTimeElapsed(lastTime) {
 
   return timeDifference >= KEEPING_SESSION_TIME;
 }
+
+export function getCurrentTime(time1, time2) {
+  return time1 - time2 > 0 ? time1 : time2;
+}

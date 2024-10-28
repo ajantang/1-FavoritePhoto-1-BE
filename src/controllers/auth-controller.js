@@ -29,7 +29,11 @@ async function signIn(req, res, next) {
 
     req.session.userId = session.userId;
 
-    return res.status(200).send(userInfo);
+    req.session.save((err) => {
+      if (err) return next(err);
+      console.log("req.session.userId : ", req.session.userId);
+      return res.status(200).send(userInfo);
+    });
   } catch (err) {
     return next(err);
   }
