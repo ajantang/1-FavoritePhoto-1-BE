@@ -27,9 +27,9 @@ export function clientErrorHandler(err, req, res, next) {
     if (err.message.includes("email -- Expected a string matching")) {
       console.log(err);
       return res.status(400).send({ message: CUSTOM_ERROR_INFO[40096] });
-    } else if (
-      err.message.includes("password -- Expected a string with a length")
-    ) {
+    } else if (err.message.includes("Expected a string with a length")) {
+      console.log("password -- Expected ... err.key :", err.key);
+      console.log("err :", err);
       return res.status(400).send({ message: CUSTOM_ERROR_INFO[40095] });
     } else if (err.message.includes("Expected a value of type `never`")) {
       return res.status(400).send({
