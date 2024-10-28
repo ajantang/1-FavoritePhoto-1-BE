@@ -4,7 +4,11 @@ import card from "../constants/card.js";
 import { urlPattern } from "./patterns/pattern.js";
 
 export const Card = object({
-  name: size(string(), card.NAME_MIN_LENGTH, card.NAME_MAX_LENGTH),
+  name: refine(
+    string(),
+    "image name",
+    (value) => card.NAME_MIN_LENGTH <= value && value <= card.NAME_MAX_LENGTH
+  ),
   exchangeDescription: refine(
     string(),
     "image description",
@@ -14,7 +18,7 @@ export const Card = object({
   ),
   image: refine(
     urlPattern,
-    "image",
+    "image url",
     (value) => card.IMAGE_MIN_LENGTH <= value && value <= card.IMAGE_MAX_LENGTH
   ),
   grade: refine(
