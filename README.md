@@ -21,7 +21,13 @@
 - **FrontEnd**  
   ![](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white) ![](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=fff&style=for-the-badge) ![](https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white) ![](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 - **BackEnd**  
-  ![](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)![](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
+  ![](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
+  ![](https://img.shields.io/badge/Cookies-FFFACD?style=for-the-badge&logo=cookie&logoColor=black)
+  ![](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
+  ![](https://img.shields.io/badge/Superstruct-7B3F00?style=for-the-badge&logo=javascript&logoColor=white)
+  ![](https://img.shields.io/badge/Multer-007ACC?style=for-the-badge&logo=express&logoColor=white)
+  ![](https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+  ![](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
 - **Database**  
   ![](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 - **공통 Tool**  
