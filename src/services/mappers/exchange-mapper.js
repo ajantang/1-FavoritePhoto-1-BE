@@ -1,4 +1,4 @@
-import { basicCardMapper } from "../../services/mappers/card-mapper.js";
+import { basicCardMapper } from "./card-mapper.js";
 import { calculateTotalCountByObject } from "../../utils/number-util.js";
 
 export function exchangeMapper(basicSelect) {

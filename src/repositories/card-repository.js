@@ -1,35 +1,4 @@
 import prisma from "./prisma.js";
-import {
-  cardSelect,
-  cardDetailSelect,
-} from "../services/selects/card-select.js";
-
-async function createCard({
-  name,
-  description,
-  image,
-  grade,
-  genre,
-  price,
-  userId,
-  quantity,
-}) {
-  const newCardData = {
-    name,
-    description,
-    image,
-    grade,
-    genre,
-    price,
-    userId,
-    totalQuantity: quantity,
-  };
-
-  return await prisma.card.create({
-    data: newCardData,
-    select: cardDetailSelect,
-  });
-}
 
 async function createData({ data, select }) {
   return await prisma.card.create({ data, select });
@@ -60,7 +29,6 @@ async function deleteData(where) {
 }
 
 export default {
-  createCard,
   createData,
   findFirstData,
   findUniqueOrThrowtData,

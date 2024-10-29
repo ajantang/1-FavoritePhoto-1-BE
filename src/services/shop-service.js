@@ -5,10 +5,7 @@ import purchaseRepository from "../repositories/purchase-repository.js";
 import shopRepository from "../repositories/shop-repository.js";
 import userRepository from "../repositories/user-repository.js";
 import { basicCardMapper, myCardMapper } from "./mappers/card-mapper.js";
-import {
-  ownCardListSelect,
-  ownCardSelect,
-} from "../services/selects/own-select.js";
+import { ownCardListSelect, ownCardSelect } from "./selects/own-select.js";
 import { exchangeDeleteAndCreateNotification } from "../utils/sellout-util.js";
 import {
   shopCreateSelect,

@@ -5,9 +5,11 @@ import exchange from "../constants/exchange.js";
 
 export const Exchange = object({
   cardId: Uuid,
-  exchangeDescription: size(
+  exchangeDescription: refine(
     string(),
-    exchange.DESCRIPTION_MIN_LENGTH,
-    exchange.DESCRIPTION_MAX_LENGTH
+    "exchange description",
+    (value) =>
+      exchange.DESCRIPTION_MIN_LENGTH <= value.length &&
+      value.length <= exchange.DESCRIPTION_MAX_LENGTH
   ),
 });

@@ -5,6 +5,7 @@ import {
   authMiddleware,
   authMiddlewareByCardIdParam,
 } from "../middlewares/auth.js";
+import { validateCreateCardData } from "../middlewares/validate-data.js";
 
 const userRouter = express.Router();
 
@@ -16,7 +17,12 @@ userRouter
     authMiddlewareByCardIdParam,
     userController.getMyCard
   )
-  .post("/my-cards", authMiddleware, userController.createMyCard)
+  .post(
+    "/my-cards",
+    authMiddleware,
+    validateCreateCardData,
+    userController.createMyCard
+  )
   .get("/exchange", authMiddleware, userController.getMyExchangeList)
   .get("/shop", authMiddleware, userController.getMyShopList)
   .get("/my-info", authMiddleware, userController.getMyInfo)

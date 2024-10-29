@@ -1,76 +1,5 @@
 import prisma from "./prisma.js";
-import { createCardListFilterByQuery } from "../utils/query-util.js";
-import { ownSelect, ownCardSelect } from "../services/selects/own-select.js";
-
-async function getByFilter(filter) {
-  return await prisma.own.findFirst({
-    where: filter,
-    select: ownSelect,
-  });
-}
-
-async function update(where, data) {
-  return await prisma.own.update({
-    where,
-    data,
-  });
-}
-
-async function createOwn({ cardId, userId, quantity }) {
-  const newOwnData = { userId, cardId, quantity };
-
-  return await prisma.own.create({
-    data: newOwnData,
-    select: ownCardSelect,
-  });
-}
-
-async function deleteById(id) {
-  return await prisma.own.delete({
-    where: { id },
-  });
-}
-
-async function addQuantity({ userId, cardId, increment }) {
-  return prisma.own.upsert({
-    where: {
-      userId_cardId: {
-        userId,
-        cardId,
-      },
-    },
-    update: {
-      quantity: { increment },
-    },
-    create: {
-      userId,
-      cardId,
-      quantity: increment,
-    },
-    select: ownCardSelect,
-  });
-}
-
-async function decreaseQuantity({ userId, cardId, decrement }) {
-  decrement *= -1;
-
-  const ownData = await prisma.own.update({
-    where: {
-      userId_cardId: {
-        userId,
-        cardId,
-      },
-    },
-    data: {
-      quantity: { decrement },
-    },
-    select: ownCardSelect,
-  });
-
-  if (ownData.quantity === 0) {
-    await prisma.own.delete({ where: { id: ownData.id } });
-  }
-}
+import { ownCardSelect } from "../services/selects/own-select.js";
 
 async function createData({ data, select }) {
   return await prisma.own.create({ data, select });
@@ -122,12 +51,6 @@ async function findShopOwnerId({ userId, cardId }) {
 }
 
 export default {
-  getByFilter,
-  update,
-  createOwn,
-  deleteById,
-  addQuantity,
-  decreaseQuantity,
   createData,
   findFirstData,
   findUniqueOrThrowtData,
