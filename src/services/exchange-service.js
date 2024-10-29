@@ -1,8 +1,8 @@
 import prisma from "../repositories/prisma.js";
 import ownRepository from "../repositories/own-repository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
-import { ownCardSelect } from "../services/selects/own-select.js";
-import { exchangeCardShopSelect } from "../services/selects/exchange-select.js";
+import { ownCardSelect } from "./selects/own-select.js";
+import { exchangeCardShopSelect } from "./selects/exchange-select.js";
 import {
   exchangeCreateMapper,
   exchangeDecisionMapper,

@@ -4,9 +4,7 @@ import session from "express-session";
 import RedisStore from "connect-redis";
 import { createClient } from "redis";
 
-import adminRouter from "./src/controllers/admin-controller.js";
 import authRouter from "./src/routes/auth-router.js";
-import cardRouter from "./src/controllers/cards-controller.js";
 import notificationRouter from "./src/routes/notification-router.js";
 import shopRouter from "./src/routes/shop-router.js";
 import userRouter from "./src/routes/user-router.js";
@@ -60,9 +58,7 @@ app.use(
 );
 app.use(express.json());
 
-app.use("/admin", adminRouter);
 app.use("/auth", authRouter);
-app.use("/cards", cardRouter);
 app.use("/notifications", notificationRouter);
 app.use("/shop", shopRouter);
 app.use("/users", userRouter);

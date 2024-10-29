@@ -1,5 +1,6 @@
 import { assert } from "superstruct";
 import { createShopStruct, updateShopStruct } from "../structs/shop-struct.js";
+import { Card } from "../structs/card-struct.js";
 import { SignUpUser, SignInUser } from "../structs/user-struct.js";
 import ownRepository from "../repositories/own-repository.js";
 import exchangeRepository from "../repositories/exchange-repository.js";
@@ -8,6 +9,16 @@ import { exchangeCardShopAndUserSelect } from "../services/selects/exchange-sele
 import { shopDetailSelect } from "../services/selects/shop-select.js";
 import { CustomError } from "../lib/custom-error.js";
 import userRepository from "../repositories/user-repository.js";
+
+export async function validateCreateCardData(req, res, next) {
+  try {
+    assert(req.body, Card);
+
+    return next();
+  } catch (err) {
+    return next(err);
+  }
+}
 
 export async function validateCreateShopData(req, res, next) {
   try {

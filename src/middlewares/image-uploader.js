@@ -2,17 +2,19 @@ import { S3Client } from "@aws-sdk/client-s3"; // S3Client를 가져옵니다
 import multer from "multer";
 import { Upload } from "@aws-sdk/lib-storage"; // Upload을 가져옵니다
 import path from "path";
-import dotenv from "dotenv";
+import {
+  AWS_S3_REGION,
+  AWS_ACCESS_KEY_ID,
+  AWS_SECRET_ACCESS_KEY,
+} from "../../config.js";
 import { CustomError } from "../lib/custom-error.js";
-
-dotenv.config();
 
 // S3 클라이언트 설정
 const s3Client = new S3Client({
-  region: process.env.AWS_S3_REGION,
+  region: AWS_S3_REGION,
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: AWS_ACCESS_KEY_ID,
+    secretAccessKey: AWS_SECRET_ACCESS_KEY,
   },
 });
 

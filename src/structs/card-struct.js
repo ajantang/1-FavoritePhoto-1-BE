@@ -1,15 +1,26 @@
 import { object, size, string, refine, number } from "superstruct";
 
-import card from "../constants/card";
+import card from "../constants/card.js";
+import { urlPattern } from "./patterns/pattern.js";
 
 export const Card = object({
-  name: size(string(), card.NAME_MIN_LENGTH, card.NAME_MAX_LENGTH),
-  description: size(
+  name: refine(
     string(),
-    card.DESCRIPTION_MIN_LENGTH,
-    card.DESCRIPTION_MAX_LENGTH
+    "image name",
+    (value) => card.NAME_MIN_LENGTH <= value && value <= card.NAME_MAX_LENGTH
   ),
-  image: size(string(), card.IMAGE_MIN_LENGTH, card.IMAGE_MAX_LENGTH),
+  description: refine(
+    string(),
+    "image description",
+    (value) =>
+      card.DESCRIPTION_MIN_LENGTH <= value.length &&
+      value.length <= card.DESCRIPTION_MAX_LENGTH
+  ),
+  image: refine(
+    urlPattern,
+    "image url",
+    (value) => card.IMAGE_MIN_LENGTH <= value && value <= card.IMAGE_MAX_LENGTH
+  ),
   grade: refine(
     number(),
     "grade",

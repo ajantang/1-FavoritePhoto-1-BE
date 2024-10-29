@@ -7,6 +7,7 @@ import {
 export const shopSelect = {
   id: true,
   userId: true,
+  cardId: true,
   price: true,
   remainingQuantity: true,
   totalQuantity: true,
