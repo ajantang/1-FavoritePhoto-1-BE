@@ -9,7 +9,7 @@ export const Card = object({
     "image name",
     (value) => card.NAME_MIN_LENGTH <= value && value <= card.NAME_MAX_LENGTH
   ),
-  exchangeDescription: refine(
+  description: refine(
     string(),
     "image description",
     (value) =>
