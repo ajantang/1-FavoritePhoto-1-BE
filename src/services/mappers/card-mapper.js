@@ -66,7 +66,7 @@ export function myShopListMapper({ counts, list }) {
   });
   const mappedData = {
     totalCount,
-    countsGroupByGrade: counts,
+    countsGroupByGrade: counts.sortGrade,
     shops: mappedList,
   };
 
