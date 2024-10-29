@@ -20,7 +20,7 @@ import { userSelect } from "./selects/user-select.js";
 import { exchangeCardShopSelect } from "./selects/exchange-select.js";
 import { ownCardSelect, ownGradeSelect } from "./selects/own-select.js";
 import { cardDetailSelect } from "./selects/card-select.js";
-import { shopListSelect, shopGradeSelect } from "./selects/shop-select.js";
+import { shopListSelect, shopFilterSelect } from "./selects/shop-select.js";
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 
@@ -114,18 +114,28 @@ async function getMyShopList({ userId, query }) {
 
   const shopGradeList = await shopRepository.findManyData({
     where,
-    select: shopGradeSelect,
+    select: shopFilterSelect,
   });
   const counts = shopGradeList.reduce((acc, shop) => {
     const grade = shop.Card.grade;
+    const genre = shop.Card.genre;
+    const sellout = shop.Card.remainingQuantity === 0 ? 1 : 0;
 
-    if (!acc[grade]) {
-      acc[grade] = 0;
+    if (!sortGrade[grade]) {
+      sortGrade[grade] = 0;
+    }
+    if (!sortGenre[genre]) {
+      sortGenre[genre] = 0;
+    }
+    if (!sortSellout[sellout]) {
+      sortSellout[sellout] = 0;
     }
 
-    acc[grade] += shop.remainingQuantity;
+    sortGrade[grade] += shop.remainingQuantity;
+    sortGenre[genre] += shop.remainingQuantity;
+    sortSellout[sellout] += 1;
 
-    return acc;
+    return { sortGrade };
   }, {});
 
   return myShopListMapper({ counts, list });
