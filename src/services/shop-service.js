@@ -55,7 +55,7 @@ async function createShop(createData) {
   });
 }
 
-async function getShopList(query) {
+async function getShopList({ query, userId }) {
   return await prisma.$transaction(async () => {
     try {
       const filterOptions = createShopListFilterByQuery(query);
@@ -66,7 +66,7 @@ async function getShopList(query) {
 
       const count = await shopRepository.conutData(filterOptions.where);
 
-      return getShopListMapper(shopList, count);
+      return getShopListMapper({ list: shopList, totalCount: count, userId });
     } catch (e) {
       throw e;
     }

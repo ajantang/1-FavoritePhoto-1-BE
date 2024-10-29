@@ -119,23 +119,17 @@ async function getMyShopList({ userId, query }) {
   const counts = shopGradeList.reduce((acc, shop) => {
     const grade = shop.Card.grade;
     const genre = shop.Card.genre;
-    const sellout = shop.Card.remainingQuantity === 0 ? 1 : 0;
+    const sellout = shop.remainingQuantity === 0 ? 1 : 0;
 
-    if (!sortGrade[grade]) {
-      sortGrade[grade] = 0;
-    }
-    if (!sortGenre[genre]) {
-      sortGenre[genre] = 0;
-    }
-    if (!sortSellout[sellout]) {
-      sortSellout[sellout] = 0;
-    }
+    if (!acc.sortGrade) acc.sortGrade = {};
+    if (!acc.sortGenre) acc.sortGenre = {};
+    if (!acc.sortSellout) acc.sortSellout = {};
 
-    sortGrade[grade] += shop.remainingQuantity;
-    sortGenre[genre] += shop.remainingQuantity;
-    sortSellout[sellout] += 1;
+    acc.sortGrade[grade] = (acc.sortGrade[grade] || 0) + shop.remainingQuantity;
+    acc.sortGenre[genre] = (acc.sortGenre[genre] || 0) + shop.remainingQuantity;
+    acc.sortSellout[sellout] = (acc.sortSellout[sellout] || 0) + 1;
 
-    return { sortGrade };
+    return acc;
   }, {});
 
   return myShopListMapper({ counts, list });

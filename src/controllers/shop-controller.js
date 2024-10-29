@@ -13,7 +13,9 @@ async function createShop(req, res, next) {
 
 async function getShopList(req, res, next) {
   try {
-    const shops = await shopService.getShopList(req.query);
+    const userId = req.session?.userId || "";
+    const query = req.query;
+    const shops = await shopService.getShopList({ query, userId });
 
     res.status(200).send(shops);
   } catch (err) {
