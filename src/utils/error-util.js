@@ -2,6 +2,7 @@ import {
   PATTERN_ERROR_MESSAGES,
   LENGTH_ERROR_MESSAGES,
   RANGE_ERROR_MESSAGES,
+  CUSTOM_ERROR_INFO,
 } from "../constants/error.js";
 
 export function handleStructError({ err, res }) {
