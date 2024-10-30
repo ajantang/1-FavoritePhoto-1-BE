@@ -227,7 +227,10 @@ async function purchaseService(userId, purchaseData) {
 
       // 매진 시 교환 신청 삭제
       if (decreaseQuantity.remainingQuantity === 0) {
-        await exchangeDelete(shopDetailData);
+        await exchangeDeleteAndCreateNotification({
+          sellout: true,
+          shopDetailDataWithExchange: shopDetailData,
+        });
         // 상점 매진시 전체 exchange 삭제 0 > hasExchangeRequest : false
         const shpoWhere = { id: shopId };
         const updateShopData = { hasExchangeRequest: false };
