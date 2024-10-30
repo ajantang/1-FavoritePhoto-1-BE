@@ -64,9 +64,15 @@ export function myShopListMapper({ counts, list }) {
   const mappedList = list.map((item) => {
     return myShopMapper(item);
   });
+
+  let countsGroupByGrade = {};
+  if (totalCount !== 0) {
+    countsGroupByGrade = counts.sortGrade;
+  }
+
   const mappedData = {
     totalCount,
-    countsGroupByGrade: counts.sortGrade,
+    countsGroupByGrade,
     shops: mappedList,
   };
 
