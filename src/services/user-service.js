@@ -20,7 +20,7 @@ import { userSelect } from "./selects/user-select.js";
 import { exchangeCardShopSelect } from "./selects/exchange-select.js";
 import { ownCardSelect, ownGradeSelect } from "./selects/own-select.js";
 import { cardDetailSelect } from "./selects/card-select.js";
-import { shopListSelect, shopGradeSelect } from "./selects/shop-select.js";
+import { shopListSelect, shopFilterSelect } from "./selects/shop-select.js";
 
 import { EXCHANGE_VOLUME } from "../constants/exchange.js";
 
@@ -114,16 +114,20 @@ async function getMyShopList({ userId, query }) {
 
   const shopGradeList = await shopRepository.findManyData({
     where,
-    select: shopGradeSelect,
+    select: shopFilterSelect,
   });
   const counts = shopGradeList.reduce((acc, shop) => {
     const grade = shop.Card.grade;
+    const genre = shop.Card.genre;
+    const sellout = shop.remainingQuantity === 0 ? 1 : 0;
 
-    if (!acc[grade]) {
-      acc[grade] = 0;
-    }
+    if (!acc.sortGrade) acc.sortGrade = {};
+    if (!acc.sortGenre) acc.sortGenre = {};
+    if (!acc.sortSellout) acc.sortSellout = {};
 
-    acc[grade] += shop.remainingQuantity;
+    acc.sortGrade[grade] = (acc.sortGrade[grade] || 0) + shop.remainingQuantity;
+    acc.sortGenre[genre] = (acc.sortGenre[genre] || 0) + shop.remainingQuantity;
+    acc.sortSellout[sellout] = (acc.sortSellout[sellout] || 0) + 1;
 
     return acc;
   }, {});

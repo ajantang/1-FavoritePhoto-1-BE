@@ -1,4 +1,7 @@
-import { calculateTotalCountByObject } from "../../utils/number-util.js";
+import {
+  calculateTotalCountByObject,
+  calculateTotalCountByFilterObject,
+} from "../../utils/number-util.js";
 
 export function basicCardMapper(basicSelect) {
   return {
@@ -57,13 +60,19 @@ export function myShopMapper(shopCardSelect) {
 }
 
 export function myShopListMapper({ counts, list }) {
-  const totalCount = calculateTotalCountByObject(counts);
+  const totalCount = calculateTotalCountByFilterObject(counts);
   const mappedList = list.map((item) => {
     return myShopMapper(item);
   });
+
+  let countsGroupByGrade = {};
+  if (totalCount !== 0) {
+    countsGroupByGrade = counts.sortGrade;
+  }
+
   const mappedData = {
     totalCount,
-    countsGroupByGrade: counts,
+    countsGroupByGrade,
     shops: mappedList,
   };
 

@@ -52,11 +52,12 @@ export const shopOwnerSelect = {
   },
 };
 
-export const shopGradeSelect = {
+export const shopFilterSelect = {
   remainingQuantity: true,
   Card: {
     select: {
       grade: true,
+      genre: true,
     },
   },
 };
