@@ -33,18 +33,29 @@
 - **공통 Tool**  
   ![](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)![](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)![](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)![](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)
 
-# 팀원별 구현 기능 상세
+# R&R
+
+### 공통
+ - API 작성
+ - API 명세서 작성
+ - 노션 자료 작성
+ - FE 미디어 쿼리 작성
+ - BE 트러블 슈팅
+ - FE 요청사항 처리
+ - 코드 리뷰
 
 ### 송영섭
- - 상점 API
- - 교환 API
- - AWS
+ - AWS 연동
+ - 발표 자료 수집
+ - 발표 자료 정리
+ - README 작성
+ - FA QA
 
 ### 이진우
-- 인증 API
-- 유저 API
-- 알림 API
-- 구글 클라우드
+- 구글 클라우드 연동
+- 세션 인증
+- 레디스 연동
+- 회의록 작성
 
 # 테이블 관계도
 <details>
