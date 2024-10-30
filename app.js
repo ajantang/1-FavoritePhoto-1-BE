@@ -37,7 +37,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://1-favorite-photo-1-v47vqw0n4-mjparks-projects.vercel.app",
+      "https://dev-1-favorite-photo-1-fe.vercel.app/",
     ],
     credentials: true,
   })
