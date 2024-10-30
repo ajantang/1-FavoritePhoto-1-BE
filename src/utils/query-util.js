@@ -100,9 +100,12 @@ export function createMyShopListFilterByQuery(query) {
   const { hasExchangeRequest, ...rest } = query;
   const filterOptions = createShopListFilterByQuery(rest);
 
+  console.log("filterOptions :", filterOptions);
+
   if (hasExchangeRequest) {
     const toBoolean = (value) => value === "true";
 
+    console.log("filterOptions.where :", filterOptions.where);
     filterOptions.where.hasExchangeRequest = toBoolean(hasExchangeRequest);
   }
 
