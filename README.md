@@ -18,16 +18,16 @@
 
 # 🛠 기술 스택
 
-- **FrontEnd**  
-  ![](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white) ![](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![](https://img.shields.io/badge/Next.js-000?logo=nextdotjs&logoColor=fff&style=for-the-badge) ![](https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white) ![](https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white)
 - **BackEnd**  
   ![](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
   ![](https://img.shields.io/badge/Cookies-FFFACD?style=for-the-badge&logo=cookie&logoColor=black)
   ![](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white)
   ![](https://img.shields.io/badge/Superstruct-7B3F00?style=for-the-badge&logo=javascript&logoColor=white)
   ![](https://img.shields.io/badge/Multer-007ACC?style=for-the-badge&logo=express&logoColor=white)
-  ![](https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
+  ![](https://img.shields.io/badge/Amazon_AWS_S3-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white)
   ![](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
+  ![](https://img.shields.io/badge/Render-000000?style=for-the-badge&logo=render&logoColor=white)
+  ![](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
 - **Database**  
   ![](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 - **공통 Tool**  
@@ -45,6 +45,18 @@
 - 유저 API
 - 알림 API
 - 구글 클라우드
+
+# 테이블 관계도
+<details>
+  
+![image](https://github.com/user-attachments/assets/c0107cdc-c35a-4d43-8442-894a92061113)
+![image](https://github.com/user-attachments/assets/674b91e6-49a3-4e9d-b5ff-a898542f2078)
+
+</details>
+
+# API 명세서
+
+[API 명세서](https://www.notion.so/API-1193c19d1a2f81d6a16ee03054e608c6)
 
 # 📂 BackEnd 파일구조
 
