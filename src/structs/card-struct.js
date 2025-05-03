@@ -21,7 +21,9 @@ export const Card = object({
   image: refine(
     urlPattern,
     "image url",
-    (value) => card.IMAGE_MIN_LENGTH <= value && value <= card.IMAGE_MAX_LENGTH
+    (value) =>
+      card.IMAGE_MIN_LENGTH <= value.length &&
+      value.length <= card.IMAGE_MAX_LENGTH
   ),
   grade: refine(
     number(),
