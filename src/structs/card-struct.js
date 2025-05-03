@@ -7,7 +7,9 @@ export const Card = object({
   name: refine(
     string(),
     "image name",
-    (value) => card.NAME_MIN_LENGTH <= value && value <= card.NAME_MAX_LENGTH
+    (value) =>
+      card.NAME_MIN_LENGTH <= value.length &&
+      value.length <= card.NAME_MAX_LENGTH
   ),
   description: refine(
     string(),
