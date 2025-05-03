@@ -6,7 +6,7 @@ const storage = new Storage();
 
 async function authenticateImplicitWithAdc() {
   const storage = new Storage({
-    projectId: "imageupload-438323",
+    projectId: "imageupload-458719",
   });
   const [buckets] = await storage.getBuckets();
   console.log("Buckets:");
