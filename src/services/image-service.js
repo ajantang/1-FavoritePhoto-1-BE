@@ -1,7 +1,7 @@
 import { Storage } from "@google-cloud/storage";
 import path from "path";
 
-const bucketName = "image-unload-codeit-test";
+const bucketName = "image-unload-codeit-test00";
 const storage = new Storage();
 
 async function authenticateImplicitWithAdc() {
@@ -19,7 +19,6 @@ async function authenticateImplicitWithAdc() {
 }
 
 async function UploadGoogelCloud(file) {
-
   authenticateImplicitWithAdc();
 
   const fileUrl = await new Promise((resolve, reject) => {
