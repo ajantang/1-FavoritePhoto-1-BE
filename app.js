@@ -35,10 +35,7 @@ redisClient.connect().then(console.log("redis connected")).catch(console.error);
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "https://dev-1-favorite-photo-1-fe.vercel.app",
-    ],
+    origin: ["http://localhost:3000", "https://favoritephoto.vercel.app"],
     credentials: true,
   })
 );
